@@ -1,0 +1,1423 @@
+{
+  "Ausbessern": [
+    "Barde",
+    "Druide",
+    "Kleriker",
+    "Magier",
+    "Zauberer"
+  ],
+  "Botschaft": [
+    "Barde",
+    "Magier",
+    "Zauberer"
+  ],
+  "Einfache Illusion": [
+    "Barde",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Gehässiger Spott": [
+    "Barde"
+  ],
+  "Licht": [
+    "Barde",
+    "Kleriker",
+    "Magier",
+    "Zauberer"
+  ],
+  "Magierhand": [
+    "Barde",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Tanzende Lichter": [
+    "Barde",
+    "Magier",
+    "Zauberer"
+  ],
+  "Taschenspielerei": [
+    "Barde",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Zielsicherer Schlag": [
+    "Barde",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Donnerwoge": [
+    "Barde",
+    "Druide",
+    "Magier",
+    "Zauberer"
+  ],
+  "Federfall": [
+    "Barde",
+    "Magier",
+    "Zauberer"
+  ],
+  "Feenfeuer": [
+    "Barde",
+    "Druide"
+  ],
+  "Fürchterlicher Lachanfall": [
+    "Barde",
+    "Magier"
+  ],
+  "Heilendes Wort": [
+    "Barde",
+    "Druide",
+    "Kleriker"
+  ],
+  "Heldenmut": [
+    "Barde",
+    "Paladin"
+  ],
+  "Identifizieren": [
+    "Barde",
+    "Magier"
+  ],
+  "Illusionsschrift": [
+    "Barde",
+    "Hexenmeister",
+    "Magier"
+  ],
+  "Lange Schritte": [
+    "Barde",
+    "Druide",
+    "Magier",
+    "Waldläufer"
+  ],
+  "Lautloses Trugbild": [
+    "Barde",
+    "Magier",
+    "Zauberer"
+  ],
+  "Magie entdecken": [
+    "Barde",
+    "Druide",
+    "Kleriker",
+    "Magier",
+    "Paladin",
+    "Waldläufer",
+    "Zauberer"
+  ],
+  "Mit Tieren sprechen": [
+    "Barde",
+    "Druide",
+    "Waldläufer"
+  ],
+  "Person bezaubern": [
+    "Barde",
+    "Druide",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Schlaf": [
+    "Barde",
+    "Magier",
+    "Zauberer"
+  ],
+  "Selbstverkleidung": [
+    "Barde",
+    "Magier",
+    "Zauberer"
+  ],
+  "Sprachen verstehen": [
+    "Barde",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Tierfreundschaft": [
+    "Barde",
+    "Druide",
+    "Waldläufer"
+  ],
+  "Unsichtbarer Diener": [
+    "Barde",
+    "Hexenmeister",
+    "Magier"
+  ],
+  "Verderben": [
+    "Barde",
+    "Kleriker"
+  ],
+  "Wunden heilen": [
+    "Barde",
+    "Druide",
+    "Kleriker",
+    "Paladin",
+    "Waldläufer"
+  ],
+  "Attribut verbessern": [
+    "Barde",
+    "Druide",
+    "Kleriker",
+    "Zauberer"
+  ],
+  "Blindheit/Taubheit": [
+    "Barde",
+    "Kleriker",
+    "Magier",
+    "Zauberer"
+  ],
+  "Einflüsterung": [
+    "Barde",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Fesseln": [
+    "Barde",
+    "Hexenmeister"
+  ],
+  "Gedanken wahrnehmen": [
+    "Barde",
+    "Magier",
+    "Zauberer"
+  ],
+  "Gefühle besänftigen": [
+    "Barde",
+    "Kleriker"
+  ],
+  "Gegenstand aufspüren": [
+    "Barde",
+    "Druide",
+    "Kleriker",
+    "Magier",
+    "Paladin",
+    "Waldläufer"
+  ],
+  "Klopfen": [
+    "Barde",
+    "Magier",
+    "Zauberer"
+  ],
+  "Magischer Mund": [
+    "Barde",
+    "Magier"
+  ],
+  "Metall erhitzen": [
+    "Barde",
+    "Druide"
+  ],
+  "Person festhalten": [
+    "Barde",
+    "Druide",
+    "Hexenmeister",
+    "Kleriker",
+    "Magier",
+    "Zauberer"
+  ],
+  "Schwache Genesung": [
+    "Barde",
+    "Druide",
+    "Kleriker",
+    "Paladin",
+    "Waldläufer"
+  ],
+  "Stille": [
+    "Barde",
+    "Kleriker",
+    "Waldläufer"
+  ],
+  "Tierbote": [
+    "Barde",
+    "Druide",
+    "Waldläufer"
+  ],
+  "Tiere oder Pflanzen aufspüren": [
+    "Barde",
+    "Druide",
+    "Waldläufer"
+  ],
+  "Unsichtbares sehen": [
+    "Barde",
+    "Magier",
+    "Zauberer"
+  ],
+  "Unsichtbarkeit": [
+    "Barde",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Zerbersten": [
+    "Barde",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Zone der Wahrheit": [
+    "Barde",
+    "Kleriker",
+    "Paladin"
+  ],
+  "Fluch": [
+    "Barde",
+    "Kleriker",
+    "Magier"
+  ],
+  "Furcht": [
+    "Barde",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Glyphe des Schutzes": [
+    "Barde",
+    "Kleriker",
+    "Magier"
+  ],
+  "Hellsehen": [
+    "Barde",
+    "Kleriker",
+    "Magier",
+    "Zauberer"
+  ],
+  "Hypnotisches Muster": [
+    "Barde",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Mächtiges Trugbild": [
+    "Barde",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Magie bannen": [
+    "Barde",
+    "Druide",
+    "Hexenmeister",
+    "Kleriker",
+    "Magier",
+    "Paladin",
+    "Zauberer"
+  ],
+  "Mit Pflanzen sprechen": [
+    "Barde",
+    "Druide",
+    "Waldläufer"
+  ],
+  "Mit Toten sprechen": [
+    "Barde",
+    "Kleriker"
+  ],
+  "Pflanzenwachstum": [
+    "Barde",
+    "Druide",
+    "Waldläufer"
+  ],
+  "Stinkende Wolke": [
+    "Barde",
+    "Magier",
+    "Zauberer"
+  ],
+  "Unauffindbarkeit": [
+    "Barde",
+    "Magier",
+    "Waldläufer"
+  ],
+  "Verständigung": [
+    "Barde",
+    "Kleriker",
+    "Magier"
+  ],
+  "Winzige Hütte": [
+    "Barde",
+    "Magier"
+  ],
+  "Zungen": [
+    "Barde",
+    "Hexenmeister",
+    "Kleriker",
+    "Magier",
+    "Zauberer"
+  ],
+  "Bewegungsfreiheit": [
+    "Barde",
+    "Druide",
+    "Kleriker",
+    "Waldläufer"
+  ],
+  "Dimensionstür": [
+    "Barde",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Kreatur aufspüren": [
+    "Barde",
+    "Druide",
+    "Kleriker",
+    "Magier",
+    "Paladin",
+    "Waldläufer"
+  ],
+  "Mächtige Unsichtbarkeit": [
+    "Barde",
+    "Magier",
+    "Zauberer"
+  ],
+  "Scheingelände": [
+    "Barde",
+    "Druide",
+    "Hexenmeister",
+    "Magier"
+  ],
+  "Verwandlung": [
+    "Barde",
+    "Druide",
+    "Magier",
+    "Zauberer"
+  ],
+  "Verwirrung": [
+    "Barde",
+    "Druide",
+    "Magier",
+    "Zauberer"
+  ],
+  "Zwang": [
+    "Barde"
+  ],
+  "Ablenkung": [
+    "Barde",
+    "Magier"
+  ],
+  "Äußerlichkeiten": [
+    "Barde",
+    "Magier",
+    "Zauberer"
+  ],
+  "Ausspähung": [
+    "Barde",
+    "Druide",
+    "Hexenmeister",
+    "Kleriker",
+    "Magier"
+  ],
+  "Bindung der Ebenen": [
+    "Barde",
+    "Druide",
+    "Kleriker",
+    "Magier"
+  ],
+  "Erinnerung verändern": [
+    "Barde",
+    "Magier"
+  ],
+  "Erwecken": [
+    "Barde",
+    "Druide"
+  ],
+  "Geas": [
+    "Barde",
+    "Druide",
+    "Kleriker",
+    "Magier",
+    "Paladin"
+  ],
+  "Gegenstände beleben": [
+    "Barde",
+    "Magier",
+    "Zauberer"
+  ],
+  "Kreis der Teleportation": [
+    "Barde",
+    "Magier",
+    "Zauberer"
+  ],
+  "Massen-Wunden heilen": [
+    "Barde",
+    "Druide",
+    "Kleriker"
+  ],
+  "Monster festhalten": [
+    "Barde",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Person beherrschen": [
+    "Barde",
+    "Magier",
+    "Zauberer"
+  ],
+  "Sagenkunde": [
+    "Barde",
+    "Kleriker",
+    "Magier"
+  ],
+  "Tote erwecken": [
+    "Barde",
+    "Kleriker",
+    "Paladin"
+  ],
+  "T": [
+    "Barde"
+  ],
+  "raum": [
+    "Barde"
+  ],
+  "Vollständige Genesung": [
+    "Barde",
+    "Druide",
+    "Kleriker"
+  ],
+  "Böser Blick": [
+    "Barde",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Massen-Einflüsterung": [
+    "Barde",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Unwiderstehlicher Tanz": [
+    "Barde",
+    "Magier"
+  ],
+  "Vorbestimmtes Trugbild": [
+    "Barde",
+    "Magier"
+  ],
+  "Wächter und Hüter": [
+    "Barde",
+    "Magier"
+  ],
+  "Wahrer Blick": [
+    "Barde",
+    "Hexenmeister",
+    "Kleriker",
+    "Magier",
+    "Zauberer"
+  ],
+  "Weg finden": [
+    "Barde",
+    "Druide",
+    "Kleriker"
+  ],
+  "Arkanes Schwert": [
+    "Barde",
+    "Magier"
+  ],
+  "Arkane Spiegelung": [
+    "Barde",
+    "Druide",
+    "Magier"
+  ],
+  "Ätherische Gestalten": [
+    "Barde",
+    "Hexenmeister",
+    "Kleriker",
+    "Magier",
+    "Zauberer"
+  ],
+  "Auferstehung": [
+    "Barde",
+    "Kleriker"
+  ],
+  "Energiekäfig": [
+    "Barde",
+    "Hexenmeister",
+    "Magier"
+  ],
+  "Herrliches Herrenhaus": [
+    "Barde",
+    "Magier"
+  ],
+  "Regeneration": [
+    "Barde",
+    "Druide",
+    "Kleriker"
+  ],
+  "Symbol": [
+    "Barde",
+    "Kleriker",
+    "Magier"
+  ],
+  "Teleportieren": [
+    "Barde",
+    "Magier",
+    "Zauberer"
+  ],
+  "Trugbild projizieren": [
+    "Barde",
+    "Magier"
+  ],
+  "Gedankenleere": [
+    "Barde",
+    "Magier"
+  ],
+  "Monster beherrschen": [
+    "Barde",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Redegewandtheit": [
+    "Barde",
+    "Hexenmeister"
+  ],
+  "Schwachsinn": [
+    "Barde",
+    "Druide",
+    "Hexenmeister",
+    "Magier"
+  ],
+  "Wort der Macht: Betäubung": [
+    "Barde",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Voraussicht": [
+    "Barde",
+    "Druide",
+    "Hexenmeister",
+    "Magier"
+  ],
+  "Wahre Verwandlung": [
+    "Barde",
+    "Hexenmeister",
+    "Magier"
+  ],
+  "Wort der Macht: Tod": [
+    "Barde",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Druidenkunst": [
+    "Druide"
+  ],
+  "Flammen erzeugen": [
+    "Druide"
+  ],
+  "Gift versprühen": [
+    "Druide",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Göttliche Führung": [
+    "Druide",
+    "Kleriker"
+  ],
+  "Shillelagh": [
+    "Druide"
+  ],
+  "Widerstand": [
+    "Druide",
+    "Kleriker"
+  ],
+  "Gift und Krankheit entdecken": [
+    "Druide",
+    "Kleriker",
+    "Paladin",
+    "Waldläufer"
+  ],
+  "Gute Beeren": [
+    "Druide",
+    "Waldläufer"
+  ],
+  "Nahrung und Wasser reinigen": [
+    "Druide",
+    "Kleriker",
+    "Paladin"
+  ],
+  "Nebelwolke": [
+    "Druide",
+    "Magier",
+    "Waldläufer",
+    "Zauberer"
+  ],
+  "Springen": [
+    "Druide",
+    "Magier",
+    "Waldläufer",
+    "Zauberer"
+  ],
+  "Verstricken": [
+    "Druide"
+  ],
+  "Wasser erschaffen oder zerstören": [
+    "Druide",
+    "Kleriker"
+  ],
+  "Dornenwuchs": [
+    "Druide",
+    "Waldläufer"
+  ],
+  "Dunkelsicht": [
+    "Druide",
+    "Magier",
+    "Waldläufer",
+    "Zauberer"
+  ],
+  "Fallen finden": [
+    "Druide",
+    "Kleriker",
+    "Waldläufer"
+  ],
+  "Flammenklinge": [
+    "Druide"
+  ],
+  "Flammenkugel": [
+    "Druide",
+    "Magier"
+  ],
+  "Mondstrahl": [
+    "Druide"
+  ],
+  "Rindenhaut": [
+    "Druide",
+    "Waldläufer"
+  ],
+  "Schutz vor Gift": [
+    "Druide",
+    "Kleriker",
+    "Paladin",
+    "Waldläufer"
+  ],
+  "Spurloses Gehen": [
+    "Druide",
+    "Waldläufer"
+  ],
+  "Windstoß": [
+    "Druide",
+    "Magier",
+    "Zauberer"
+  ],
+  "Auf Wasser gehen": [
+    "Druide",
+    "Kleriker",
+    "Waldläufer",
+    "Zauberer"
+  ],
+  "Blitze herbeirufen": [
+    "Druide"
+  ],
+  "Mit Stein verschmelzen": [
+    "Druide",
+    "Kleriker"
+  ],
+  "Schneesturm": [
+    "Druide",
+    "Magier",
+    "Zauberer"
+  ],
+  "Schutz vor Energie": [
+    "Druide",
+    "Kleriker",
+    "Magier",
+    "Waldläufer",
+    "Zauberer"
+  ],
+  "Tageslicht": [
+    "Druide",
+    "Kleriker",
+    "Paladin",
+    "Waldläufer",
+    "Zauberer"
+  ],
+  "Tiere beschwören": [
+    "Druide",
+    "Waldläufer"
+  ],
+  "Wasser atmen": [
+    "Druide",
+    "Magier",
+    "Waldläufer",
+    "Zauberer"
+  ],
+  "Windwall": [
+    "Druide",
+    "Waldläufer"
+  ],
+  "Eissturm": [
+    "Druide",
+    "Magier",
+    "Zauberer"
+  ],
+  "Feuerwand": [
+    "Druide",
+    "Magier",
+    "Zauberer"
+  ],
+  "Plage": [
+    "Druide",
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Rieseninsekt": [
+    "Druide"
+  ],
+  "Schwache Elementare beschwören": [
+    "Druide",
+    "Magier"
+  ],
+  "Stein formen": [
+    "Druide",
+    "Kleriker",
+    "Magier"
+  ],
+  "Steinhaut": [
+    "Druide",
+    "Magier",
+    "Waldläufer",
+    "Zauberer"
+  ],
+  "Tier beherrschen": [
+    "Druide",
+    "Zauberer"
+  ],
+  "Wasser kontrollieren": [
+    "Druide",
+    "Kleriker",
+    "Magier"
+  ],
+  "Wesen des Waldes beschwören": [
+    "Druide",
+    "Waldläufer"
+  ],
+  "Ansteckung": [
+    "Druide",
+    "Kleriker"
+  ],
+  "Einswerden mit der Natur": [
+    "Druide",
+    "Waldläufer"
+  ],
+  "Elementar beschwören": [
+    "Druide",
+    "Magier"
+  ],
+  "Hölzerner Weg": [
+    "Druide",
+    "Waldläufer"
+  ],
+  "Insektenplage": [
+    "Druide",
+    "Kleriker",
+    "Zauberer"
+  ],
+  "Schutzhülle gegen Lebendes": [
+    "Druide"
+  ],
+  "Steinwand": [
+    "Druide",
+    "Magier",
+    "Zauberer"
+  ],
+  "Wiedergeburt": [
+    "Druide"
+  ],
+  "Dornenwand": [
+    "Druide"
+  ],
+  "Erde bewegen": [
+    "Druide",
+    "Magier",
+    "Zauberer"
+  ],
+  "Feenwesen beschwören": [
+    "Druide",
+    "Hexenmeister"
+  ],
+  "Heilung": [
+    "Druide",
+    "Kleriker"
+  ],
+  "Heldenmahl": [
+    "Druide",
+    "Kleriker"
+  ],
+  "Pflanzentor": [
+    "Druide"
+  ],
+  "Sonnenstrahl": [
+    "Druide",
+    "Magier",
+    "Zauberer"
+  ],
+  "Windwandeln": [
+    "Druide"
+  ],
+  "Ebenenwechsel": [
+    "Druide",
+    "Hexenmeister",
+    "Kleriker",
+    "Magier",
+    "Zauberer"
+  ],
+  "Feuersturm": [
+    "Druide",
+    "Kleriker",
+    "Zauberer"
+  ],
+  "Schwerkraft umkehren": [
+    "Druide",
+    "Magier",
+    "Zauberer"
+  ],
+  "Antipathie/Sympathie": [
+    "Druide",
+    "Magier"
+  ],
+  "Erdbeben": [
+    "Druide",
+    "Kleriker",
+    "Zauberer"
+  ],
+  "Sonnenfeuer": [
+    "Druide",
+    "Magier",
+    "Zauberer"
+  ],
+  "Tierform": [
+    "Druide"
+  ],
+  "Wetterkontrolle": [
+    "Druide",
+    "Kleriker",
+    "Magier"
+  ],
+  "Gestaltwandel": [
+    "Druide",
+    "Magier"
+  ],
+  "Sturm der Vergeltung": [
+    "Druide"
+  ],
+  "Wahre Auferstehung": [
+    "Druide",
+    "Kleriker"
+  ],
+  "Kalte Hand": [
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Unheimlicher Strahl": [
+    "Hexenmeister"
+  ],
+  "Höllischer Tadel": [
+    "Hexenmeister"
+  ],
+  "Rascher Rückzug": [
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Schutz vor Gut und Böse": [
+    "Hexenmeister",
+    "Kleriker",
+    "Magier",
+    "Paladin"
+  ],
+  "Dunkelheit": [
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Nebelschritt": [
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Schwächestrahl": [
+    "Hexenmeister",
+    "Magier"
+  ],
+  "Spiegelbilder": [
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Spinnenklettern": [
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Fliegen": [
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Fluch brechen": [
+    "Hexenmeister",
+    "Kleriker",
+    "Magier",
+    "Paladin"
+  ],
+  "Gasförmige Gestalt": [
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Gegenzauber": [
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Schutzkreis": [
+    "Hexenmeister",
+    "Kleriker",
+    "Magier",
+    "Paladin"
+  ],
+  "Vampirgriff": [
+    "Hexenmeister",
+    "Magier"
+  ],
+  "Verbannung": [
+    "Hexenmeister",
+    "Kleriker",
+    "Magier",
+    "Paladin",
+    "Zauberer"
+  ],
+  "Kontakt zu anderen Ebenen": [
+    "Hexenmeister",
+    "Magier"
+  ],
+  "Traum": [
+    "Hexenmeister",
+    "Magier"
+  ],
+  "Fleisch zu Stein": [
+    "Hexenmeister",
+    "Magier"
+  ],
+  "Todeskreis": [
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Untote erschaffen": [
+    "Hexenmeister",
+    "Kleriker",
+    "Magier"
+  ],
+  "Finger des Todes": [
+    "Hexenmeister",
+    "Magier",
+    "Zauberer"
+  ],
+  "Halbebene": [
+    "Hexenmeister",
+    "Magier"
+  ],
+  "Astrale Projektion": [
+    "Hexenmeister",
+    "Kleriker",
+    "Magier"
+  ],
+  "Einkerkerung": [
+    "Hexenmeister",
+    "Magier"
+  ],
+  "Heilige Flamme": [
+    "Kleriker"
+  ],
+  "Thaumaturgie": [
+    "Kleriker"
+  ],
+  "Verschonung der Sterbenden": [
+    "Kleriker"
+  ],
+  "Befehl": [
+    "Kleriker",
+    "Paladin"
+  ],
+  "Gutes und Böses entdecken": [
+    "Kleriker",
+    "Paladin"
+  ],
+  "Heiligtum": [
+    "Kleriker"
+  ],
+  "Lenkendes Geschoss": [
+    "Kleriker"
+  ],
+  "Schild des Glaubens": [
+    "Kleriker",
+    "Paladin"
+  ],
+  "Segnen": [
+    "Kleriker",
+    "Paladin"
+  ],
+  "Wunden verursachen": [
+    "Kleriker"
+  ],
+  "Beistand": [
+    "Kleriker",
+    "Paladin"
+  ],
+  "Dauerhafte Flamme": [
+    "Kleriker",
+    "Magier"
+  ],
+  "Gebet der Heilung": [
+    "Kleriker"
+  ],
+  "Sanfte Ruhe": [
+    "Kleriker",
+    "Magier"
+  ],
+  "Schützendes Band": [
+    "Kleriker"
+  ],
+  "Vorahnung": [
+    "Kleriker"
+  ],
+  "Waffe des Glaubens": [
+    "Kleriker"
+  ],
+  "Leuchtfeuer der Hoffnung": [
+    "Kleriker"
+  ],
+  "Massen-Heilendes Wort": [
+    "Kleriker"
+  ],
+  "Nahrung und Wasser erschaffen": [
+    "Kleriker",
+    "Paladin"
+  ],
+  "Tote beleben": [
+    "Kleriker",
+    "Magier"
+  ],
+  "Wächtergeister": [
+    "Kleriker"
+  ],
+  "Wiederbeleben": [
+    "Kleriker",
+    "Paladin"
+  ],
+  "Hüter des Glaubens": [
+    "Kleriker"
+  ],
+  "Todesschutz": [
+    "Kleriker",
+    "Paladin"
+  ],
+  "Weissagung": [
+    "Kleriker"
+  ],
+  "Flammenschlag": [
+    "Kleriker"
+  ],
+  "Gutes und Böses bannen": [
+    "Kleriker",
+    "Paladin"
+  ],
+  "Heiliges Gespräch": [
+    "Kleriker"
+  ],
+  "Weihen": [
+    "Kleriker"
+  ],
+  "Klingenbarriere": [
+    "Kleriker"
+  ],
+  "Leid": [
+    "Kleriker"
+  ],
+  "Rückruf": [
+    "Kleriker"
+  ],
+  "Verbündeter aus den Ebenen": [
+    "Kleriker"
+  ],
+  "Zutritt verwehren": [
+    "Kleriker"
+  ],
+  "Celestisches Wesen beschwören": [
+    "Kleriker"
+  ],
+  "Göttliches Wort": [
+    "Kleriker"
+  ],
+  "Antimagisches Feld": [
+    "Kleriker",
+    "Magier"
+  ],
+  "Heilige Aura": [
+    "Kleriker"
+  ],
+  "Massen-Heilung": [
+    "Kleriker"
+  ],
+  "Tor": [
+    "Kleriker",
+    "Magier",
+    "Zauberer"
+  ],
+  "Feuerpfeil": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Kältestrahl": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Säurespritzer": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Schockgriff": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Alarm": [
+    "Magier",
+    "Waldläufer"
+  ],
+  "Brennende Hände": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Falsches Leben": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Magierrüstung": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Magisches Geschoss": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Schild": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Schmieren": [
+    "Magier"
+  ],
+  "Schwebende Scheibe": [
+    "Magier"
+  ],
+  "Sprühende Farben": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Vertrauten finden": [
+    "Magier"
+  ],
+  "Arkanes Schloss": [
+    "Magier"
+  ],
+  "Gestalt verändern": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Magische Aura des Arkanisten": [
+    "Magier"
+  ],
+  "Magische Waffe": [
+    "Magier",
+    "Paladin"
+  ],
+  "Netz": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Säurepfeil": [
+    "Magier"
+  ],
+  "Schweben": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Seiltrick": [
+    "Magier"
+  ],
+  "Sengender Strahl": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Vergrößern/Verkleinern": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Verschwimmen": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Blitz": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Feuerball": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Flimmern": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Geisterross": [
+    "Magier"
+  ],
+  "Hast": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Verlangsamen": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Arkanes Auge": [
+    "Magier"
+  ],
+  "Feuerschild": [
+    "Magier"
+  ],
+  "Geheime Truhe": [
+    "Magier"
+  ],
+  "Privates Heiligtum": [
+    "Magier"
+  ],
+  "Schwarze Tentakel": [
+    "Magier"
+  ],
+  "Tödliches Phantom": [
+    "Magier"
+  ],
+  "Treuer Hund": [
+    "Magier"
+  ],
+  "Unverwüstliche Sphäre": [
+    "Magier"
+  ],
+  "Verarbeitung": [
+    "Magier"
+  ],
+  "Arkane Hand": [
+    "Magier"
+  ],
+  "Energiewand": [
+    "Magier"
+  ],
+  "Erschaffung": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Kältekegel": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Telekinese": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Telepathische Bindung": [
+    "Magier"
+  ],
+  "Todeswolke": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Wände passieren": [
+    "Magier"
+  ],
+  "Auflösung": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Eiswand": [
+    "Magier"
+  ],
+  "Frostsphäre": [
+    "Magier"
+  ],
+  "Kettenblitz": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Kugel der Unverwundbarkeit": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Magisches Gefäß": [
+    "Magier"
+  ],
+  "Notfall": [
+    "Magier"
+  ],
+  "Sofortige Beschwörung": [
+    "Magier"
+  ],
+  "Regenbogenspiel": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Simulakrum": [
+    "Magier"
+  ],
+  "Spätzündender Feuerball": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Verbergen": [
+    "Magier"
+  ],
+  "Flammende Wolke": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Irrgarten": [
+    "Magier"
+  ],
+  "Klon": [
+    "Magier"
+  ],
+  "Meteoritenschwarm": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Regenbogenwand": [
+    "Magier"
+  ],
+  "Unheimliches Schicksal": [
+    "Magier"
+  ],
+  "Wunsch": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Zeitstopp": [
+    "Magier",
+    "Zauberer"
+  ],
+  "Göttliche Gunst": [
+    "Paladin"
+  ],
+  "Brandmarkendes Niederstrecken": [
+    "Paladin"
+  ],
+  "Reittier finden": [
+    "Paladin"
+  ],
+  "Zeichen des Jägers": [
+    "Waldläufer"
+  ]
+}

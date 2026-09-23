@@ -1,0 +1,19 @@
+Tormentor Android includes:
+
+Vosk Android 0.3.75
+Copyright Alpha Cephei Inc.
+https://github.com/alphacep/vosk-api
+Apache License 2.0
+
+vosk-model-small-de-0.15
+Copyright 2020 Alpha Cephei Inc.
+https://alphacephei.com/vosk/models
+Apache License 2.0
+
+Java Native Access (JNA) 5.18.1
+Copyright the JNA project contributors
+https://github.com/java-native-access/jna
+Dual licensed LGPL 2.1 or Apache 2.0; used here under Apache 2.0.
+
+The accompanying Apache-2.0.txt contains the license terms.
+The user's own media remain their respective owners' content.

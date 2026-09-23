@@ -1,0 +1,22 @@
+[Unit]
+Description=Tormentor Spielerportal
+After=network.target
+
+[Service]
+Type=simple
+User=tormentor
+Group=tormentor
+WorkingDirectory=/srv/tormentor
+EnvironmentFile=/etc/tormentor/portal.env
+ExecStart=/srv/tormentor/.venv/bin/python /srv/tormentor/portal.py
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/srv/tormentor
+
+[Install]
+WantedBy=multi-user.target

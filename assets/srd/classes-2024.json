@@ -1,0 +1,174 @@
+{
+  "barbar": {
+    "name": "Barbar",
+    "page": 33,
+    "end": 35,
+    "stats": {
+      "Hauptattribut": "Stärke",
+      "Trefferpunktewürfel": "1W12 pro Barbarenstufe",
+      "Rettungswürfe, in denen du geübt bist": "Stärke und Konstitution",
+      "Fertigkeiten, in denen du geübt bist": "Wähle zwei aus: Athletik, Einschüchtern, Mit Tieren umgehen, Naturkunde, Überlebenskunst oder Wahrnehmung",
+      "Übung im Umgang mit Waffen": "Einfache Waffen und Kriegswaffen",
+      "Rüstungsvertrautheit": "Leichte und mittelschwere Rüstungen und Schilde",
+      "Anfangsausrüstung": "Wähle A oder B aus: (A) Zweihandaxt, vier Beile, Entdeckerausrüstung und 15 GM oder (B) 75 GM"
+    }
+  },
+  "barde": {
+    "name": "Barde",
+    "page": 36,
+    "end": 41,
+    "stats": {
+      "Hauptattribut": "Charisma",
+      "Trefferpunktewürfel": "1W8 pro Bardenstufe",
+      "Rettungswürfe, in denen du geübt bist": "Geschicklichkeit und Charisma",
+      "Fertigkeiten, in denen du geübt bist": "Drei Fertigkeiten deiner Wahl (siehe „Die Spielregeln“)",
+      "Übung im Umgang mit Waffen": "Einfache Waffen",
+      "Übung im Umgang mit Werkzeug": "Drei Musikinstrumente deiner Wahl (siehe „Ausrüstung“)",
+      "Rüstungsvertrautheit": "Leichte Rüstung",
+      "Anfangsausrüstung": "Wähle A oder B aus: (A) Lederrüstung, zwei Dolche, Musikinstrument deiner Wahl, Unterhaltungsk ünstler Ausrüstung und 19 GM oder (B) 90 GM"
+    }
+  },
+  "druide": {
+    "name": "Druide",
+    "page": 41,
+    "end": 47,
+    "stats": {
+      "Hauptattribut": "Weisheit",
+      "Trefferpunktewürfel": "1W8 pro Druidenstufe",
+      "Rettungswürfe, in denen du geübt bist": "Intelligenz und Weisheit",
+      "Fertigkeiten, in denen du geübt bist": "Wähle zwei aus: Arkane Kunde, Heilkunde, Mit Tieren umgehen, Motiv erkennen, Naturkunde, Religion, Überlebenskunst oder Wahrnehmung",
+      "Übung im Umgang mit Waffen": "Einfache Waffen",
+      "Übung im Umgang mit Werkzeug": "Kräuterkundeausrüstung",
+      "Rüstungsvertrautheit": "Leichte Rüstung und Schilde",
+      "Anfangsausrüstung": "Wähle A oder B aus: (A) Lederrüstung, Schild, Sichel, Druidischer Fokus (Kampfstab), Entdeckeraus rüstung, Kräuterkundeaus rüstung und 9 GM oder (B) 50 GM"
+    }
+  },
+  "hexenmeister": {
+    "name": "Hexenmeister",
+    "page": 48,
+    "end": 54,
+    "stats": {
+      "Hauptattribut": "Charisma",
+      "Trefferpunktewürfel": "1W8 pro Hexenmeisterstufe",
+      "Rettungswürfe, in denen du geübt bist": "Weisheit und Charisma",
+      "Fertigkeiten, in denen du geübt bist": "Wähle zwei aus: Arkane Kunde, Einschüchtern, Geschichte, Nachforschungen, Naturkunde, Religion oder Täuschen",
+      "Übung im Umgang mit Waffen": "Einfache Waffen",
+      "Rüstungsvertrautheit": "Leichte Rüstung",
+      "Anfangsausrüstung": "Wähle A oder B aus: (A) Lederrüstung, Sichel, zwei Dolche, Arkaner Fokus (Kugel), Buch (okkulte Über lieferungen), Gelehrtenaus rüstung und 15 GM oder (B) 100 GM"
+    }
+  },
+  "kaempfer": {
+    "name": "Kämpfer",
+    "page": 55,
+    "end": 57,
+    "stats": {
+      "Hauptattribut": "Stärke oder Geschicklichkeit",
+      "Trefferpunktewürfel": "1W10 pro Kämpferstufe",
+      "Rettungswürfe, in denen du geübt bist": "Stärke und Konstitution",
+      "Fertigkeiten, in denen du geübt bist": "Wähle zwei aus: Akrobatik, Athletik, Einschüchtern, Geschichte, Mit Tieren umgehen, Motiv erkennen, Überlebenskunst, Überzeugen oder Wahrnehmung",
+      "Übung im Umgang mit Waffen": "Einfache Waffen und Kriegswaffen",
+      "Rüstungsvertrautheit": "Leichte, mittelschwere und schwere Rüstung sowie Schilde",
+      "Anfangsausrüstung": "Wähle A, B oder C aus: (A) Kettenpanzer, Zweihands chwert, Flegel, acht Wurfspeere, Gewölbeforscherausrüstung und 4 GM oder (B) Beschlagene Lederrüstung, Krummsäbel, Kurzschwert, Langbogen, 20 Pfeile, Köcher, Gewölbeforscherausrüstung und 11 GM oder (C) 155 GM"
+    }
+  },
+  "kleriker": {
+    "name": "Kleriker",
+    "page": 58,
+    "end": 62,
+    "stats": {
+      "Hauptattribut": "Weisheit",
+      "Trefferpunktewürfel": "1W8 pro Klerikerstufe",
+      "Rettungswürfe, in denen du geübt bist": "Weisheit und Charisma",
+      "Fertigkeiten, in denen du geübt bist": "Wähle zwei aus: Geschichte, Heilkunde, Motiv erkennen, Religion oder Überzeugen",
+      "Übung im Umgang mit Waffen": "Einfache Waffen",
+      "Rüstungsvertrautheit": "Leichte und mittelschwere Rüstungen und Schilde",
+      "Anfangsausrüstung": "Wähle A oder B aus: (A) Kettenhemd, Schild, Streitkolben, Heiliges Symbol, Priesterausrüstung und 7 GM oder (B) 110 GM"
+    }
+  },
+  "magier": {
+    "name": "Magier",
+    "page": 63,
+    "end": 69,
+    "stats": {
+      "Hauptattribut": "Intelligenz",
+      "Trefferpunktewürfel": "1W6 pro Magierstufe",
+      "Rettungswürfe, in denen du geübt bist": "Intelligenz und Weisheit",
+      "Fertigkeiten, in denen du geübt bist": "Wähle zwei aus: Arkane Kunde, Geschichte, Heilkunde, Motiv erkennen, Nachforschungen, Naturkunde oder Religion",
+      "Übung im Umgang mit Waffen": "Einfache Waffen",
+      "Rüstungsvertrautheit": "Keine",
+      "Anfangsausrüstung": "Wähle A oder B aus: (A) Zwei Dolche, Arkaner Fokus (Kampfstab), Robe, Zauberbuch, Gelehrtenaus rüstung und 5 GM oder (B) 55 GM"
+    }
+  },
+  "moench": {
+    "name": "Mönch",
+    "page": 70,
+    "end": 72,
+    "stats": {
+      "Hauptattribut": "Geschicklichkeit und Weisheit",
+      "Trefferpunktewürfel": "1W8 pro Mönchsstufe",
+      "Rettungswürfe, in denen du geübt bist": "Stärke und Geschicklichkeit",
+      "Fertigkeiten, in denen du geübt bist": "Wähle zwei aus: Akrobatik, Athletik, Geschichte, Heimlich keit, Motiv erkennen oder Religion",
+      "Übung im Umgang mit Waffen": "Einfache Waffen und Kriegswaf fen mit der Eigenschaft Leicht",
+      "Übung im Umgang mit Werkzeug": "Wähle eine Art von Handwerks - zeug oder ein Musikinstrument aus (siehe „Ausrüstung“)",
+      "Rüstungsvertrautheit": "Keine",
+      "Anfangsausrüstung": "Wähle A oder B aus: (A) Speer, fünf Dolche, Handwerkszeug oder Musikinstrument (im Rahmen von „Übung im Umgang mit Werkzeug“ oben ausgewählt), Entdeckeraus rüstung und 11 GM oder (B) 50 GM"
+    }
+  },
+  "paladin": {
+    "name": "Paladin",
+    "page": 73,
+    "end": 77,
+    "stats": {
+      "Hauptattribut": "Stärke und Charisma",
+      "Trefferpunktewürfel": "1W10 pro Paladinstufe",
+      "Rettungswürfe, in denen du geübt bist": "Weisheit und Charisma",
+      "Fertigkeiten, in denen du geübt bist": "Wähle zwei aus: Athletik, Einschüchtern, Heilkunde, Motiv erkennen, Religion oder Überzeugen",
+      "Übung im Umgang mit Waffen": "Einfache Waffen und Kriegswaffen",
+      "Rüstungsvertrautheit": "Leichte, mittelschwere und schwere Rüstung sowie Schilde",
+      "Anfangsausrüstung": "Wähle A oder B aus: (A) Kettenpanzer, Schild, Langschwert, sechs Wurfspeere, Heiliges Symbol, Priesterausrüstung und 9 GM oder (B) 150 GM"
+    }
+  },
+  "schurke": {
+    "name": "Schurke",
+    "page": 78,
+    "end": 81,
+    "stats": {
+      "Hauptattribut": "Geschicklichkeit",
+      "Trefferpunktewürfel": "1W8 pro Schurkenstufe",
+      "Rettungswürfe, in denen du geübt bist": "Geschicklichkeit und Intelligenz",
+      "Fertigkeiten, in denen du geübt bist": "Wähle vier aus: Akrobatik, Athletik, Einschüchtern, Fingerfertigkeit, Heimlichkeit, Motiv erkennen, Nachforschun gen, Täuschen, Überzeugen oder Wahrnehmung",
+      "Übung im Umgang mit Waffen": "Einfache Waffen und Kriegswaffen mit der Eigenschaft Finesse oder Leicht",
+      "Übung im Umgang mit Werkzeug": "Diebeswerkzeug",
+      "Rüstungsvertrautheit": "Leichte Rüstung",
+      "Anfangsausrüstung": "Wähle A oder B aus: (A) Lederrüstung, zwei Dolche, Kurzschwert, Kurzbogen, 20 Pfeile, Köcher, Diebeswerkzeug, Einbrecherausrüstung und 8 GM oder (B) 100 GM"
+    }
+  },
+  "waldlaeufer": {
+    "name": "Waldläufer",
+    "page": 82,
+    "end": 85,
+    "stats": {
+      "Hauptattribut": "Geschicklichkeit und Weisheit",
+      "Trefferpunktewürfel": "1W10 pro Waldläuferstufe",
+      "Rettungswürfe, in denen du geübt bist": "Stärke und Geschicklichkeit",
+      "Fertigkeiten, in denen du geübt bist": "Wähle drei aus: Athletik, Heimlichkeit, Mit Tieren umgehen, Motiv erkennen, Nachforschungen, Naturkunde, Überlebenskunst oder Wahrnehmung",
+      "Übung im Umgang mit Waffen": "Einfache Waffen und Kriegswaffen",
+      "Rüstungsvertrautheit": "Leichte und mittelschwere Rüstungen und Schilde",
+      "Anfangsausrüstung": "Wähle A oder B aus: (A) Beschlagene Lederrüstung, Krummsäbel, Kurzschwert, Langbogen, 20 Pfeile, Köcher, Druidischer Fokus (Mistelzweig), Entdeckerausrüstung und 7 GM oder (B) 150 GM"
+    }
+  },
+  "zauberer": {
+    "name": "Zauberer",
+    "page": 86,
+    "end": 92,
+    "stats": {
+      "Hauptattribut": "Charisma",
+      "Trefferpunktewürfel": "1W6 pro Zaubererstufe",
+      "Rettungswürfe, in denen du geübt bist": "Konstitution und Charisma",
+      "Fertigkeiten, in denen du geübt bist": "Wähle zwei aus: Arkane Kunde, Einschüchtern, Motiv erkennen, Religion, Täuschen oder Überzeugen",
+      "Übung im Umgang mit Waffen": "Einfache Waffen",
+      "Rüstungsvertrautheit": "Keine",
+      "Anfangsausrüstung": "Wähle A oder B aus: (A) Speer, zwei Dolche, Arkaner Fokus (Kristall), Gewölbeforscherausrüstung und 28 GM oder (B) 50 GM"
+    }
+  }
+}

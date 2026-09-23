@@ -1,0 +1,8 @@
+[Unit]
+Description=Consistent Tormentor campaign backup
+[Service]
+Type=oneshot
+UMask=0077
+ExecStartPre=/usr/bin/systemctl stop tormentor-portal
+ExecStart=/usr/bin/python3 /srv/tormentor/deploy/backup.py
+ExecStopPost=/usr/bin/systemctl start tormentor-portal

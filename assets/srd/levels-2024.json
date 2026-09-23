@@ -1,0 +1,3699 @@
+{
+  "barde": {
+    "page": 37,
+    "headers": [
+      "Bardenwürfel",
+      "Zaubertricks",
+      "Vorbereitete Zauber"
+    ],
+    "rows": [
+      {
+        "level": 1,
+        "bonus": "+2",
+        "features": "Bardische Inspiration, Zauberwirken",
+        "values": [
+          "W6",
+          "2",
+          "4"
+        ],
+        "slots": [
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 2,
+        "bonus": "+2",
+        "features": "Alleskönner, Expertise",
+        "values": [
+          "W6",
+          "2",
+          "5"
+        ],
+        "slots": [
+          "3",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 3,
+        "bonus": "+2",
+        "features": "Barden-Unterklasse",
+        "values": [
+          "W6",
+          "2",
+          "6"
+        ],
+        "slots": [
+          "4",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 4,
+        "bonus": "+2",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "W6",
+          "3",
+          "7"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 5,
+        "bonus": "+3",
+        "features": "Quelle der Inspiration",
+        "values": [
+          "W8",
+          "3",
+          "9"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 6,
+        "bonus": "+3",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "W8",
+          "3",
+          "10"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 7,
+        "bonus": "+3",
+        "features": "Bannlied",
+        "values": [
+          "W8",
+          "3",
+          "11"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "1",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 8,
+        "bonus": "+3",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "W8",
+          "3",
+          "12"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 9,
+        "bonus": "+4",
+        "features": "Expertise",
+        "values": [
+          "W8",
+          "3",
+          "14"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "1",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 10,
+        "bonus": "+4",
+        "features": "Magische Geheimnisse",
+        "values": [
+          "W10",
+          "4",
+          "15"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 11,
+        "bonus": "+4",
+        "features": "−",
+        "values": [
+          "W10",
+          "4",
+          "16"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 12,
+        "bonus": "+4",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "W10",
+          "4",
+          "16"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 13,
+        "bonus": "+5",
+        "features": "−",
+        "values": [
+          "W10",
+          "4",
+          "17"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 14,
+        "bonus": "+5",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "W10",
+          "4",
+          "17"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 15,
+        "bonus": "+5",
+        "features": "−",
+        "values": [
+          "W12",
+          "4",
+          "18"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1",
+          "−"
+        ]
+      },
+      {
+        "level": 16,
+        "bonus": "+5",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "W12",
+          "4",
+          "18"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1",
+          "−"
+        ]
+      },
+      {
+        "level": 17,
+        "bonus": "+6",
+        "features": "−",
+        "values": [
+          "W12",
+          "4",
+          "19"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      {
+        "level": 18,
+        "bonus": "+6",
+        "features": "Überlegene Inspiration",
+        "values": [
+          "W12",
+          "4",
+          "20"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "3",
+          "1",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      {
+        "level": 19,
+        "bonus": "+6",
+        "features": "Epische Gabe",
+        "values": [
+          "W12",
+          "4",
+          "21"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      {
+        "level": 20,
+        "bonus": "+6",
+        "features": "Worte der Schöpfung",
+        "values": [
+          "W12",
+          "4",
+          "22"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "3",
+          "2",
+          "2",
+          "1",
+          "1"
+        ]
+      }
+    ],
+    "slot_grades": 9
+  },
+  "druide": {
+    "page": 42,
+    "headers": [
+      "Tiergestalt: Anwendungen",
+      "Zaubertricks",
+      "Vorbereitete Zauber"
+    ],
+    "rows": [
+      {
+        "level": 1,
+        "bonus": "+2",
+        "features": "Zauberwirken, Druidisch, Urtümliche Ordnung",
+        "values": [
+          "−",
+          "2",
+          "4"
+        ],
+        "slots": [
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 2,
+        "bonus": "+2",
+        "features": "Tiergestalt, Wilder Gefährte",
+        "values": [
+          "2",
+          "2",
+          "5"
+        ],
+        "slots": [
+          "3",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 3,
+        "bonus": "+2",
+        "features": "Druiden-Unterklasse",
+        "values": [
+          "2",
+          "2",
+          "6"
+        ],
+        "slots": [
+          "4",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 4,
+        "bonus": "+2",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "2",
+          "3",
+          "7"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 5,
+        "bonus": "+3",
+        "features": "Wilde Wiederkehr",
+        "values": [
+          "2",
+          "3",
+          "9"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 6,
+        "bonus": "+3",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "3",
+          "3",
+          "10"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 7,
+        "bonus": "+3",
+        "features": "Elementare Wut",
+        "values": [
+          "3",
+          "3",
+          "11"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "1",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 8,
+        "bonus": "+3",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "3",
+          "3",
+          "12"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 9,
+        "bonus": "+4",
+        "features": "−",
+        "values": [
+          "3",
+          "3",
+          "14"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "1",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 10,
+        "bonus": "+4",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "3",
+          "4",
+          "15"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 11,
+        "bonus": "+4",
+        "features": "−",
+        "values": [
+          "3",
+          "4",
+          "16"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 12,
+        "bonus": "+4",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "3",
+          "4",
+          "16"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 13,
+        "bonus": "+5",
+        "features": "−",
+        "values": [
+          "3",
+          "4",
+          "17"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 14,
+        "bonus": "+5",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "3",
+          "4",
+          "17"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 15,
+        "bonus": "+5",
+        "features": "Verbesserte Elementare Wut",
+        "values": [
+          "3",
+          "4",
+          "18"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1",
+          "−"
+        ]
+      },
+      {
+        "level": 16,
+        "bonus": "+5",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "3",
+          "4",
+          "18"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1",
+          "−"
+        ]
+      },
+      {
+        "level": 17,
+        "bonus": "+6",
+        "features": "−",
+        "values": [
+          "4",
+          "4",
+          "19"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      {
+        "level": 18,
+        "bonus": "+6",
+        "features": "In Tiergestalt zaubern",
+        "values": [
+          "4",
+          "4",
+          "20"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "3",
+          "1",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      {
+        "level": 19,
+        "bonus": "+6",
+        "features": "Epische Gabe",
+        "values": [
+          "4",
+          "4",
+          "21"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      {
+        "level": 20,
+        "bonus": "+6",
+        "features": "Erzdruide",
+        "values": [
+          "4",
+          "4",
+          "22"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "3",
+          "2",
+          "2",
+          "1",
+          "1"
+        ]
+      }
+    ],
+    "slot_grades": 9
+  },
+  "hexenmeister": {
+    "page": 48,
+    "headers": [
+      "Schauerliche Anrufungen",
+      "Zaubertricks",
+      "Vorbereitete Zauber",
+      "Paktmagie: Zauberplätze",
+      "Grad der Paktplätze"
+    ],
+    "rows": [
+      {
+        "level": 1,
+        "bonus": "+2",
+        "features": "Paktmagie, Schauerliche Anrufungen",
+        "values": [
+          "1",
+          "2",
+          "2",
+          "1",
+          "1"
+        ],
+        "slots": []
+      },
+      {
+        "level": 2,
+        "bonus": "+2",
+        "features": "Magische Raffinesse",
+        "values": [
+          "3",
+          "2",
+          "3",
+          "2",
+          "1"
+        ],
+        "slots": []
+      },
+      {
+        "level": 3,
+        "bonus": "+2",
+        "features": "Hexenmeister-Unterklasse",
+        "values": [
+          "3",
+          "2",
+          "4",
+          "2",
+          "2"
+        ],
+        "slots": []
+      },
+      {
+        "level": 4,
+        "bonus": "+2",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "3",
+          "3",
+          "5",
+          "2",
+          "2"
+        ],
+        "slots": []
+      },
+      {
+        "level": 5,
+        "bonus": "+3",
+        "features": "−",
+        "values": [
+          "5",
+          "3",
+          "6",
+          "2",
+          "3"
+        ],
+        "slots": []
+      },
+      {
+        "level": 6,
+        "bonus": "+3",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "5",
+          "3",
+          "7",
+          "2",
+          "3"
+        ],
+        "slots": []
+      },
+      {
+        "level": 7,
+        "bonus": "+3",
+        "features": "−",
+        "values": [
+          "6",
+          "3",
+          "8",
+          "2",
+          "4"
+        ],
+        "slots": []
+      },
+      {
+        "level": 8,
+        "bonus": "+3",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "6",
+          "3",
+          "9",
+          "2",
+          "4"
+        ],
+        "slots": []
+      },
+      {
+        "level": 9,
+        "bonus": "+4",
+        "features": "Schutzherrn kontaktieren",
+        "values": [
+          "7",
+          "3",
+          "10",
+          "2",
+          "5"
+        ],
+        "slots": []
+      },
+      {
+        "level": 10,
+        "bonus": "+4",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "7",
+          "4",
+          "10",
+          "2",
+          "5"
+        ],
+        "slots": []
+      },
+      {
+        "level": 11,
+        "bonus": "+4",
+        "features": "Mystisches Arkanum (Zauber des 6. Grades)",
+        "values": [
+          "7",
+          "4",
+          "11",
+          "3",
+          "5"
+        ],
+        "slots": []
+      },
+      {
+        "level": 12,
+        "bonus": "+4",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "8",
+          "4",
+          "11",
+          "3",
+          "5"
+        ],
+        "slots": []
+      },
+      {
+        "level": 13,
+        "bonus": "+5",
+        "features": "Mystisches Arkanum (Zauber des 7. Grades)",
+        "values": [
+          "8",
+          "4",
+          "12",
+          "3",
+          "5"
+        ],
+        "slots": []
+      },
+      {
+        "level": 14,
+        "bonus": "+5",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "8",
+          "4",
+          "12",
+          "3",
+          "5"
+        ],
+        "slots": []
+      },
+      {
+        "level": 15,
+        "bonus": "+5",
+        "features": "Mystisches Arkanum (Zauber des 8. Grades)",
+        "values": [
+          "9",
+          "4",
+          "13",
+          "3",
+          "5"
+        ],
+        "slots": []
+      },
+      {
+        "level": 16,
+        "bonus": "+5",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "9",
+          "4",
+          "13",
+          "3",
+          "5"
+        ],
+        "slots": []
+      },
+      {
+        "level": 17,
+        "bonus": "+6",
+        "features": "Mystisches Arkanum (Zauber des 9. Grades)",
+        "values": [
+          "9",
+          "4",
+          "14",
+          "4",
+          "5"
+        ],
+        "slots": []
+      },
+      {
+        "level": 18,
+        "bonus": "+6",
+        "features": "−",
+        "values": [
+          "10",
+          "4",
+          "14",
+          "4",
+          "5"
+        ],
+        "slots": []
+      },
+      {
+        "level": 19,
+        "bonus": "+6",
+        "features": "Epische Gabe",
+        "values": [
+          "10",
+          "4",
+          "15",
+          "4",
+          "5"
+        ],
+        "slots": []
+      },
+      {
+        "level": 20,
+        "bonus": "+6",
+        "features": "Mystischer Meister",
+        "values": [
+          "10",
+          "4",
+          "15",
+          "4",
+          "5"
+        ],
+        "slots": []
+      }
+    ],
+    "slot_grades": 0
+  },
+  "kaempfer": {
+    "page": 56,
+    "headers": [
+      "Durchschnaufen: Anwendungen",
+      "Waffenbeherrschung"
+    ],
+    "rows": [
+      {
+        "level": 1,
+        "bonus": "+2",
+        "features": "Kampfstil, Durchschnaufen, Waffenbeherrschung",
+        "values": [
+          "2",
+          "3"
+        ],
+        "slots": []
+      },
+      {
+        "level": 2,
+        "bonus": "+2",
+        "features": "Taktisches Verständnis, Tatendrang (einmalig)",
+        "values": [
+          "2",
+          "3"
+        ],
+        "slots": []
+      },
+      {
+        "level": 3,
+        "bonus": "+2",
+        "features": "Kämpfer-Unterklasse",
+        "values": [
+          "2",
+          "3"
+        ],
+        "slots": []
+      },
+      {
+        "level": 4,
+        "bonus": "+2",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "3",
+          "4"
+        ],
+        "slots": []
+      },
+      {
+        "level": 5,
+        "bonus": "+3",
+        "features": "Taktikwechsel, Zusätzlicher Angriff",
+        "values": [
+          "3",
+          "4"
+        ],
+        "slots": []
+      },
+      {
+        "level": 6,
+        "bonus": "+3",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "3",
+          "4"
+        ],
+        "slots": []
+      },
+      {
+        "level": 7,
+        "bonus": "+3",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "3",
+          "4"
+        ],
+        "slots": []
+      },
+      {
+        "level": 8,
+        "bonus": "+3",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "3",
+          "4"
+        ],
+        "slots": []
+      },
+      {
+        "level": 9,
+        "bonus": "+4",
+        "features": "Taktischer Meister, Unbeugsamkeit (eine Anwendung)",
+        "values": [
+          "3",
+          "4"
+        ],
+        "slots": []
+      },
+      {
+        "level": 10,
+        "bonus": "+4",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "4",
+          "5"
+        ],
+        "slots": []
+      },
+      {
+        "level": 11,
+        "bonus": "+4",
+        "features": "Zwei zusätzliche Angriffe",
+        "values": [
+          "4",
+          "5"
+        ],
+        "slots": []
+      },
+      {
+        "level": 12,
+        "bonus": "+4",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "4",
+          "5"
+        ],
+        "slots": []
+      },
+      {
+        "level": 13,
+        "bonus": "+5",
+        "features": "Angriffsstudien, Unbeugsamkeit (zwei Anwendungen)",
+        "values": [
+          "4",
+          "5"
+        ],
+        "slots": []
+      },
+      {
+        "level": 14,
+        "bonus": "+5",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "4",
+          "5"
+        ],
+        "slots": []
+      },
+      {
+        "level": 15,
+        "bonus": "+5",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "4",
+          "5"
+        ],
+        "slots": []
+      },
+      {
+        "level": 16,
+        "bonus": "+5",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "4",
+          "6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 17,
+        "bonus": "+6",
+        "features": "Tatendrang (zwei Anwendungen), Unbeugsamkeit (drei Anwendungen)",
+        "values": [
+          "4",
+          "6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 18,
+        "bonus": "+6",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "4",
+          "6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 19,
+        "bonus": "+6",
+        "features": "Epische Gabe",
+        "values": [
+          "4",
+          "6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 20,
+        "bonus": "+6",
+        "features": "Drei zusätzliche Angriffe",
+        "values": [
+          "4",
+          "6"
+        ],
+        "slots": []
+      }
+    ],
+    "slot_grades": 0
+  },
+  "kleriker": {
+    "page": 58,
+    "headers": [
+      "Göttliche Macht fokussieren: Anwendungen",
+      "Zaubertricks",
+      "Vorbereitete Zauber"
+    ],
+    "rows": [
+      {
+        "level": 1,
+        "bonus": "+2",
+        "features": "Zauberwirken, Göttliche Ordnung",
+        "values": [
+          "−",
+          "3",
+          "4"
+        ],
+        "slots": [
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 2,
+        "bonus": "+2",
+        "features": "Göttliche Macht fokussieren",
+        "values": [
+          "2",
+          "3",
+          "5"
+        ],
+        "slots": [
+          "3",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 3,
+        "bonus": "+2",
+        "features": "Kleriker-Unterklasse",
+        "values": [
+          "2",
+          "3",
+          "6"
+        ],
+        "slots": [
+          "4",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 4,
+        "bonus": "+2",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "2",
+          "4",
+          "7"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 5,
+        "bonus": "+3",
+        "features": "Untote versengen",
+        "values": [
+          "2",
+          "4",
+          "9"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 6,
+        "bonus": "+3",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "3",
+          "4",
+          "10"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 7,
+        "bonus": "+3",
+        "features": "Gesegnete Schläge",
+        "values": [
+          "3",
+          "4",
+          "11"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "1",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 8,
+        "bonus": "+3",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "3",
+          "4",
+          "12"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 9,
+        "bonus": "+4",
+        "features": "−",
+        "values": [
+          "3",
+          "4",
+          "14"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "1",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 10,
+        "bonus": "+4",
+        "features": "Göttliche Intervention",
+        "values": [
+          "3",
+          "5",
+          "15"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 11,
+        "bonus": "+4",
+        "features": "−",
+        "values": [
+          "3",
+          "5",
+          "16"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 12,
+        "bonus": "+4",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "3",
+          "5",
+          "16"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 13,
+        "bonus": "+5",
+        "features": "−",
+        "values": [
+          "3",
+          "5",
+          "17"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 14,
+        "bonus": "+5",
+        "features": "Verbesserte Gesegnete Schläge",
+        "values": [
+          "3",
+          "5",
+          "17"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 15,
+        "bonus": "+5",
+        "features": "−",
+        "values": [
+          "3",
+          "5",
+          "18"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1",
+          "−"
+        ]
+      },
+      {
+        "level": 16,
+        "bonus": "+5",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "3",
+          "5",
+          "18"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1",
+          "−"
+        ]
+      },
+      {
+        "level": 17,
+        "bonus": "+6",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "3",
+          "5",
+          "19"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      {
+        "level": 18,
+        "bonus": "+6",
+        "features": "−",
+        "values": [
+          "4",
+          "5",
+          "20"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "3",
+          "1",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      {
+        "level": 19,
+        "bonus": "+6",
+        "features": "Epische Gabe",
+        "values": [
+          "4",
+          "5",
+          "21"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      {
+        "level": 20,
+        "bonus": "+6",
+        "features": "Mächtige Göttliche Intervention",
+        "values": [
+          "4",
+          "5",
+          "22"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "3",
+          "2",
+          "2",
+          "1",
+          "1"
+        ]
+      }
+    ],
+    "slot_grades": 9
+  },
+  "magier": {
+    "page": 64,
+    "headers": [
+      "Zaubertricks",
+      "Vorbereitete Zauber"
+    ],
+    "rows": [
+      {
+        "level": 1,
+        "bonus": "+2",
+        "features": "Zauberwirken, Ritual-Adept, Arkane Erholung",
+        "values": [
+          "3",
+          "4"
+        ],
+        "slots": [
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 2,
+        "bonus": "+2",
+        "features": "Gelehrter",
+        "values": [
+          "3",
+          "5"
+        ],
+        "slots": [
+          "3",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 3,
+        "bonus": "+2",
+        "features": "Magier-Unterklasse",
+        "values": [
+          "3",
+          "6"
+        ],
+        "slots": [
+          "4",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 4,
+        "bonus": "+2",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "4",
+          "7"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 5,
+        "bonus": "+3",
+        "features": "Zauber auswendig lernen",
+        "values": [
+          "4",
+          "9"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 6,
+        "bonus": "+3",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "4",
+          "10"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 7,
+        "bonus": "+3",
+        "features": "−",
+        "values": [
+          "4",
+          "11"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "1",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 8,
+        "bonus": "+3",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "4",
+          "12"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 9,
+        "bonus": "+4",
+        "features": "−",
+        "values": [
+          "4",
+          "14"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "1",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 10,
+        "bonus": "+4",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "5",
+          "15"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 11,
+        "bonus": "+4",
+        "features": "−",
+        "values": [
+          "5",
+          "16"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 12,
+        "bonus": "+4",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "5",
+          "16"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 13,
+        "bonus": "+5",
+        "features": "−",
+        "values": [
+          "5",
+          "17"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 14,
+        "bonus": "+5",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "5",
+          "18"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 15,
+        "bonus": "+5",
+        "features": "−",
+        "values": [
+          "5",
+          "19"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1",
+          "−"
+        ]
+      },
+      {
+        "level": 16,
+        "bonus": "+5",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "5",
+          "21"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1",
+          "−"
+        ]
+      },
+      {
+        "level": 17,
+        "bonus": "+6",
+        "features": "−",
+        "values": [
+          "5",
+          "22"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      {
+        "level": 18,
+        "bonus": "+6",
+        "features": "Zaubermeisterschaft",
+        "values": [
+          "5",
+          "23"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "3",
+          "1",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      {
+        "level": 19,
+        "bonus": "+6",
+        "features": "Epische Gabe",
+        "values": [
+          "5",
+          "24"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      {
+        "level": 20,
+        "bonus": "+6",
+        "features": "Lieblingszauber",
+        "values": [
+          "5",
+          "25"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "3",
+          "2",
+          "2",
+          "1",
+          "1"
+        ]
+      }
+    ],
+    "slot_grades": 9
+  },
+  "moench": {
+    "page": 70,
+    "headers": [
+      "Kampfkünste",
+      "Fokuspunkte",
+      "Ungerüstete Bewegung"
+    ],
+    "rows": [
+      {
+        "level": 1,
+        "bonus": "+2",
+        "features": "Kampfkünste, Ungerüstete Verteidigung",
+        "values": [
+          "1W6",
+          "−",
+          "−"
+        ],
+        "slots": []
+      },
+      {
+        "level": 2,
+        "bonus": "+2",
+        "features": "Mönchsfokus, Ungerüstete Bewegung, Unglaublicher Stoffwechsel",
+        "values": [
+          "1W6",
+          "2",
+          "+3 m (+10 ft)"
+        ],
+        "slots": []
+      },
+      {
+        "level": 3,
+        "bonus": "+2",
+        "features": "Angriffe umleiten, Mönch-Unterklasse",
+        "values": [
+          "1W6",
+          "3",
+          "+3 m (+10 ft)"
+        ],
+        "slots": []
+      },
+      {
+        "level": 4,
+        "bonus": "+2",
+        "features": "Attributswerterhöhung, Sturz abfedern",
+        "values": [
+          "1W6",
+          "4",
+          "+3 m (+10 ft)"
+        ],
+        "slots": []
+      },
+      {
+        "level": 5,
+        "bonus": "+3",
+        "features": "Betäubender Schlag, Zusätzlicher Angriff",
+        "values": [
+          "1W8",
+          "5",
+          "+3 m (+10 ft)"
+        ],
+        "slots": []
+      },
+      {
+        "level": 6,
+        "bonus": "+3",
+        "features": "Mächtige Schläge, Unterklassenmerkmal",
+        "values": [
+          "1W8",
+          "6",
+          "+4,5 m (+15 ft)"
+        ],
+        "slots": []
+      },
+      {
+        "level": 7,
+        "bonus": "+3",
+        "features": "Entrinnen",
+        "values": [
+          "1W8",
+          "7",
+          "+4,5 m (+15 ft)"
+        ],
+        "slots": []
+      },
+      {
+        "level": 8,
+        "bonus": "+3",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "1W8",
+          "8",
+          "+4,5 m (+15 ft)"
+        ],
+        "slots": []
+      },
+      {
+        "level": 9,
+        "bonus": "+4",
+        "features": "Akrobatische Bewegung",
+        "values": [
+          "1W8",
+          "9",
+          "+4,5 m (+15 ft)"
+        ],
+        "slots": []
+      },
+      {
+        "level": 10,
+        "bonus": "+4",
+        "features": "Erhöhter Fokus, Selbstwiederherstellung",
+        "values": [
+          "1W8",
+          "10",
+          "+6 m (+20 ft)"
+        ],
+        "slots": []
+      },
+      {
+        "level": 11,
+        "bonus": "+4",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "1W10",
+          "11",
+          "+6 m (+20 ft)"
+        ],
+        "slots": []
+      },
+      {
+        "level": 12,
+        "bonus": "+4",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "1W10",
+          "12",
+          "+6 m (+20 ft)"
+        ],
+        "slots": []
+      },
+      {
+        "level": 13,
+        "bonus": "+5",
+        "features": "Energie umleiten",
+        "values": [
+          "1W10",
+          "13",
+          "+6 m (+20 ft)"
+        ],
+        "slots": []
+      },
+      {
+        "level": 14,
+        "bonus": "+5",
+        "features": "Der disziplinierte Überlebende",
+        "values": [
+          "1W10",
+          "14",
+          "+7,5 m (+25 ft)"
+        ],
+        "slots": []
+      },
+      {
+        "level": 15,
+        "bonus": "+5",
+        "features": "Perfekter Fokus",
+        "values": [
+          "1W10",
+          "15",
+          "+7,5 m (+25 ft)"
+        ],
+        "slots": []
+      },
+      {
+        "level": 16,
+        "bonus": "+5",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "1W10",
+          "16",
+          "+7,5 m (+25 ft)"
+        ],
+        "slots": []
+      },
+      {
+        "level": 17,
+        "bonus": "+6",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "1W12",
+          "17",
+          "+7,5 m (+25 ft)"
+        ],
+        "slots": []
+      },
+      {
+        "level": 18,
+        "bonus": "+6",
+        "features": "Überlegene Verteidigung",
+        "values": [
+          "1W12",
+          "18",
+          "+9 m (+30 ft)"
+        ],
+        "slots": []
+      },
+      {
+        "level": 19,
+        "bonus": "+6",
+        "features": "Epische Gabe",
+        "values": [
+          "1W12",
+          "19",
+          "+9 m (+30 ft)"
+        ],
+        "slots": []
+      },
+      {
+        "level": 20,
+        "bonus": "+6",
+        "features": "Körper und Geist",
+        "values": [
+          "1W12",
+          "20",
+          "+9 m (+30 ft)"
+        ],
+        "slots": []
+      }
+    ],
+    "slot_grades": 0
+  },
+  "paladin": {
+    "page": 74,
+    "headers": [
+      "Göttliche Macht fokussieren: Anwendungen",
+      "Vorbereitete Zauber"
+    ],
+    "rows": [
+      {
+        "level": 1,
+        "bonus": "+2",
+        "features": "Handauflegen, Waffenbeherrschung, Zauberwirken",
+        "values": [
+          "−",
+          "2"
+        ],
+        "slots": [
+          "2",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 2,
+        "bonus": "+2",
+        "features": "Kampfstil, Paladin-Niederstrecken",
+        "values": [
+          "−",
+          "3"
+        ],
+        "slots": [
+          "2",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 3,
+        "bonus": "+2",
+        "features": "Göttliche Macht fokussieren, Paladin-Unterklasse",
+        "values": [
+          "2",
+          "4"
+        ],
+        "slots": [
+          "3",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 4,
+        "bonus": "+2",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "2",
+          "5"
+        ],
+        "slots": [
+          "3",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 5,
+        "bonus": "+3",
+        "features": "Treues Reittier, Zusätzlicher Angriff",
+        "values": [
+          "2",
+          "6"
+        ],
+        "slots": [
+          "4",
+          "2",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 6,
+        "bonus": "+3",
+        "features": "Aura des Schutzes",
+        "values": [
+          "2",
+          "6"
+        ],
+        "slots": [
+          "4",
+          "2",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 7,
+        "bonus": "+3",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "2",
+          "7"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 8,
+        "bonus": "+3",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "2",
+          "7"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 9,
+        "bonus": "+4",
+        "features": "Gegner verdammen",
+        "values": [
+          "2",
+          "9"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "2",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 10,
+        "bonus": "+4",
+        "features": "Aura der Tapferkeit",
+        "values": [
+          "2",
+          "9"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "2",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 11,
+        "bonus": "+4",
+        "features": "Gleißende Schläge",
+        "values": [
+          "3",
+          "10"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 12,
+        "bonus": "+4",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "3",
+          "10"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 13,
+        "bonus": "+5",
+        "features": "−",
+        "values": [
+          "3",
+          "11"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "1",
+          "−"
+        ]
+      },
+      {
+        "level": 14,
+        "bonus": "+5",
+        "features": "Erquickende Berührung",
+        "values": [
+          "3",
+          "11"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "1",
+          "−"
+        ]
+      },
+      {
+        "level": 15,
+        "bonus": "+5",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "3",
+          "12"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "2",
+          "−"
+        ]
+      },
+      {
+        "level": 16,
+        "bonus": "+5",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "3",
+          "12"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "2",
+          "−"
+        ]
+      },
+      {
+        "level": 17,
+        "bonus": "+6",
+        "features": "−",
+        "values": [
+          "3",
+          "14"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "level": 18,
+        "bonus": "+6",
+        "features": "Aura-Ausdehnung",
+        "values": [
+          "3",
+          "14"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "level": 19,
+        "bonus": "+6",
+        "features": "Epische Gabe",
+        "values": [
+          "3",
+          "15"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2"
+        ]
+      },
+      {
+        "level": 20,
+        "bonus": "+6",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "3",
+          "15"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2"
+        ]
+      }
+    ],
+    "slot_grades": 5
+  },
+  "schurke": {
+    "page": 79,
+    "headers": [
+      "Hinterhältiger Angriff"
+    ],
+    "rows": [
+      {
+        "level": 1,
+        "bonus": "+2",
+        "features": "Diebessprache, Expertise, Hinterhältiger Angriff, Waffenbeherrschung",
+        "values": [
+          "1W6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 2,
+        "bonus": "+2",
+        "features": "Raffinierte Aktion",
+        "values": [
+          "1W6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 3,
+        "bonus": "+2",
+        "features": "Schurken-Unterklasse, Zielsicher",
+        "values": [
+          "2W6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 4,
+        "bonus": "+2",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "2W6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 5,
+        "bonus": "+3",
+        "features": "Raffinierter Schlag, Unglaubliches Ausweichen",
+        "values": [
+          "3W6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 6,
+        "bonus": "+3",
+        "features": "Expertise",
+        "values": [
+          "3W6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 7,
+        "bonus": "+3",
+        "features": "Entrinnen, Verlässliches Talent",
+        "values": [
+          "4W6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 8,
+        "bonus": "+3",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "4W6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 9,
+        "bonus": "+4",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "5W6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 10,
+        "bonus": "+4",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "5W6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 11,
+        "bonus": "+4",
+        "features": "Verbesserter Raffinierter Schlag",
+        "values": [
+          "6W6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 12,
+        "bonus": "+4",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "6W6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 13,
+        "bonus": "+5",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "7W6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 14,
+        "bonus": "+5",
+        "features": "Hinterhältige Schläge",
+        "values": [
+          "7W6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 15,
+        "bonus": "+5",
+        "features": "Entschlüpfender Geist",
+        "values": [
+          "8W6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 16,
+        "bonus": "+5",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "8W6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 17,
+        "bonus": "+6",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "9W6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 18,
+        "bonus": "+6",
+        "features": "Schwer zu fassen",
+        "values": [
+          "9W6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 19,
+        "bonus": "+6",
+        "features": "Epische Gabe",
+        "values": [
+          "10W6"
+        ],
+        "slots": []
+      },
+      {
+        "level": 20,
+        "bonus": "+6",
+        "features": "Glückstreffer",
+        "values": [
+          "10W6"
+        ],
+        "slots": []
+      }
+    ],
+    "slot_grades": 0
+  },
+  "waldlaeufer": {
+    "page": 82,
+    "headers": [
+      "Erzfeind: Anwendungen",
+      "Vorbereitete Zauber"
+    ],
+    "rows": [
+      {
+        "level": 1,
+        "bonus": "+2",
+        "features": "Erzfeind, Waffenbeherrschung, Zauberwirken",
+        "values": [
+          "2",
+          "2"
+        ],
+        "slots": [
+          "2",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 2,
+        "bonus": "+2",
+        "features": "Geschickte Erkundung, Kampfstil",
+        "values": [
+          "2",
+          "3"
+        ],
+        "slots": [
+          "2",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 3,
+        "bonus": "+2",
+        "features": "Waldläufer-Unterklasse",
+        "values": [
+          "2",
+          "4"
+        ],
+        "slots": [
+          "3",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 4,
+        "bonus": "+2",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "2",
+          "5"
+        ],
+        "slots": [
+          "3",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 5,
+        "bonus": "+3",
+        "features": "Zusätzlicher Angriff",
+        "values": [
+          "3",
+          "6"
+        ],
+        "slots": [
+          "4",
+          "2",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 6,
+        "bonus": "+3",
+        "features": "Vagabund",
+        "values": [
+          "3",
+          "6"
+        ],
+        "slots": [
+          "4",
+          "2",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 7,
+        "bonus": "+3",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "3",
+          "7"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 8,
+        "bonus": "+3",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "3",
+          "7"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 9,
+        "bonus": "+4",
+        "features": "Expertise",
+        "values": [
+          "4",
+          "9"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "2",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 10,
+        "bonus": "+4",
+        "features": "Unermüdlichkeit",
+        "values": [
+          "4",
+          "9"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "2",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 11,
+        "bonus": "+4",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "4",
+          "10"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 12,
+        "bonus": "+4",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "4",
+          "10"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 13,
+        "bonus": "+5",
+        "features": "Unermüdlicher Jäger",
+        "values": [
+          "5",
+          "11"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "1",
+          "−"
+        ]
+      },
+      {
+        "level": 14,
+        "bonus": "+5",
+        "features": "Naturschleier",
+        "values": [
+          "5",
+          "11"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "1",
+          "−"
+        ]
+      },
+      {
+        "level": 15,
+        "bonus": "+5",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "5",
+          "12"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "2",
+          "−"
+        ]
+      },
+      {
+        "level": 16,
+        "bonus": "+5",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "5",
+          "12"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "2",
+          "−"
+        ]
+      },
+      {
+        "level": 17,
+        "bonus": "+6",
+        "features": "Präziser Jäger",
+        "values": [
+          "6",
+          "14"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "level": 18,
+        "bonus": "+6",
+        "features": "Wildes Gespür",
+        "values": [
+          "6",
+          "14"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "level": 19,
+        "bonus": "+6",
+        "features": "Epische Gabe",
+        "values": [
+          "6",
+          "15"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2"
+        ]
+      },
+      {
+        "level": 20,
+        "bonus": "+6",
+        "features": "Feindestöter",
+        "values": [
+          "6",
+          "15"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2"
+        ]
+      }
+    ],
+    "slot_grades": 5
+  },
+  "zauberer": {
+    "page": 86,
+    "headers": [
+      "Zaubereipunkte",
+      "Zaubertricks",
+      "Vorbereitete Zauber"
+    ],
+    "rows": [
+      {
+        "level": 1,
+        "bonus": "+2",
+        "features": "Zauberwirken, Intuitive Zauberei",
+        "values": [
+          "−",
+          "4",
+          "2"
+        ],
+        "slots": [
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 2,
+        "bonus": "+2",
+        "features": "Metamagie, Quelle der Magie",
+        "values": [
+          "2",
+          "4",
+          "4"
+        ],
+        "slots": [
+          "3",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 3,
+        "bonus": "+2",
+        "features": "Zauberer-Unterklasse",
+        "values": [
+          "3",
+          "4",
+          "6"
+        ],
+        "slots": [
+          "4",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 4,
+        "bonus": "+2",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "4",
+          "5",
+          "7"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 5,
+        "bonus": "+3",
+        "features": "Zaubereiauffrischung",
+        "values": [
+          "5",
+          "5",
+          "9"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 6,
+        "bonus": "+3",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "6",
+          "5",
+          "10"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 7,
+        "bonus": "+3",
+        "features": "Zauberei-Inkarnat",
+        "values": [
+          "7",
+          "5",
+          "11"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "1",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 8,
+        "bonus": "+3",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "8",
+          "5",
+          "12"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 9,
+        "bonus": "+4",
+        "features": "−",
+        "values": [
+          "9",
+          "5",
+          "14"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "1",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 10,
+        "bonus": "+4",
+        "features": "Metamagie",
+        "values": [
+          "10",
+          "6",
+          "15"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "−",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 11,
+        "bonus": "+4",
+        "features": "−",
+        "values": [
+          "11",
+          "6",
+          "16"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 12,
+        "bonus": "+4",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "12",
+          "6",
+          "16"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "−",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 13,
+        "bonus": "+5",
+        "features": "−",
+        "values": [
+          "13",
+          "6",
+          "17"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 14,
+        "bonus": "+5",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "14",
+          "6",
+          "17"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "−",
+          "−"
+        ]
+      },
+      {
+        "level": 15,
+        "bonus": "+5",
+        "features": "−",
+        "values": [
+          "15",
+          "6",
+          "18"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1",
+          "−"
+        ]
+      },
+      {
+        "level": 16,
+        "bonus": "+5",
+        "features": "Attributswerterhöhung",
+        "values": [
+          "16",
+          "6",
+          "18"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1",
+          "−"
+        ]
+      },
+      {
+        "level": 17,
+        "bonus": "+6",
+        "features": "Metamagie",
+        "values": [
+          "17",
+          "6",
+          "19"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      {
+        "level": 18,
+        "bonus": "+6",
+        "features": "Unterklassenmerkmal",
+        "values": [
+          "18",
+          "6",
+          "20"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "3",
+          "1",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      {
+        "level": 19,
+        "bonus": "+6",
+        "features": "Epische Gabe",
+        "values": [
+          "19",
+          "6",
+          "21"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "3",
+          "2",
+          "1",
+          "1",
+          "1"
+        ]
+      },
+      {
+        "level": 20,
+        "bonus": "+6",
+        "features": "Arkane Vergöttlichung",
+        "values": [
+          "20",
+          "6",
+          "22"
+        ],
+        "slots": [
+          "4",
+          "3",
+          "3",
+          "3",
+          "3",
+          "2",
+          "2",
+          "1",
+          "1"
+        ]
+      }
+    ],
+    "slot_grades": 9
+  }
+}

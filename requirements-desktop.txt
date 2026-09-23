@@ -1,0 +1,7 @@
+-r requirements.txt
+customtkinter
+opencv-python
+Pillow
+openai
+elevenlabs
+python-dotenv
