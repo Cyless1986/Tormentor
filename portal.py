@@ -439,6 +439,12 @@ class Handler(BaseHTTPRequestHandler):
         for key in codex_expansions.codex_profiles.ILLUSTRATIONS:
             media[f"/media/codex/{key}.png"] = ROOT / "assets" / "codex" / f"{key}.png"
         if self.path in media:
+            codex_download = self.path.startswith('/media/Tormentor-Codex-') and self.path.endswith('.pdf')
+            if codex_download:
+                with database() as db:
+                    user = self.current_user(db)
+                    if not user or user['role'] != 'dm':
+                        return self.send(403, page('Kein Zugriff', '<p>Codex-Downloads sind nur für den DM.</p>', user))
             file = media[self.path]
             if not file.is_file(): return self.send(404, "Medien nicht gefunden")
             size = file.stat().st_size
@@ -457,6 +463,7 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", mimetypes.guess_type(file)[0] or "application/octet-stream")
             self.send_header("Content-Length", str(end - start + 1))
             self.send_header("Accept-Ranges", "bytes")
+            if codex_download: self.send_header('Cache-Control', 'private, no-store')
             if byte_range: self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
             self.end_headers()
             with file.open("rb") as source:
@@ -600,7 +607,8 @@ class Handler(BaseHTTPRequestHandler):
                 body = ''.join(handout_card(row) for row in rows) or '<p>Noch keine freigegebenen Handouts.</p>'
             elif path == "/codex":
                 body = '<div class="grid"><div class="book cover"><img src="/media/tc.png" alt="Tormentor TC Logo"><h2>Tormentors Rassen und Klassen</h2><p>Ausgabe 2024 · SRD 5.2.1</p><a href="/codex/2024">Buch öffnen →</a></div><div class="book cover"><img src="/media/tc.png" alt="Tormentor TC Logo"><h2>Tormentors Rassen und Klassen</h2><p>Ausgabe 2014 · SRD 5.1</p><a href="/codex/2014">Buch öffnen →</a></div></div><p><a href="/codex/zauber">Zauberlexikon →</a> · <a href="/codex/weitere">Weitere offizielle Spezies →</a> · <a href="/codex/klassen">Weitere offizielle Klassen →</a> · <a href="/codex/herkuenfte">Herkünfte →</a> · <a href="/codex/homebrew">Separates Homebrew-Buch →</a></p>'
-                body += '<section class="card"><h2>Codex als PDF</h2><p>Druckfassung des aktuellen Stands · A4 · getrennte Bände</p><p><a href="/media/Tormentor-Codex-2024.pdf">2024 herunterladen</a> · <a href="/media/Tormentor-Codex-2014-Quellen.pdf">2014-Quellen herunterladen</a> · <a href="/media/Tormentor-Codex-Homebrew.pdf">Homebrew herunterladen</a></p></section>'
+                if user and user["role"] == "dm":
+                    body += '<section class="card"><h2>Codex als PDF</h2><p>Druckfassung des aktuellen Stands · A4 · getrennte Bände</p><p><a href="/media/Tormentor-Codex-2024.pdf">2024 herunterladen</a> · <a href="/media/Tormentor-Codex-2014-Quellen.pdf">2014-Quellen herunterladen</a> · <a href="/media/Tormentor-Codex-Homebrew.pdf">Homebrew herunterladen</a></p></section>'
             elif path == "/codex/weitere":
                 query = parse_qs(self.path.partition('?')[2]).get('q', [''])[0][:80]
                 body = codex_expansions.index(codex_expansions.catalogue(EXTRA_SPECIES), query)

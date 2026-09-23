@@ -157,3 +157,5 @@
 !/tools/build_spell_classes.py
 !/tools/check_publication.py
 !/tools/import_german_spells.py
+
+!/test_codex_downloads.py
