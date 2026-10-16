@@ -8,6 +8,40 @@ ROOT = Path(__file__).resolve().parent
 FFMPEG = Path(r'C:\Users\dwhd1\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.1.2-full_build\bin\ffmpeg.exe')
 W, H, FPS, SECONDS = 1280, 720, 24, 12
 
+def animate_hanging_details(base, phase):
+    """Warp two small regions; their upper attachment points remain fixed."""
+    image = base.copy()
+    height, width = base.shape[:2]
+    for kind, box in [('sign', (.251, .192, .331, .378)),
+                      ('flag', (.912, .100, .999, .495))]:
+        left, top, right, bottom = [int(value * (width if index % 2 == 0 else height))
+                                    for index, value in enumerate(box)]
+        yy, xx = np.mgrid[top:bottom, left:right].astype(np.float32)
+        u = (xx-left) / max(right-left-1, 1)
+        v = (yy-top) / max(bottom-top-1, 1)
+        # Fade displacement at patch boundaries to avoid seams in the fixed scenery.
+        edge = np.minimum(np.clip(u * 9, 0, 1), np.clip((1-u) * 9, 0, 1))
+        edge *= np.clip((1-v) * 12, 0, 1)
+        weight = edge * np.clip(v * 5, 0, 1)
+        if kind == 'sign':
+            angle = .022 * np.sin(phase * 3)
+            dx = angle * (yy - height * .195) * weight
+            dy = -angle * (xx - width * .290) * weight
+        else:
+            hanging = np.clip((yy / height - .115) / .32, 0, 1)
+            wave = phase * 2 - v * 7
+            dx = width * .0045 * np.sin(wave) * hanging * weight
+            dy = height * .0016 * np.sin(wave + .8) * hanging * weight
+        sx = np.clip(xx + dx, 0, width-1.001)
+        sy = np.clip(yy + dy, 0, height-1.001)
+        x0, y0 = sx.astype(np.int32), sy.astype(np.int32)
+        fx, fy = (sx-x0)[..., None], (sy-y0)[..., None]
+        image[top:bottom, left:right] = (
+            base[y0, x0] * (1-fx) * (1-fy) + base[y0, x0+1] * fx * (1-fy)
+            + base[y0+1, x0] * (1-fx) * fy + base[y0+1, x0+1] * fx * fy)
+    return image
+
+
 def main():
     base = np.asarray(Image.open(ROOT/'assets/login-tavern.png').convert('RGB').resize((W,H), Image.Resampling.LANCZOS), dtype=np.float32)
     y,x = np.mgrid[0:H,0:W].astype(np.float32)
@@ -38,7 +72,8 @@ def main():
             alpha=(np.maximum(drift-.30,0)*.21+np.maximum(slow-.4,0)*.11)*mistmask
             cloud=np.maximum(drift-.36,0)*.075*skymask
             opacity=(alpha+cloud)[...,None]
-            image=base*(1-opacity)+np.array([152,177,182],dtype=np.float32)*opacity
+            moving_base=animate_hanging_details(base,phase)
+            image=moving_base*(1-opacity)+np.array([152,177,182],dtype=np.float32)*opacity
             flicker=0.48+0.21*np.sin(phase*7)+0.16*np.sin(phase*13+.8)+0.1*np.sin(phase*23)
             image+=glow[...,None]*flicker*np.array([28,13,3],dtype=np.float32)
             for index, lantern in enumerate(lanterns):

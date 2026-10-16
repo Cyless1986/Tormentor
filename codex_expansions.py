@@ -11,7 +11,7 @@ GERMAN = {
     'Alchemist': 'Alchemist', 'Armorer': 'Rüstungsschmied', 'Artillerist': 'Artillerist',
     'Battle Smith': 'Kampfschmied', 'Circle of Spores': 'Zirkel der Sporen',
     'Circle of Stars': 'Zirkel der Sterne', 'Circle of Wildfire': 'Zirkel des Wildfeuers',
-    'Soulknife': 'Seelenklinge',
+    'Soulknife': 'Seelenklinge', 'Custom Lineage': 'Individuelle Abstammung',
     'Artificer': 'Magieschmied', 'Reanimator': 'Wiederbeleber',
     'College of Spirits': 'Kollegium der Geister', 'Grave Domain': 'Grabesdomäne',
     'Hollow Warden': 'Wächter der finsteren Wildnis', 'Shadow Sorcery': 'Schattenmagie',
@@ -65,6 +65,7 @@ def catalogue(groups):
             result.append(dict(name=name, kind='Spezies', edition=edition, source=source, code=code, key=f'{code}-{slug(name)}', theme=''))
     for parent, name, theme in SUBCLASSES:
         result.append(dict(name=name, kind=f'Unterklasse · {german(parent)}', parent_original=parent, edition='2024', source=RAVENLOFT, code='rthw', key=f'rthw-{slug(name)}', theme=theme))
+    result.append(dict(name='Custom Lineage', kind='Spezies', edition='2014', source=TASHA, code='tcoe', key='tcoe-custom-lineage', theme='Individuelle Abstammung (Custom Lineage): eine optionale Alternative zur Wahl einer vorgegebenen Spezies. Diese Gestaltungsoption aus Tashas Kessel gehört zur Regelfassung 2014; sie ist kein zusätzliches benanntes Volk.'))
     result.append(dict(name='Artificer',kind='Klasse',edition='2014',source=TASHA,code='tcoe',key='tcoe-artificer',theme='Quellen-Steckbrief zur Klasse aus Tashas Kessel mit Allem.'))
     for parent,name in TASHA_OPTIONS:
         result.append(dict(name=name,kind=f'Unterklasse · {parent}',edition='2014',source=TASHA,code='tcoe',key=f'tcoe-{slug(name)}',theme='Quellen-Steckbrief · Diese Buchfassung gehört zur Regelausgabe 2014.'))
@@ -129,7 +130,8 @@ def index(entries, term=''):
         if not selected: continue
         if term and not any(term.casefold() in searchable(e) for e in selected):
             continue
-        body += '<section class="card"><h2>'+escape(source)+'</h2>'+links(selected, term=term)+'</section>'
+        note = '<p>Individuelle Abstammung ist eine optionale Gestaltungsalternative zur Spezieswahl, kein zusätzliches benanntes Volk.</p>' if source == TASHA else ''
+        body += '<section class="card"><h2>'+escape(source)+'</h2>'+note+links(selected, term=term)+'</section>'
     return body
 
 def detail(entry, entries):
@@ -169,4 +171,4 @@ def tasha_source(entries):
     body += '<h3>Klasse</h3>' + links(classes)
     for kind in sorted({entry['kind'] for entry in selected if entry['kind'].startswith('Unterklasse')}):
         body += '<h3>' + escape(kind) + '</h3>' + links([entry for entry in selected if entry['kind'] == kind])
-    return body + '<p><a href="/codex">← Zur Codex-Bibliothek</a></p></article>'
+    return body + '<p><a href="/codex/weitere?q=Tashas">Individuelle Abstammung bei Weitere Spezies →</a></p><p><a href="/codex/klassen">← Weitere Klassen</a></p></article>'

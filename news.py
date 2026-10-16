@@ -167,41 +167,61 @@ def render_links():
 
 def render_atmosphere(title):
     """Decorative lights aligned with each background's cover crop."""
-    if title not in ('D&D-News und Videos', 'Entdecken'):
+    scenes = {
+        'D&D-News und Videos': (1672, 941, [(448,281,7,18),(1192,526,4,14),(1300,391,4,14),(1131,220,4,12),(510,451,4,12)]),
+        'Entdecken': (2172,724,[(1242,30,9,26),(1384,130,7,22),(940,80,22,40)]),
+        'Weitere Klassen': (1536,1024,[(251,819,5,22),(1405,670,5,22),(508,272,4,15),(623,36,3,12),(679,22,3,12),(749,22,3,12),(811,36,3,12),(1508,515,20,20),(1047,474,18,25)]),
+        'Weitere Spezies': (1536,1024,[(55,188,8,22),(556,291,4,12),(711,465,4,12),(1460,751,9,24)]),
+        'Handouts': (1672,941,[(98,163,9,24),(1643,473,5,22),(1598,550,5,20),(1568,637,4,16)]),
+        'Charakterbogen': (1672,941,[(82,474,5,20),(1523,819,7,20),(454,328,3,11),(1235,328,3,11),(1090,330,3,10),(785,32,3,10),(953,44,3,10)]),
+        'Spieler-Dashboard': (1672,941,[(32,700,7,24),(1177,652,5,20),(1205,669,4,16),(1395,884,10,25),(1073,344,3,10),(25,316,20,45)]),
+        'Mein Profil': (1672,941,[(1506,413,5,22),(1534,433,4,18),(1654,400,4,17),(204,339,3,11),(52,322,3,12),(792,8,3,10),(894,8,3,10)]),
+        'Chronik': (1672,941,[(17,404,6,24),(32,780,5,20),(1627,519,5,22),(1226,214,4,16),(1263,188,4,16),(286,8,4,15)]),
+        'DM-Zentrale': (1672,941,[(83,23,5,19),(125,55,4,15),(153,41,4,15),(1454,453,5,19),(1507,541,4,16),(1559,584,4,16),(1407,388,3,12),(31,310,4,16)]),
+        'Memories': (1672,941,[(1615,355,5,20),(1562,389,4,16),(1586,478,4,16),(1655,240,18,35),(1278,34,3,12)]),
+        'Kartenbibliothek': (2172,724,[(900,170,4,14),(1020,122,4,14),(1234,79,4,14),(1344,96,4,14),(1120,359,4,14),(1320,329,4,14),(1650,450,4,14),(1790,504,4,14),(1983,135,4,14),(2054,369,4,14)]),
+    }
+    if title not in scenes:
         return ''
     links = title == 'Entdecken'
-    width, height = (2172, 724) if links else (1672, 941)
-    lights = ([(1242, 30, 9, 26), (1384, 130, 7, 22), (940, 80, 22, 40)] if links
-              else [(448, 281, 7, 18), (1192, 526, 4, 14), (1300, 391, 4, 14),
-                    (1131, 220, 4, 12), (510, 451, 4, 12)])
+    width, height, lights = scenes[title]
     flames = ''
     for index, (x, y, rx, ry) in enumerate(lights):
         flames += (f'<g class="ambient-light" style="--delay:-{index * .73}s;--speed:{2.7 + index * .31}s;transform-origin:{x}px {y}px">'
                    f'<ellipse cx="{x}" cy="{y}" rx="{rx * 9}" ry="{ry * 4}" fill="url(#ambient-glow)"/>'
                    f'<ellipse class="ambient-flame" cx="{x}" cy="{y}" rx="{rx}" ry="{ry}" fill="url(#ambient-fire)"/>'
                    '</g>')
+    magic = {'Spieler-Dashboard': (1620,345,35), 'DM-Zentrale': (1610,401,66)}.get(title)
+    if magic:
+        mx, my, radius = magic
+        flames += f'<circle class="ambient-light" style="--delay:-1s;--speed:6s;transform-origin:{mx}px {my}px" cx="{mx}" cy="{my}" r="{radius}" fill="url(#ambient-magic)"/>'
     # Match CSS background-size:cover and the existing horizontal crop exactly.
     ratio = width / height
     wide = f'{ratio * 100:.6f}vh'
     tall = f'{100 / ratio:.6f}vw'
     position = '.65' if links else '.5'
+    mist = ('<g class="ambient-mist" fill="url(#ambient-mist)"><ellipse cx="890" cy="670" rx="260" ry="140"/><ellipse cx="1050" cy="500" rx="190" ry="80"/></g>' if title == 'Weitere Spezies' else '')
+    header_style = ('header{position:relative;isolation:isolate;background-position:center center!important}header>strong,header>nav{position:relative;z-index:1}.ambient-scene.ambient-header{position:absolute;z-index:0}.ambient-scene.ambient-header svg{inset:0;width:100%;height:100%}' if title == 'Kartenbibliothek' else '')
+    scene_class = 'ambient-scene ambient-header' if title == 'Kartenbibliothek' else 'ambient-scene'
     return (f'<style>.ambient-scene{{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:-1}}'
             f'.ambient-scene svg{{position:absolute;width:max(100vw,{wide});height:max(100vh,{tall});'
             f'left:calc((100vw - max(100vw,{wide}))*{position});top:calc((100vh - max(100vh,{tall}))*.5)}}'
             '.ambient-light{opacity:.5;animation:ambient-flicker var(--speed) ease-in-out var(--delay) infinite alternate}'
             '.ambient-flame{mix-blend-mode:screen;filter:blur(1px)}'
             '.ambient-dust{animation:ambient-drift 22s ease-in-out infinite alternate;opacity:.2}'
+            '.ambient-mist{animation:ambient-mist 25s ease-in-out infinite alternate;opacity:.12}'
+            '@keyframes ambient-mist{from{transform:translate(-12px,10px);opacity:.08}to{transform:translate(12px,-12px);opacity:.18}}'
             '@keyframes ambient-flicker{0%,100%{opacity:.32;transform:scale(.94,1)}23%{opacity:.55;transform:scale(1.04,.96)}'
             '47%{opacity:.42;transform:scale(.97,1.03)}71%{opacity:.65;transform:scale(1.03,1.01)}}'
             '@keyframes ambient-drift{from{transform:translate(0,12px);opacity:.12}to{transform:translate(14px,-20px);opacity:.35}}'
             f'@media(max-width:600px){{.ambient-scene svg{{left:calc((100vw - max(100vw,{wide}))*.65)}}}}'
-            '@media(prefers-reduced-motion:reduce){.ambient-scene{display:none}}'
+            + header_style + '@media(prefers-reduced-motion:reduce){.ambient-scene{display:none}}'
             '@media print{.ambient-scene{display:none}}</style>'
-            f'<div class="ambient-scene" aria-hidden="true"><svg viewBox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg" focusable="false">'
-            '<defs><radialGradient id="ambient-glow"><stop stop-color="#ffb342" stop-opacity=".5"/>'
+            f'<div class="{scene_class}" aria-hidden="true"><svg preserveAspectRatio="xMidYMid slice" viewBox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg" focusable="false">'
+            '<defs><radialGradient id="ambient-magic"><stop stop-color="#b6e7ff" stop-opacity=".45"/><stop offset=".5" stop-color="#398de8" stop-opacity=".2"/><stop offset="1" stop-color="#398de8" stop-opacity="0"/></radialGradient><radialGradient id="ambient-mist"><stop stop-color="#d4e4e1" stop-opacity=".7"/><stop offset="1" stop-color="#d4e4e1" stop-opacity="0"/></radialGradient><radialGradient id="ambient-glow"><stop stop-color="#ffb342" stop-opacity=".5"/>'
             '<stop offset=".4" stop-color="#ed7f24" stop-opacity=".16"/><stop offset="1" stop-color="#ed7f24" stop-opacity="0"/></radialGradient>'
             '<radialGradient id="ambient-fire"><stop stop-color="#fff5ce" stop-opacity=".85"/>'
             '<stop offset=".4" stop-color="#ffcb68" stop-opacity=".55"/><stop offset="1" stop-color="#ffa129" stop-opacity="0"/></radialGradient></defs>'
-            + flames + '<g class="ambient-dust" fill="#ffdc9b">'
+            + mist + flames + '<g class="ambient-dust" fill="#ffdc9b">'
             + ''.join(f'<circle cx="{width * x}" cy="{height * y}" r="1.1"/>' for x, y in ((.12,.43),(.2,.68),(.32,.23),(.47,.6),(.62,.34),(.82,.72),(.91,.3)))
             + '</g></svg></div>')

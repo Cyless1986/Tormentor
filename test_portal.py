@@ -64,7 +64,7 @@ class PortalRegistrationTest(unittest.TestCase):
                 status, _, body = request("GET", "/dashboard", cookie=player_cookie)
                 self.assertIn('<b>Unterklasse:</b> Champion', body)
                 self.assertIn('Rising Moon — RandomMind', body)
-                self.assertIn('id="dashboard-music" src="/media/intro.mp3"', body)
+                self.assertIn('id="global-music" src="/media/intro.mp3"', body)
                 status, _, body = request("GET", "/codex/unterklassen")
                 self.assertEqual(status, 200)
                 self.assertIn('Regelfassung 2014', body)

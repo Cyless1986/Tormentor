@@ -132,13 +132,21 @@ def escape(value):
 
 
 def page(title, body, user=None):
-    # Migration bundles intentionally omit local music files.
-    if not INTRO_MUSIC.is_file():
-        body = re.sub(r'<p><audio id="intro-music".*?</script>', '', body, flags=re.S)
-    if not FOREST_MUSIC.is_file():
-        body = re.sub(r'<section class="card"><h2>Spielmusik</h2>.*?</section>', '', body, flags=re.S)
-    if 'id="intro-music"' in body or 'id="dashboard-music"' in body:
-        body += '<p><small>Musik: <a href="https://opengameart.org/content/fantasy-rising-moon">Rising Moon — RandomMind</a> · <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</small></p>'
+    if title == "Willkommen":
+        body += '<script src="/media/start-devil.js" defer></script>'
+    # One compact player is shared by every portal page.
+    body = re.sub(r'<p><audio id="intro-music".*?</script>', '', body, flags=re.S)
+    body = re.sub(r'<section class="card"><h2>Spielmusik</h2>.*?</section>', '', body, flags=re.S)
+    if INTRO_MUSIC.is_file():
+        body += ('<div class="global-music"><audio id="global-music" src="/media/intro.mp3" loop preload="none" hidden></audio>'
+                 '<button type="button" id="music-toggle" aria-label="Titelmusik abspielen" aria-pressed="false">▶ Musik</button>'
+                 '<span id="music-status" class="music-sr-only" role="status"></span></div>'
+                 '<script src="/media/portal-music.js" defer></script>'
+                 '<p><small>Musik: <a href="https://opengameart.org/content/fantasy-rising-moon">Rising Moon — RandomMind</a> · <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</small></p>'
+                 '<style>.global-music{position:fixed;right:max(12px,env(safe-area-inset-right));bottom:calc(12px + env(safe-area-inset-bottom));z-index:30}'
+                 '.global-music button{min-height:44px;padding:9px 15px;border-radius:24px;font:14px system-ui;background:#241b17ed;color:#f4db9f;border:1px solid #a17c44;box-shadow:0 4px 18px #0008}'
+                 '.music-sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}main{padding-bottom:90px}'
+                 '@media print{.global-music{display:none}}</style>')
     login_video = '<video id="login-background" autoplay muted loop playsinline preload="none" aria-hidden="true" poster="/media/login-tavern.png"></video><script src="/media/login-background.js" defer></script>' if title in ('Login', 'Willkommen') else ''
     login_style = '<style>body{background:#10191b url("/media/login-tavern.png") center center/cover fixed no-repeat;min-height:100vh}#login-background{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;z-index:-1}body{isolation:isolate}header{background:#100e10d9}@media(prefers-reduced-motion:reduce){#login-background{display:none}}main{max-width:960px}main>h1{text-shadow:0 2px 12px #000}main>.grid>.card{background:#17120fed;backdrop-filter:blur(8px)}main>p{background:#100e10db;padding:.7rem;border-radius:8px} @media(max-width:600px){body{background-position:30% center}#login-background{object-position:30% center}main{padding-top:1.5rem}}</style>' if title in ('Login', 'Willkommen') else ''
     nav = '<a href="/">Start</a><a href="/codex">Codex</a><a href="/news">D&D-News</a><a href="/links">Links</a>'
@@ -236,6 +244,10 @@ main>.card h2{line-height:1.35;margin-top:0}
     # Parchment reading surfaces and matching search controls.
     if title in ('Codex 2024', 'Codex 2014', 'Zauberlexikon · Codex', 'Tormentor Homebrew', 'Weitere Spezies', 'Weitere Klassen', 'Unterklassen · Codex', 'Herkünfte · Codex'):
         header_style += "<style>\n@media screen {\nmain>.book{background:#f3e8cf url('/media/codex-parchment.png') center top/100% 100% no-repeat;color:#30251a;border:1px solid #b39562;border-left:12px solid #503526;border-radius:5px 12px 12px 5px;padding:clamp(24px,4vw,48px);box-shadow:inset 7px 0 14px #5e3d2520,4px 4px 0 #d7c7a2,7px 7px 0 #6b4c31,12px 18px 30px #0007;line-height:1.65}\nmain>.book h2{color:#583b22;border-bottom:1px solid #a8865055;padding-bottom:12px;letter-spacing:.015em}\nmain>.book>h2:first-child{font-size:clamp(25px,3vw,34px);margin-top:0}\nmain>.book>ol{padding-left:1.7rem;columns:2;column-gap:34px}\nmain>.book>ol>li{break-inside:avoid;margin:0 0 8px;padding:4px 0;border-bottom:1px solid #96764b25}\nmain>.book>ol>li::marker{color:#8a6237;font-size:.85em}\nmain>.book form{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;background:#fff9e577;border:1px solid #ac8b5655;border-radius:10px;padding:18px;margin:22px 0}\nmain>.book form label{flex:1 1 135px;min-width:0;margin:0;font:14px/1.5 system-ui;color:#624628}\nmain>.book form label:has(input[name=q]){flex-basis:100%}\nmain>.book form input,main>.book form select{width:100%;max-width:none;margin:6px 0 0;background:#fffbefd9;color:#30251a;border:1px solid #ab8a58;box-shadow:inset 0 1px 3px #5a402018;min-height:44px}\nmain>.book form input::placeholder{color:#7b6b56}\nmain>.book form button{background:#67412b;color:#fff1d1;border-color:#8c6841;min-height:44px}\nmain>.book form button:hover{background:#805337}\nmain>.book form input:focus-visible,main>.book form select:focus-visible{outline:2px solid #806036;outline-offset:2px}\nmain>.book small{color:#6d5b43}\n@media(max-width:600px){main>.book{padding:25px 20px;border-left-width:7px}main>.book>ol{columns:1}main>.book form{padding:12px;gap:12px}main>.book form button{width:100%}}\n}\n</style>"
+    if title == 'Codex 2014':
+        header_style += """<style>@media screen {
+main>.book{background-image:none;background-color:#f3e8cf;border:clamp(32px,6vw,80px) solid transparent;border-image-source:url('/media/codex-parchment.png');border-image-slice:180 fill;border-image-width:1;border-image-repeat:stretch;border-radius:0;padding:clamp(12px,2vw,24px)}
+}</style>"""
     body += '''<style>*{box-sizing:border-box}main,.book,.card,.grid>*{min-width:0;max-width:100%}.grid{grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr))}.book,.card{overflow-wrap:anywhere}.book .card{color:#f1e3c8}.book .card h2,.spell-help h2,.spell-help h3{color:#e5be72}.book .card small,.spell-help small{color:#d3c2a4}.book .card a{color:#edcb85}.level-table{max-width:100%;overflow-x:auto}.book ul,.book ol{padding-left:1.4rem}dd{margin-left:1rem}button{max-width:100%;white-space:normal}@media(max-width:600px){.book{padding:.8rem;border-width:6px}.card{padding:1rem}.cover:hover{transform:none}.book h2{font-size:1.4rem}header{background-position:65% center}}</style>'''
     return f'''<!doctype html><html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{escape(title)} · Tormentor</title><style>
     :root{{color-scheme:dark}}body{{margin:0;background:#100c0b;color:#f1e3c8;font:17px Georgia,serif;cursor:url('/media/dagger.svg') 3 3,auto}}header{{background:#201510;border-bottom:1px solid #806847;padding:1.2rem 4vw;display:flex;align-items:center;gap:2rem;flex-wrap:wrap}}h1,h2{{font-weight:normal;color:#e5be72}}header strong{{font-size:1.6rem;color:#d3a256}}nav{{display:flex;gap:1rem;align-items:center;flex-wrap:wrap}}a{{color:#dcb46d}}nav a{{text-decoration:none}}main{{max-width:1050px;margin:auto;padding:3rem 5vw}}.card{{background:#211915;border:1px solid #785c3a;border-radius:14px;padding:1.5rem;margin:1rem 0;box-shadow:0 15px 35px #0005}}input,textarea,button{{font:inherit;border-radius:6px;padding:.65rem;background:#130f0d;color:#f5e6c8;border:1px solid #9b7546}}input,textarea{{display:block;width:min(100%,560px);box-sizing:border-box;margin:.4rem 0 1rem;cursor:text}}button{{background:#752d26}}button:hover{{background:#a44336}}a,button{{cursor:url('/media/dagger.svg') 3 3,pointer}}.grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}}small{{color:#baa88f}}label{{display:block;margin:.5rem 0}}.error{{color:#ffaaa3}}.book{{background:#e6d4ad;color:#281b11;border:14px solid #4a271d;border-radius:8px 18px 18px 8px;min-height:320px;padding:2rem;box-shadow:12px 18px 30px #0009}}.book h2{{color:#633a22}}.book small{{color:#71583e}}.book a{{color:#713d26}}@media print{{header,button{{display:none}}body{{background:white;color:black}}.book{{box-shadow:none;break-after:page}}}}
@@ -247,7 +259,7 @@ main>.card h2{line-height:1.35;margin-top:0}
     .level-table{{overflow-x:auto;margin:1rem 0}}.level-table caption{{text-align:left;font-weight:bold;padding:.6rem 0}}.level-table td:first-child{{font-weight:bold}}@media print{{.level-table{{overflow:visible}}.level-table table{{font-size:9pt}}.level-table th,.level-table td{{padding:3pt}}.level-table tr{{break-inside:avoid}}}}
     .book table{{width:100%;border-collapse:collapse;font-size:.95rem}}.book th,.book td{{padding:.6rem;text-align:left;vertical-align:top;border-bottom:1px solid #927854}}.book th{{color:#59341f}}.book tr:nth-child(even){{background:#b29a7020}}
     .codex-art-page{{margin-bottom:1.5rem}}@media print{{.codex-art-page{{break-inside:avoid}}.codex-art-page .codex-illustration{{width:100%;height:220mm;object-fit:contain}}}}
-    </style>{login_style}{header_style}{login_video}{news.render_atmosphere(title)}<header><strong>☉ TORMENTOR</strong><nav>{nav}</nav></header><main><h1>{escape(title)}</h1>{body}<p><small>Version 2.0 created with ChatGPT/Kodex</small></p></main></html>'''
+    </style>{login_style}{header_style}{login_video}{news.render_atmosphere(title) if title != 'Kartenbibliothek' else ''}<header>{news.render_atmosphere(title) if title == 'Kartenbibliothek' else ''}<strong>☉ TORMENTOR</strong><nav>{nav}</nav></header><main><h1>{escape(title)}</h1>{body}<p><small>Version 2.0 created with ChatGPT/Kodex</small></p></main></html>'''
 
 
 def form_field(name, label, value="", kind="text", autocomplete=None):
@@ -417,6 +429,7 @@ def expansion_classes():
     ravenloft = [("Artificer", "Reanimator"), ("Barde", "College of Spirits"), ("Kleriker", "Grave Domain"), ("Waldläufer", "Hollow Warden"), ("Schurke", "Phantom"), ("Zauberer (Sorcerer)", "Shadow Sorcery"), ("Hexenmeister", "Undead Patron")]
     rows = ''.join(f'<li><b>{escape(codex_expansions.german(kind))}:</b> {escape(codex_expansions.german(subclass))}</li>' for kind, subclass in ravenloft)
     return ('<div class="card"><h2>Magieschmied · zusätzliche Klasse</h2><p>Für 2014 und 2024 gibt es getrennte Fassungen des Magieschmieds (Artificer). Die neuere Fassung steht in „Eberron: Forge of the Artificer“. Sie ist nicht Teil der SRDs und wird deshalb nicht als frei lizenzierter Regeltext wiedergegeben.</p><p><a href="https://www.dndbeyond.com/sources/dnd/efota">Offizielle Quelle: Eberron: Forge of the Artificer</a></p></div>'
+            '<div class="card"><h2>Tashas Kessel mit Allem · 2014</h2><p>Magieschmied (Artificer) und 30 Unterklassen, nach Klassen geordnet.</p><p><a href="/codex/quellen/tasha">Klasse und Unterklassen öffnen →</a></p></div>'
             '<div class="card"><h2>Ravenloft: The Horrors Within · 2024</h2><p>Das 2026 erschienene Buch führt sieben Horror-Unterklassen auf:</p><ol>' + rows + '</ol><p><a href="https://www.dndbeyond.com/sources/dnd/rthw">Offizielles Inhaltsverzeichnis</a> · <a href="https://www.dndbeyond.com/posts/2191-become-the-monster-in-the-shadows-with-7">Offizielle Vorstellung der sieben Unterklassen</a></p><p><small>Quellenindex; keine Übernahme der geschützten Unterklassenregeln.</small></p></div>')
 
 
@@ -526,7 +539,7 @@ class Handler(BaseHTTPRequestHandler):
                     return self.send(404, page('Nicht gefunden', '<p>Anhang nicht verfügbar.</p>', user))
                 data = (portal_handouts.ROOT / file['filename']).read_bytes()
                 self.send_response(200); self.send_header('Content-Type', file['mime']); self.send_header('Content-Length', str(len(data))); self.send_header('Content-Disposition', 'inline; filename="' + file['original_name'].replace('"', '') + '"'); self.send_header('Cache-Control', 'private, no-store'); self.end_headers(); self.wfile.write(data); return
-        if self.path in ("/media/character-portrait.js", "/media/handouts-unread.js", "/media/memories.js", "/media/character.css", "/media/chat-unread.js", "/media/chat.js", "/media/character.js", "/media/feed.js", "/media/login-background.js", "/media/session-countdown.js", "/media/dashboard-music.js", "/media/intro-music.js", "/media/portal-music.js", "/media/reset-password.js"):
+        if self.path in ("/media/start-devil.js", "/media/character-portrait.js", "/media/handouts-unread.js", "/media/memories.js", "/media/character.css", "/media/chat-unread.js", "/media/chat.js", "/media/character.js", "/media/feed.js", "/media/login-background.js", "/media/session-countdown.js", "/media/dashboard-music.js", "/media/intro-music.js", "/media/portal-music.js", "/media/reset-password.js"):
             content = (ROOT / "assets" / self.path.rsplit("/", 1)[-1]).read_bytes()
             self.send_response(200)
             self.send_header("Content-Type", "text/css; charset=utf-8" if self.path.endswith(".css") else "text/javascript; charset=utf-8")
