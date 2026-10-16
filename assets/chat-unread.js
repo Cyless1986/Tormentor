@@ -1,4 +1,7 @@
 (() => {
+  const scope = window.tormentorNavigation?.scope;
+  const options = scope ? {signal:scope.signal} : undefined;
+  const pageFetch = (url, options={}) => fetch(url, {...options, signal:scope?.signal});
   const badge = document.getElementById('chat-unread');
   const link = document.getElementById('chat-link');
   if (!badge || !link) return;
@@ -15,14 +18,14 @@
           through = Math.max(through, Number(el.dataset.messageId));
         });
         if (through) {
-          const saved = await fetch('/messages/read', {
+          const saved = await pageFetch('/messages/read', {
             method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: 'through=' + through
           });
           if (!saved.ok || saved.redirected) throw new Error();
         }
       }
-      const response = await fetch('/messages/unread', {cache: 'no-store'});
+      const response = await pageFetch('/messages/unread', {cache: 'no-store'});
       if (!response.ok || response.redirected) throw new Error();
       const count = Number(await response.text());
       if (!Number.isInteger(count) || count < 0) throw new Error();
@@ -35,8 +38,9 @@
       link.title = 'Nachrichtenstatus aktuell nicht abrufbar';
     } finally { busy = false; }
   }
-  document.addEventListener('visibilitychange', update);
-  document.addEventListener('chat-updated', update);
-  window.setInterval(update, 3000);
+  document.addEventListener('visibilitychange', update, options);
+  document.addEventListener('chat-updated', update, options);
+  const timer = window.setInterval(update, 3000);
+  scope?.signal.addEventListener("abort", () => clearInterval(timer), {once:true});
   update();
 })();

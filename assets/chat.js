@@ -1,4 +1,7 @@
 (() => {
+  const scope = window.tormentorNavigation?.scope;
+  let timer;
+  scope?.signal.addEventListener("abort", () => clearTimeout(timer), {once:true});
   const feed = document.getElementById('chat-feed');
   const status = document.getElementById('chat-status');
   let previous = feed.innerHTML;
@@ -9,9 +12,10 @@
   }
   dates();
   async function refresh() {
+    if (scope?.signal.aborted || !feed.isConnected) return;
     try {
       if (!document.hidden) {
-        const response = await fetch('/messages/feed', {cache: 'no-store'});
+        const response = await fetch('/messages/feed', {cache: 'no-store', signal:scope?.signal});
         if (!response.ok || response.redirected) throw new Error();
         const content = await response.text();
         if (content !== previous) {
@@ -24,7 +28,7 @@
       }
     } catch (_) {
       status.textContent = 'Verbindung unterbrochen oder Anmeldung abgelaufen. Erneuter Versuch in 3 Sekunden; bei Bedarf neu anmelden.';
-    } finally { window.setTimeout(refresh, 3000); }
+    } finally { if (!scope?.signal.aborted) timer = window.setTimeout(refresh, 3000); }
   }
-  window.setTimeout(refresh, 3000);
+  if (!scope?.signal.aborted) timer = window.setTimeout(refresh, 3000);
 })();

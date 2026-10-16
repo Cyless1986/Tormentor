@@ -1,4 +1,7 @@
 (() => {
+  const scope = window.tormentorNavigation?.scope;
+  const options = scope ? {signal:scope.signal} : undefined;
+  const pageFetch = (url, options={}) => fetch(url, {...options, signal:scope?.signal});
   const badge = document.getElementById('handouts-unread');
   const link = document.getElementById('handouts-link');
   if (!badge || !link) return;
@@ -8,7 +11,7 @@
     busy = true;
     try {
       for (const card of document.querySelectorAll('.handout-card[open][data-handout-read="0"]')) {
-        const response = await fetch('/handouts/read', {
+        const response = await pageFetch('/handouts/read', {
           method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},
           body:new URLSearchParams({id:card.dataset.handoutId,version:card.dataset.handoutVersion})
         });
@@ -26,7 +29,7 @@
           }
         }
       }
-      const response=await fetch('/handouts/unread',{cache:'no-store'});
+      const response=await pageFetch('/handouts/unread',{cache:'no-store'});
       if (!response.ok || response.redirected) throw new Error();
       const count=Number(await response.text());
       if (!Number.isInteger(count) || count<0) throw new Error();
@@ -38,7 +41,8 @@
     finally { busy=false; }
   }
   document.querySelectorAll('.handout-card').forEach(card=>card.addEventListener('toggle',update));
-  document.addEventListener('visibilitychange',update);
-  window.setInterval(update,3000);
+  document.addEventListener('visibilitychange',update,options);
+  const timer = window.setInterval(update,3000);
+  scope?.signal.addEventListener("abort", () => clearInterval(timer), {once:true});
   update();
 })();

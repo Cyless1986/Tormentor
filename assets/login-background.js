@@ -12,5 +12,5 @@ function updateBackground() {
   background.muted = true;
   background.play().catch(() => {});
 }
-motion.addEventListener("change", updateBackground);
+motion.addEventListener("change", updateBackground, window.tormentorNavigation ? {signal:window.tormentorNavigation.scope.signal} : undefined);
 updateBackground();

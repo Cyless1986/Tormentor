@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+import gzip
 import hmac
 import html
 import json
@@ -40,6 +41,8 @@ import portal_levels
 import portal_inspiration
 import portal_registration
 import portal_memories
+
+mimetypes.add_type('image/webp', '.webp')
 
 ROOT = Path(__file__).resolve().parent
 INTRO_MUSIC = ROOT / 'assets/music/rising-moon.mp3'
@@ -259,7 +262,7 @@ main>.book{background-image:none;background-color:#f3e8cf;border:clamp(32px,6vw,
     .level-table{{overflow-x:auto;margin:1rem 0}}.level-table caption{{text-align:left;font-weight:bold;padding:.6rem 0}}.level-table td:first-child{{font-weight:bold}}@media print{{.level-table{{overflow:visible}}.level-table table{{font-size:9pt}}.level-table th,.level-table td{{padding:3pt}}.level-table tr{{break-inside:avoid}}}}
     .book table{{width:100%;border-collapse:collapse;font-size:.95rem}}.book th,.book td{{padding:.6rem;text-align:left;vertical-align:top;border-bottom:1px solid #927854}}.book th{{color:#59341f}}.book tr:nth-child(even){{background:#b29a7020}}
     .codex-art-page{{margin-bottom:1.5rem}}@media print{{.codex-art-page{{break-inside:avoid}}.codex-art-page .codex-illustration{{width:100%;height:220mm;object-fit:contain}}}}
-    </style>{login_style}{header_style}{login_video}{news.render_atmosphere(title) if title != 'Kartenbibliothek' else ''}<header>{news.render_atmosphere(title) if title == 'Kartenbibliothek' else ''}<strong>☉ TORMENTOR</strong><nav>{nav}</nav></header><main><h1>{escape(title)}</h1>{body}<p><small>Version 2.0 created with ChatGPT/Kodex</small></p></main></html>'''
+    </style>{login_style}{header_style}<script src="/media/portal-navigation.js" defer></script>{login_video}{news.render_atmosphere(title) if title != 'Kartenbibliothek' else ''}<header>{news.render_atmosphere(title) if title == 'Kartenbibliothek' else ''}<strong>☉ TORMENTOR</strong><nav>{nav}</nav></header><main><h1>{escape(title)}</h1>{body}<p><small>Version 2.0 created with ChatGPT/Kodex</small></p></main></html>'''
 
 
 def form_field(name, label, value="", kind="text", autocomplete=None):
@@ -480,9 +483,19 @@ class Handler(BaseHTTPRequestHandler):
         row = db.execute("SELECT u.* FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=? AND s.expires_at>?", (digest(token.value), int(time.time()))).fetchone()
         return row
 
+    def compress_response(self, data):
+        accepts = any(part.split(';')[0].strip() == 'gzip' and not re.search(r';\s*q=0(?:\.0*)?\s*$', part)
+                      for part in self.headers.get('Accept-Encoding', '').split(','))
+        if len(data) > 1024 and accepts:
+            self.send_header('Content-Encoding', 'gzip')
+            return gzip.compress(data, compresslevel=5)
+        return data
+
     def send(self, status, content, cookie=None):
         body = content.encode("utf-8")
         self.send_response(status)
+        body = self.compress_response(body)
+        self.send_header("Vary", "Accept-Encoding")
         self.send_header("Content-Type", "text/html; charset=utf-8")
         self.send_header("Cache-Control", "no-store")
         self.send_header("Referrer-Policy", "same-origin")
@@ -539,10 +552,20 @@ class Handler(BaseHTTPRequestHandler):
                     return self.send(404, page('Nicht gefunden', '<p>Anhang nicht verfügbar.</p>', user))
                 data = (portal_handouts.ROOT / file['filename']).read_bytes()
                 self.send_response(200); self.send_header('Content-Type', file['mime']); self.send_header('Content-Length', str(len(data))); self.send_header('Content-Disposition', 'inline; filename="' + file['original_name'].replace('"', '') + '"'); self.send_header('Cache-Control', 'private, no-store'); self.end_headers(); self.wfile.write(data); return
-        if self.path in ("/media/start-devil.js", "/media/character-portrait.js", "/media/handouts-unread.js", "/media/memories.js", "/media/character.css", "/media/chat-unread.js", "/media/chat.js", "/media/character.js", "/media/feed.js", "/media/login-background.js", "/media/session-countdown.js", "/media/dashboard-music.js", "/media/intro-music.js", "/media/portal-music.js", "/media/reset-password.js"):
-            content = (ROOT / "assets" / self.path.rsplit("/", 1)[-1]).read_bytes()
+        asset_path = self.path.partition("?")[0]
+        if asset_path in ("/media/portal-navigation.js", "/media/start-devil.js", "/media/character-portrait.js", "/media/handouts-unread.js", "/media/memories.js", "/media/character.css", "/media/chat-unread.js", "/media/chat.js", "/media/character.js", "/media/feed.js", "/media/login-background.js", "/media/session-countdown.js", "/media/dashboard-music.js", "/media/intro-music.js", "/media/portal-music.js", "/media/reset-password.js"):
+            content = (ROOT / "assets" / asset_path.rsplit("/", 1)[-1]).read_bytes()
+            if asset_path.endswith(".js") and "page" in parse_qs(self.path.partition("?")[2]):
+                content = b"(() => {\n" + content + b"\n})();"
+            etag = 'W/"' + hashlib.sha256(content).hexdigest()[:24] + '"'
+            if self.headers.get("If-None-Match") == etag:
+                self.send_response(304); self.send_header("ETag", etag); self.send_header("Cache-Control", "public, max-age=0, must-revalidate"); self.send_header("Vary", "Accept-Encoding"); self.end_headers(); return
             self.send_response(200)
-            self.send_header("Content-Type", "text/css; charset=utf-8" if self.path.endswith(".css") else "text/javascript; charset=utf-8")
+            content = self.compress_response(content)
+            self.send_header("ETag", etag)
+            self.send_header("Vary", "Accept-Encoding")
+            self.send_header("Cache-Control", "public, max-age=0, must-revalidate")
+            self.send_header("Content-Type", "text/css; charset=utf-8" if asset_path.endswith(".css") else "text/javascript; charset=utf-8")
             self.send_header("Content-Length", str(len(content)))
             self.send_header("X-Content-Type-Options", "nosniff")
             self.end_headers()
@@ -594,6 +617,17 @@ class Handler(BaseHTTPRequestHandler):
                         return self.send(403, page('Kein Zugriff', '<p>Codex-Downloads sind nur für den DM.</p>', user))
             file = media[self.path]
             if not file.is_file(): return self.send(404, "Medien nicht gefunden")
+            webp = file.with_suffix('.webp')
+            vary_accept = file.suffix.lower() == '.png' and webp.is_file()
+            if vary_accept and 'image/webp' in self.headers.get('Accept', ''):
+                file = webp
+            info = file.stat()
+            etag = f'"{info.st_mtime_ns:x}-{info.st_size:x}"'
+            if not codex_download and self.headers.get('If-None-Match') == etag:
+                self.send_response(304); self.send_header('ETag', etag)
+                self.send_header('Cache-Control', 'public, max-age=3600')
+                if vary_accept: self.send_header('Vary', 'Accept')
+                self.end_headers(); return
             size = file.stat().st_size
             byte_range = self.headers.get("Range", "")
             start, end = 0, size - 1
@@ -611,6 +645,10 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Content-Length", str(end - start + 1))
             self.send_header("Accept-Ranges", "bytes")
             if codex_download: self.send_header('Cache-Control', 'private, no-store')
+            else:
+                self.send_header('Cache-Control', 'public, max-age=3600')
+                self.send_header('ETag', etag)
+                if vary_accept: self.send_header('Vary', 'Accept')
             if byte_range: self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
             self.end_headers()
             with file.open("rb") as source:

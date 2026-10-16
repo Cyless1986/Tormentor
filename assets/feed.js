@@ -1,4 +1,5 @@
 "use strict";
+const scope = window.tormentorNavigation?.scope;
 document.addEventListener("click", (event) => {
   const button = event.target.closest("[data-video]");
   if (!button || !/^[A-Za-z0-9_-]{11}$/.test(button.dataset.video)) return;
@@ -9,7 +10,7 @@ document.addEventListener("click", (event) => {
   iframe.allowFullscreen = true;
   iframe.referrerPolicy = "strict-origin-when-cross-origin";
   button.replaceWith(iframe);
-});
+}, scope ? {signal:scope.signal} : undefined);
 const cards = Array.from(document.querySelectorAll("[data-feed-card]"));
 const more = document.querySelector("[data-feed-more]");
 const end = document.querySelector("[data-feed-end]");
@@ -43,8 +44,10 @@ if (cards.length) {
   showMore();
   more?.addEventListener("click", showMore);
   if ("IntersectionObserver" in window && more) {
-    new IntersectionObserver((entries) => {
+    const observer = new IntersectionObserver((entries) => {
       if (entries.some((entry) => entry.isIntersecting) && shown < cards.length) showMore();
-    }, { rootMargin: "200px" }).observe(more);
+    }, { rootMargin: "200px" });
+    observer.observe(more);
+    scope?.signal.addEventListener("abort", () => observer.disconnect(), {once:true});
   }
 }

@@ -23,4 +23,5 @@ function updateSessionCountdown() {
   });
 }
 updateSessionCountdown();
-setInterval(updateSessionCountdown,1000);
+const countdownTimer = setInterval(updateSessionCountdown,1000);
+window.tormentorNavigation?.scope.signal.addEventListener("abort", () => clearInterval(countdownTimer), {once:true});

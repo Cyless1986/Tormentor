@@ -2,6 +2,7 @@
   const form = document.getElementById('character-sheet');
   const status = document.getElementById('sheet-status');
   let dirty = false;
+  const options = window.tormentorNavigation ? {signal:window.tormentorNavigation.scope.signal} : undefined;
   const panels = [...form.querySelectorAll('.sheet-panel')];
   const links = [...form.querySelectorAll('.sheet-tabs a')];
   const previous = document.getElementById('sheet-prev');
@@ -39,7 +40,7 @@
   }
   previous.addEventListener('click', () => turnPage(-1));
   next.addEventListener('click', () => turnPage(1));
-  window.addEventListener('hashchange', pageFromHash);
+  window.addEventListener('hashchange', pageFromHash, options);
   form.addEventListener('invalid', event => {
     const panel = event.target.closest('.sheet-panel');
     if (panel) showPage(panels.indexOf(panel));
@@ -115,8 +116,8 @@
     document.getElementById('spell-dc').textContent = ability ? 8 + mod(ability) + proficiency : '–';
     document.getElementById('spell-attack').textContent = ability ? signed(mod(ability) + proficiency) : '–';
   }
-  form.addEventListener('input', () => { dirty = true; status.textContent = 'Ungespeicherte Änderungen'; calculate(); });
-  form.addEventListener('submit', () => { dirty = false; });
-  window.addEventListener('beforeunload', event => { if (dirty) {event.preventDefault(); event.returnValue = '';} });
+  form.addEventListener('input', () => { dirty = true; form.dataset.portalDirty = 'true'; status.textContent = 'Ungespeicherte Änderungen'; calculate(); });
+  form.addEventListener('submit', () => { dirty = false; delete form.dataset.portalDirty; });
+  window.addEventListener('beforeunload', event => { if (dirty) {event.preventDefault(); event.returnValue = '';} }, options);
   calculate();
 })();
