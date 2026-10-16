@@ -17,7 +17,7 @@ class CodexDownloadTest(unittest.TestCase):
         for name in names:
             (root / 'print' / name).write_bytes(b'%PDF-test-book')
         with patch.object(portal, 'ROOT', root):
-            for name in names:
+            for name in names + [value + '?v=cache-check' for value in names]:
                 for who in (None, 'alice', 'bob', 'dm'):
                     for ranged in (False, True):
                         with self.subTest(name=name, who=who, ranged=ranged):

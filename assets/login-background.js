@@ -8,7 +8,7 @@ function updateBackground() {
     background.load();
     return;
   }
-  background.src = "/media/login-tavern-loop.mp4";
+  background.src = "/media/login-tavern-loop.mp4?v=leaves-20261016";
   background.muted = true;
   background.play().catch(() => {});
 }

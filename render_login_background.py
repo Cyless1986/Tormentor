@@ -9,11 +9,13 @@ FFMPEG = Path(r'C:\Users\dwhd1\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmp
 W, H, FPS, SECONDS = 1280, 720, 24, 12
 
 def animate_hanging_details(base, phase):
-    """Warp two small regions; their upper attachment points remain fixed."""
+    """Warp hanging details and foliage; fixed edges stay anchored."""
     image = base.copy()
     height, width = base.shape[:2]
     for kind, box in [('sign', (.251, .192, .331, .378)),
-                      ('flag', (.912, .100, .999, .495))]:
+                      ('flag', (.912, .100, .999, .495)),
+                      ('leaves-left', (.220, .000, .405, .145)),
+                      ('leaves-right', (.865, .000, .999, .105))]:
         left, top, right, bottom = [int(value * (width if index % 2 == 0 else height))
                                     for index, value in enumerate(box)]
         yy, xx = np.mgrid[top:bottom, left:right].astype(np.float32)
@@ -27,11 +29,18 @@ def animate_hanging_details(base, phase):
             angle = .022 * np.sin(phase * 3)
             dx = angle * (yy - height * .195) * weight
             dy = -angle * (xx - width * .290) * weight
-        else:
+        elif kind == 'flag':
             hanging = np.clip((yy / height - .115) / .32, 0, 1)
             wave = phase * 2 - v * 7
             dx = width * .0045 * np.sin(wave) * hanging * weight
             dy = height * .0016 * np.sin(wave + .8) * hanging * weight
+        else:
+            # Subpixel leaf flutter and a slow breeze, repeating seamlessly.
+            offset = 0.0 if kind == 'leaves-left' else 1.4
+            breeze = phase * 2 + u * 2.8 + offset
+            flutter = np.sin(phase * 5 + v * 3.5 + offset)
+            dx = width * .0008 * (.75 * np.sin(breeze) + .18 * flutter) * weight
+            dy = height * .0010 * np.sin(breeze + v * 1.2) * weight
         sx = np.clip(xx + dx, 0, width-1.001)
         sy = np.clip(yy + dy, 0, height-1.001)
         x0, y0 = sx.astype(np.int32), sy.astype(np.int32)

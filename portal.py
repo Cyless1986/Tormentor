@@ -608,14 +608,14 @@ class Handler(BaseHTTPRequestHandler):
             media["/media/"+filename] = ROOT / "print" / filename
         for key in codex_expansions.codex_profiles.ILLUSTRATIONS:
             media[f"/media/codex/{key}.png"] = ROOT / "assets" / "codex" / f"{key}.png"
-        if self.path in media:
-            codex_download = self.path.startswith('/media/Tormentor-Codex-') and self.path.endswith('.pdf')
+        if asset_path in media:
+            codex_download = asset_path.startswith('/media/Tormentor-Codex-') and asset_path.endswith('.pdf')
             if codex_download:
                 with database() as db:
                     user = self.current_user(db)
                     if not user or user['role'] != 'dm':
                         return self.send(403, page('Kein Zugriff', '<p>Codex-Downloads sind nur für den DM.</p>', user))
-            file = media[self.path]
+            file = media[asset_path]
             if not file.is_file(): return self.send(404, "Medien nicht gefunden")
             webp = file.with_suffix('.webp')
             vary_accept = file.suffix.lower() == '.png' and webp.is_file()
