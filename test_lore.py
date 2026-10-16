@@ -38,7 +38,7 @@ class LoreWorkflowTest(LoreTestCase):
             data = json.loads(request.data)
             text = data["messages"][-1]["content"]
             submitted.append(text)
-            result = {"summary": "Geprüfter Abschnitt", "npcs": ["Arin"], "places": ["Wald"], "quests": [], "transcript": "DARF NICHT EXPORTIERT WERDEN"}
+            result = {"summary": "Geprüfter Abschnitt", "npcs": ["Arin"], "places": ["Wald"], "quests": [], "transcript": "DARF NICHT EXPORTIERT WERDEN", "level_ups": []}
             if "Stufe 3" in text:
                 result["level_ups"] = [{"player": "Arin", "level": 3}]
             return io.BytesIO(json.dumps({"message": {"content": json.dumps(result)}}).encode())
@@ -46,7 +46,7 @@ class LoreWorkflowTest(LoreTestCase):
             draft = lore.analyze(item)
         self.assertGreater(len(submitted), 1)
         self.assertEqual("".join(submitted), item["transcript"])
-        self.assertEqual(draft["level_ups"], [{"player": "Arin", "level": 3}])
+        self.assertEqual(draft["level_ups"], [])  # Lore no longer proposes character levels.
         self.assertEqual(draft["npcs"], ["Arin"])
         self.assertNotIn("transcript", draft)
         public = self.root / "published"
@@ -169,6 +169,11 @@ class LorePortalTest(LoreTestCase):
         spec = importlib.util.spec_from_file_location("tormentor_bridge_test", Path(__file__).parent / "Tormentor_Android/local_ai/server.py")
         bridge = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(bridge)
+        bridge.ROOT = self.root
+        (self.root / "lore-online.json").write_text("{}")
+        enqueue_patch = patch("lore_online_sync.enqueue")
+        enqueue_mock = enqueue_patch.start()
+        self.addCleanup(enqueue_patch.stop)
         bridge.Handler.config = {"token": "a" * 32}
         self.server = bridge.ThreadingHTTPServer(("127.0.0.1", 0), bridge.Handler)
         threading.Thread(target=self.server.serve_forever, daemon=True).start()
@@ -182,9 +187,11 @@ class LorePortalTest(LoreTestCase):
                 connection.close()
                 return result
             self.assertEqual(upload("wrong")[0], 401)
+            enqueue_mock.assert_not_called()
             self.assertEqual(len(lore.list_sessions()), 0)
             status, data = upload("a" * 32)
             self.assertEqual(status, 201)
+            enqueue_mock.assert_called_once_with(data["id"])
             self.assertEqual(data["title"], "Session 4 – Rückkehr")
             self.assertNotIn("transcript", data)
             self.assertFalse(lore.load(data["id"])["published"])

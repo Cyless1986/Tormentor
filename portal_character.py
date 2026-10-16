@@ -1,6 +1,9 @@
 """German D&D 2024 character sheet, stored per authenticated player."""
 import json
 import portal_inspiration
+import portal_portraits
+import portal_inventory
+import portal_experience
 from html import escape
 
 ABILITIES = [('str', 'Stärke'), ('dex', 'Geschicklichkeit'), ('con', 'Konstitution'), ('int', 'Intelligenz'), ('wis', 'Weisheit'), ('cha', 'Charisma')]
@@ -16,6 +19,7 @@ COMPANION_NUMBERS = {f'companion_{i}_{key}': (title, low, high, default) for i i
 
 
 def initialize(db):
+    portal_portraits.initialize(db)
     db.execute('CREATE TABLE IF NOT EXISTS character_sheets (user_id INTEGER PRIMARY KEY, data TEXT NOT NULL, revision INTEGER NOT NULL DEFAULT 1)')
 
 
@@ -26,6 +30,8 @@ def load(db, uid):
 
 def save(db, user, data):
     result = {}
+    stored, _ = load(db, user["id"])
+    result.update(portal_inventory.save(data, stored))
     def number(key, low, high, default):
         try:
             value = float(data.get(key, default)) if key == 'speed' else int(data.get(key, default))
@@ -92,7 +98,8 @@ def render(db, user, data=None, error='', saved=False):
     for key, title, ability in SKILLS:
         skills += '<div class="sheet-skill">' + select(key, title, [(0, 'Nicht geübt'), (1, 'Geübt'), (2, 'Expertise')]) + f'<output data-skill="{key}" data-ability="{ability}"></output></div>'
     skills += '</div></section>'
-    magic = '<section class="card"><h3>Zauberwirken</h3>' + select('spell_ability', 'Zauberattribut', [('', 'Keines')] + ABILITIES, '') + '<div class="sheet-totals"><span>Rettungswurf-SG <output id="spell-dc"></output></span><span>Zauberangriff <output id="spell-attack"></output></span></div><div class="grid">'
+    elements = '<div class="magic-elements" aria-label="Magische Elemente">' + ''.join('<span><b class="'+color+'" aria-hidden="true">'+icon+'</b>'+label+'</span>' for color, icon, label in [('fire','♨','Feuer'),('ice','❄','Wasser/Eis'),('air','≋','Luft'),('earth','◆','Erde'),('lightning','ϟ','Blitz'),('shadow','☯','Licht/Schatten')]) + '</div>'
+    magic = '<section class="card"><div class="magic-heading"><h3>Zauberwirken</h3>' + elements + '</div>' + select('spell_ability', 'Zauberattribut', [('', 'Keines')] + ABILITIES, '') + '<div class="sheet-totals"><span>Rettungswurf-SG <output id="spell-dc"></output></span><span>Zauberangriff <output id="spell-attack"></output></span></div><div class="grid">'
     for level in range(1, 10):
         magic += f'<div class="sheet-stat"><h4>Grad {level}</h4>' + num(f'slots_{level}', 'Zauberplätze gesamt', 0, 30, 0) + num(f'used_{level}', 'Davon verbraucht', 0, 30, 0) + '</div>'
     magic += '</div></section>'
@@ -111,14 +118,14 @@ def render(db, user, data=None, error='', saved=False):
         for key, title in COMPANION_TEXTS:
             if key in (prefix + 'abilities', prefix + 'notes'):
                 companions += f'<label>{title}<textarea name="{key}" rows="4" maxlength="6000">{value(key)}</textarea></label>'
-        companions += '</details>'
+        companions += '<div class="companion-portrait-placement">' + portal_portraits.render(db, user['id'], f'companion-{i}') + '</div></details>'
     pages = [
-        ('identity', 'Charakter', 'Name, Herkunft und die Geschichte hinter deinem Abenteuer.', fields('name', 'background', 'alignment', 'notes')),
-        ('combat', 'Kampf', 'Alles, was im nächsten Gefecht zählt.', combat + fields('hit_dice', 'attacks', 'conditions')),
+        ('identity', 'Charakter', 'Name, Herkunft und die Geschichte hinter deinem Abenteuer.', '<div class="character-identity-layout"><div>' + fields('name', 'background', 'alignment', 'notes') + '</div>' + portal_portraits.render(db, user['id']) + '</div>'),
+        ('combat', 'Kampf', 'Alles, was im nächsten Gefecht zählt.', combat + '<div class="character-combat-layout"><div>' + fields('hit_dice', 'attacks', 'conditions') + '</div><figure class="character-combat-art"><img src="/media/character-combat.png" alt="Ein Held kämpft gegen ein Monster" loading="lazy"></figure></div>'),
         ('skills', 'Fertigkeiten', 'Deine Attribute, Rettungswürfe und besonderen Stärken.', abilities + skills + fields('features')),
         ('magic', 'Magie', 'Deine Zauber und verfügbaren Zauberplätze.', magic + fields('spells')),
         ('companions', 'Begleiter', 'Tiergefährte, Vertrauter oder Reittier – Platz für bis zu drei treue Gefährten. Werte und Fähigkeiten trägst du selbst ein.', companions),
-        ('gear', 'Ausrüstung', 'Von der ersten Goldmünze bis zum liebsten Werkzeug.', fields('equipment', 'languages')),
+        ('gear', 'Ausrüstung', 'Von der ersten Goldmünze bis zum liebsten Werkzeug.', portal_inventory.render(values) + fields('equipment', 'languages')),
     ]
     tabs = '<nav class="sheet-tabs" aria-label="Seiten des Charakterbogens">' + ''.join(f'<a id="tab-{key}" href="#sheet-{key}"><span>0{i}</span>{title}</a>' for i, (key, title, _, _) in enumerate(pages, 1)) + '</nav>'
     panels = ''.join(f'<section class="sheet-panel" id="sheet-{key}" aria-labelledby="tab-{key}"><h2>{title}</h2><p class="sheet-hint">{intro}</p>{content}</section>' for key, title, intro, content in pages)
@@ -128,4 +135,4 @@ def render(db, user, data=None, error='', saved=False):
     body = f'<form method="post" id="character-sheet" data-level="{user["level"]}"><input type="hidden" name="revision" value="{value("revision", revision)}">' + tabs + panels
     body += '<div class="sheet-paging" hidden><button type="button" id="sheet-prev">← Zurück</button><span id="sheet-page-count" aria-live="polite"></span><button type="button" id="sheet-next">Weiter →</button></div><p class="sheet-hint">Berechnete Boni berücksichtigen Attribute, Stufe und Übung. Zusätzliche Klassenmerkmale, Talente, Gegenstände und Zustände bitte selbst berücksichtigen und in den Notizen festhalten.</p><div class="sheet-save"><div><strong>Dein Abenteuer, dein Bogen</strong><span id="sheet-status" role="status">Alle Seiten gemeinsam speichern</span></div><button type="submit">Charakterbogen speichern</button></div></form><script src="/media/character.js" defer></script>'
     hero = '<link rel="stylesheet" href="/media/character.css"><div class="sheet-hero"><p class="sheet-eyebrow">TORMENTOR · D&D 2024</p><h2 id="hero-name">' + (value('name') or 'Deine Legende beginnt') + '</h2><p>' + escape(user['class_name'] or 'Klasse offen') + ' · ' + escape(user['subclass'] or 'Unterklasse offen') + '</p><div class="sheet-badges"><span>Stufe ' + str(user['level']) + '</span><span>' + escape(user['race'] or 'Spezies offen') + '</span></div><a href="/profil">Profildaten bearbeiten ↗</a> · <a href="/codex/zauber">Zauberlexikon ↗</a></div>'
-    return hero + notices + body
+    return portal_portraits.STYLE + hero + portal_experience.render(db, user) + notices + body + '<script src="/media/character-portrait.js" defer></script>'

@@ -38,6 +38,15 @@ public class MainActivity extends Activity {
     private float voiceVolume=1f;
     private MediaPlayer voicePlayer;
     private OfflineVoice offline;
+    private AlertDialog trainingDialog;
+    private static final String[] TRAINING_SENTENCES={
+        "Cortana, spiele bitte die Musik für unsere Taverne und die Reisenden.",
+        "Heute führt unser Abenteuer durch einen dunklen Wald zu einer alten Burg.",
+        "Die Gruppe begegnet einem Händler und fragt ihn nach dem nächsten Dorf.",
+        "Cortana, starte bitte die Aufnahme für unsere heutige gemeinsame Sitzung.",
+        "Wir suchen nach verborgenen Wegen und erzählen unsere Geschichte weiter.",
+        "Cortana, spiele bitte die Musik für die Taverne und unsere nächste Reise."
+    };
     private Button wakeButton;
     private boolean wakeEnabled=false;
     private final WakeGate wakeGate=new WakeGate();
@@ -58,6 +67,14 @@ public class MainActivity extends Activity {
     private Dialog introDialog;
     private VideoView introVideo;
     private MediaPlayer introMusic;
+    private float introVolume=0.5f;
+    private boolean introReady;
+    private final AudioManager.OnAudioFocusChangeListener introFocus=change->{
+        if(introMusic==null||!introReady)return;
+        if(change==AudioManager.AUDIOFOCUS_LOSS||change==AudioManager.AUDIOFOCUS_LOSS_TRANSIENT)introMusic.pause();
+        else if(change==AudioManager.AUDIOFOCUS_GAIN){introMusic.setVolume(introVolume,introVolume);if(foreground)introMusic.start();}
+        else if(change==AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK)introMusic.setVolume(introVolume*0.2f,introVolume*0.2f);
+    };
     private AudioManager audio;
     private final AudioManager.OnAudioFocusChangeListener focus=change -> {
         if(change==AudioManager.AUDIOFOCUS_LOSS || change==AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) stopPlayback();
@@ -67,6 +84,9 @@ public class MainActivity extends Activity {
         super.onCreate(state);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         audio=(AudioManager)getSystemService(AUDIO_SERVICE);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        // Intro volume is session-local: a previous mute must not silence the next launch.
+        introVolume=0.5f;
         volume=getPreferences(0).getFloat("volume",0.5f);
         voiceVolume=getPreferences(0).getFloat("voiceVolume",1f);
         loop=getPreferences(0).getBoolean("loop",true);
@@ -78,7 +98,7 @@ public class MainActivity extends Activity {
         offline=new OfflineVoice(this,new OfflineVoice.Events(){
             public void status(String text){report(text);}
             public void heard(String text){if(!foreground||(!wakeEnabled&&!onceListening)||busy||voicePlayer!=null||answerPending)return;if(onceListening){finishOnce();command(text);return;}if(awaitingQuestion){endQuestion();if(normalize(text).equals("abbrechen")||normalize(text).equals("stopp")){report("Frage abgebrochen.");return;}askLocal(text,false);return;}String accepted=wakeGate.accept(text,SystemClock.elapsedRealtime());if(accepted!=null)command(accepted);else if(wakeGate.activated){report("Ja, Dungeonmaster? Sage deinen Befehl.");activationVoice();}}
-            public void failed(String text){wakeEnabled=false;wakeButton.setText("Cortana einschalten");report(text);}
+            public void failed(String text){if(trainingDialog!=null)trainingDialog.dismiss();wakeEnabled=false;wakeButton.setText("Cortana einschalten");report(text);}
             public java.util.List<String> phrases(){ArrayList<String> phrases=new ArrayList<>();for(Library.Scene scene:library.scenes){phrases.add(scene.name.toLowerCase(Locale.GERMAN));phrases.add(scene.voiceName.toLowerCase(Locale.GERMAN));if(scene.name.equalsIgnoreCase("Dungeon"))phrases.add("dann gehen");}return phrases;}
         });
         if(state==null)showIntro();
@@ -96,8 +116,10 @@ public class MainActivity extends Activity {
     private void buildUi() {
         compactLayout=ScreenLayout.compact(getResources().getConfiguration().screenWidthDp);
         LinearLayout root=new LinearLayout(this); root.setOrientation(LinearLayout.VERTICAL); root.setBackgroundColor(BG);
-        title=label("TORMENTOR",compactLayout?20:25);title.setGravity(Gravity.CENTER);root.addView(title);
-        TextView version=label("Version 2.3 · Smartphone & Tablet",12);version.setGravity(Gravity.CENTER);root.addView(version);
+        LinearLayout headingRow=new LinearLayout(this);headingRow.setGravity(Gravity.CENTER_VERTICAL);root.addView(headingRow);
+        title=label("TORMENTOR",compactLayout?20:25);title.setGravity(Gravity.CENTER);headingRow.addView(title,new LinearLayout.LayoutParams(0,-2,1));
+        Button myVoice=button("Meine Stimme",0xff155b78,this::voiceSettings);myVoice.setTextSize(14);headingRow.addView(myVoice,new LinearLayout.LayoutParams(-2,-2));
+        TextView version=label("Version 2.5.3 · Smartphone & Tablet",12);version.setGravity(Gravity.CENTER);root.addView(version);
         if(compactLayout){
             LinearLayout actions=new LinearLayout(this);
             actions.addView(button("Funktionen",0xff33281e,this::phoneMenu),new LinearLayout.LayoutParams(0,-2,1));
@@ -109,6 +131,8 @@ public class MainActivity extends Activity {
         LinearLayout controls=new LinearLayout(this); controls.setOrientation(LinearLayout.VERTICAL); scroll.addView(controls);
         wakeButton=button("Cortana einschalten",0xff155b78,this::toggleWake);controls.addView(wakeButton);
         controls.addView(button("Sprachbefehl einmal",0xff33281e,this::onceCommands));
+        controls.addView(button("Meine Stimme",0xff155b78,this::voiceSettings));
+        controls.addView(button("Cortanas Sprache",0xff155b78,this::cortanaLanguage));
         controls.addView(button("Frage Tormentor",0xff633c83,this::typedQuestion));
         controls.addView(button("Hilfe",0xff33281e,this::help));
         controls.addView(button("Würfeln",0xff28613b,this::dice));
@@ -140,9 +164,37 @@ public class MainActivity extends Activity {
         LinearLayout voiceBar=new LinearLayout(this);voiceBar.setGravity(Gravity.CENTER_VERTICAL);bar.addView(voiceBar,compactLayout?new LinearLayout.LayoutParams(-1,-2):new LinearLayout.LayoutParams(0,-2,1));voiceBar.addView(label("Stimme",14));SeekBar voiceSlider=new SeekBar(this);voiceSlider.setMax(100);voiceSlider.setProgress(Math.round(voiceVolume*100));voiceBar.addView(voiceSlider,new LinearLayout.LayoutParams(0,dp(48),1));voiceSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){public void onStartTrackingTouch(SeekBar s){}public void onStopTrackingTouch(SeekBar s){getPreferences(0).edit().putFloat("voiceVolume",voiceVolume).apply();}public void onProgressChanged(SeekBar s,int n,boolean user){voiceVolume=n/100f;if(voicePlayer!=null)voicePlayer.setVolume(voiceVolume,voiceVolume);}});
         status=label("Bereit · Android 8.1 kompatibel",14);status.setMaxLines(2);status.setEllipsize(android.text.TextUtils.TruncateAt.END); root.addView(status); setContentView(root); refreshScenes();
     }
+    private void voiceSettings(){
+        if(offline==null)return;
+        String info=offline.hasVoiceProfile()?"Dein lokales Stimmprofil ist gespeichert.":"Noch kein Stimmprofil gespeichert.";
+        new AlertDialog.Builder(this).setTitle("Meine Stimme · Cortana")
+            .setMessage(info+"\n\nLies fünf Sätze und eine Prüfprobe vor. Die App speichert nur Stimmmerkmale auf diesem Gerät, keine Trainingsaufnahmen. Der Filter ist experimentell und keine sichere Personenprüfung. Kurze Wörter wie „Stopp“ können zu kurz sein; sprich mit Filter ganze Befehle.\n\nNeue Befehle: „Hey Cortana, starte Taverne“, „Cortana, spiel bitte Wald“, „Cortana, Musik stoppen“, „Cortana, würfeln“. Ohne Stimmfilter funktioniert auch Cortana allein mit anschließendem Befehl innerhalb von zehn Sekunden.")
+            .setPositiveButton("Stimme einlernen",(d,w)->startVoiceTraining())
+            .setView(button("Gespeichertes Stimmprofil löschen",()->new AlertDialog.Builder(this).setTitle("Stimmprofil löschen?").setMessage("Der Stimmfilter wird ausgeschaltet. Danach kannst du deine Stimme neu einlernen.").setPositiveButton("Löschen",(d,w)->{offline.deleteVoiceProfile();wakeGate.reset();report("Stimmprofil gelöscht.");}).setNegativeButton("Behalten",null).show()))
+            .setNeutralButton(offline.voiceFilterEnabled()?"Filter ausschalten":"Filter einschalten",(d,w)->{if(!offline.hasVoiceProfile()){report("Bitte zuerst deine Stimme einlernen.");return;}offline.setVoiceFilter(!offline.voiceFilterEnabled());wakeGate.reset();report(offline.voiceFilterEnabled()?"Stimmfilter eingeschaltet.":"Stimmfilter ausgeschaltet.");})
+            .setNegativeButton("Schließen",null).show();
+    }
+    private void startVoiceTraining(){
+        if(busy||answerPending||loreIsRecording()){report("Bitte zuerst Import, KI-Antwort oder Sitzungsaufnahme beenden.");return;}
+        if(checkSelfPermission(Manifest.permission.RECORD_AUDIO)!=PackageManager.PERMISSION_GRANTED){requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO},18);return;}
+        stopPlayback();finishOnce();wakeGate.reset();
+        boolean resumeWake=wakeEnabled;wakeEnabled=false;wakeButton.setText("Cortana einschalten");offline.stop();
+        TextView instructions=label("Sprachmodell wird geladen. Dann Satz 1 von 6 ruhig vorlesen:\n\n"+TRAINING_SENTENCES[0]+"\n\nNach jedem Satz kurz schweigen. Bitte allein in ruhiger Umgebung sprechen.",18);
+        ScrollView content=new ScrollView(this);content.addView(instructions);
+        AlertDialog dialog=new AlertDialog.Builder(this).setTitle("Deine Stimme einlernen").setView(content).setNegativeButton("Abbrechen",null).create();
+        trainingDialog=dialog;
+        dialog.setOnDismissListener(d->{handler.removeCallbacks(trainingTimeout);offline.cancelTraining();offline.stop();trainingDialog=null;wakeEnabled=resumeWake;wakeButton.setText(wakeEnabled?"Cortana ausschalten":"Cortana einschalten");if(wakeEnabled&&foreground){offline.pause(false);offline.start();}});
+        dialog.show();handler.postDelayed(trainingTimeout,300000);
+        offline.train((message,sample,finished)->{
+            if(trainingDialog!=dialog)return;
+            if(finished){dialog.dismiss();report(message);new AlertDialog.Builder(this).setTitle("Stimme gespeichert").setMessage(message+"\n\nSchalte Cortana ein und probiere: „Cortana, spiele bitte die Musik für die Taverne“. Unter „Meine Stimme“ kannst du den Filter ausschalten oder neu einlernen.").setPositiveButton("OK",null).show();}
+            else instructions.setText(message+"\n\n"+(sample==5?"Prüfprobe 6 von 6":"Satz "+(sample+1)+" von 6")+":\n\n"+TRAINING_SENTENCES[Math.min(sample,5)]+"\n\nNach dem Satz kurz schweigen.");
+        });
+    }
+    private final Runnable trainingTimeout=()->{if(trainingDialog!=null){trainingDialog.dismiss();report("Stimmtraining nach fünf Minuten beendet. Ein vorhandenes Profil bleibt erhalten.");}};
     private void phoneMenu(){
-        String[] names={wakeEnabled?"Cortana ausschalten":"Cortana einschalten","Sprachbefehl einmal","Frage Tormentor","Würfeln","Medien verwalten","Tormentor Lore","Kampagnenportal","Lokale KI einrichten","Intro abspielen","Hilfe"};
-        Runnable[] actions={this::toggleWake,this::onceCommands,this::typedQuestion,this::dice,this::chooseManager,this::loreMenu,this::openPortal,this::configureLocal,this::showIntro,this::help};
+        String[] names={wakeEnabled?"Cortana ausschalten":"Cortana einschalten","Sprachbefehl einmal","Meine Stimme","Cortanas Sprache","Frage Tormentor","Würfeln","Medien verwalten","Tormentor Lore","Kampagnenportal","Lokale KI einrichten","Intro abspielen","Hilfe"};
+        Runnable[] actions={this::toggleWake,this::onceCommands,this::voiceSettings,this::cortanaLanguage,this::typedQuestion,this::dice,this::chooseManager,this::loreMenu,this::openPortal,this::configureLocal,this::showIntro,this::help};
         new AlertDialog.Builder(this).setTitle("Tormentor · Funktionen").setItems(names,(d,n)->actions[n].run()).setNegativeButton("Schließen",null).show();
     }
     @Override public void onConfigurationChanged(android.content.res.Configuration configuration){
@@ -205,15 +257,29 @@ public class MainActivity extends Activity {
         FrameLayout layout=new FrameLayout(this);layout.setBackgroundColor(BG);layout.setClipChildren(true);
         BackgroundVideoView view=new BackgroundVideoView(this);view.setAudioFocusRequest(AudioManager.AUDIOFOCUS_NONE);introVideo=view;layout.addView(view,new FrameLayout.LayoutParams(-1,-1,Gravity.CENTER));
         TextView heading=label("TORMENTOR",26);heading.setGravity(Gravity.CENTER);heading.setShadowLayer(4,0,2,Color.BLACK);layout.addView(heading,new FrameLayout.LayoutParams(-1,-2,Gravity.TOP));
-        Button skip=button("Abenteuer starten · Intro überspringen",dialog::dismiss);FrameLayout.LayoutParams skipParams=new FrameLayout.LayoutParams(-1,-2,Gravity.BOTTOM);skipParams.setMargins(dp(16),dp(12),dp(16),dp(20));layout.addView(skip,skipParams);dialog.setContentView(layout);
-        dialog.setOnDismissListener(d->{view.stopPlayback();introVideo=null;if(introMusic!=null){introMusic.release();introMusic=null;}introDialog=null;showHomeBackground();if(offline!=null&&wakeEnabled&&foreground)offline.start();});
+        LinearLayout introControls=new LinearLayout(this);introControls.setOrientation(LinearLayout.VERTICAL);introControls.setBackgroundColor(0xdd120d08);
+        TextView soundStatus=label("Intro-Ton wird geladen …",14);introControls.addView(soundStatus);
+        SeekBar introSlider=new SeekBar(this);introSlider.setMax(100);introSlider.setProgress(Math.round(introVolume*100));introControls.addView(introSlider,new LinearLayout.LayoutParams(-1,dp(48)));
+        introSlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){public void onStartTrackingTouch(SeekBar bar){}public void onStopTrackingTouch(SeekBar bar){}public void onProgressChanged(SeekBar bar,int value,boolean fromUser){introVolume=value/100f;if(introMusic!=null&&introReady){introMusic.setVolume(introVolume,introVolume);soundStatus.setText(value==0?"Intro-Ton aus":"Intro-Lautstärke: "+value+" % · Gerätelautstärke über die Lautstärketasten");}}});
+        Button skip=button("Abenteuer starten · Intro überspringen",dialog::dismiss);introControls.addView(skip);FrameLayout.LayoutParams skipParams=new FrameLayout.LayoutParams(-1,-2,Gravity.BOTTOM);skipParams.setMargins(dp(16),dp(12),dp(16),dp(20));layout.addView(introControls,skipParams);dialog.setContentView(layout);
+        dialog.setOnDismissListener(d->{view.stopPlayback();introVideo=null;introReady=false;if(introMusic!=null){introMusic.release();introMusic=null;}audio.abandonAudioFocus(introFocus);introDialog=null;showHomeBackground();if(offline!=null&&wakeEnabled&&foreground)offline.start();});
         dialog.show();
         if(dialog.getWindow()!=null)dialog.getWindow().setLayout(-1,-1);
         io.execute(()->{File target=new File(getCacheDir(),"intro-v3.mp4");Exception failure=null;try{if(!target.isFile()){File partial=new File(getCacheDir(),"intro.partial");try(InputStream source=getAssets().open("intro.mp4");OutputStream out=new FileOutputStream(partial)){byte[] b=new byte[65536];int n;while((n=source.read(b))!=-1)out.write(b,0,n);}if(!partial.renameTo(target))throw new IOException("Intro konnte nicht vorbereitet werden");}}catch(Exception e){failure=e;}final Exception problem=failure;
             runOnUiThread(()->{if(introDialog!=dialog||!foreground||isDestroyed())return;if(problem!=null){dialog.dismiss();error(problem);return;}view.setVideoPath(target.getAbsolutePath());view.setOnPreparedListener(p->{view.setCropSize(p.getVideoWidth(),p.getVideoHeight());p.setVolume(0,0);p.setLooping(true);if(foreground&&introDialog==dialog)view.start();});view.setOnErrorListener((p,w,e)->{dialog.dismiss();report("Intro-Video nicht abspielbar.");return true;});
-                try(android.content.res.AssetFileDescriptor asset=getAssets().openFd("intro.mp3")){MediaPlayer player=new MediaPlayer();introMusic=player;player.setDataSource(asset.getFileDescriptor(),asset.getStartOffset(),asset.getLength());player.setVolume(volume,volume);player.setLooping(true);player.setOnPreparedListener(p->{if(introMusic==p&&foreground)p.start();});player.setOnErrorListener((p,w,e)->{if(introMusic==p){p.release();introMusic=null;}return true;});player.prepareAsync();}catch(Exception e){report("Intro-Sound nicht verfügbar.");}
+                startIntroMusic(dialog,soundStatus);
             });
         });
+    }
+    private void startIntroMusic(Dialog owner,TextView soundStatus){
+        if(audio.requestAudioFocus(introFocus,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN)!=AudioManager.AUDIOFOCUS_REQUEST_GRANTED){soundStatus.setText("Intro-Ton blockiert: Bitte andere Audiowiedergabe beenden und das Intro erneut öffnen.");return;}
+        try(android.content.res.AssetFileDescriptor asset=getAssets().openFd("intro.mp3")){
+            MediaPlayer player=new MediaPlayer();introMusic=player;introReady=false;
+            player.setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build());
+            player.setDataSource(asset.getFileDescriptor(),asset.getStartOffset(),asset.getLength());player.setVolume(introVolume,introVolume);player.setLooping(true);
+            player.setOnPreparedListener(p->{if(introMusic==p&&foreground&&introDialog==owner){introReady=true;p.start();soundStatus.setText(introVolume==0?"Intro-Ton aus":"Intro-Lautstärke: "+Math.round(introVolume*100)+" % · Gerätelautstärke über die Lautstärketasten");}});
+            player.setOnErrorListener((p,what,extra)->{if(introMusic==p){introReady=false;p.release();introMusic=null;soundStatus.setText("Intro-Ton nicht abspielbar ("+what+"/"+extra+").");}return true;});player.prepareAsync();
+        }catch(Exception e){introReady=false;if(introMusic!=null){introMusic.release();introMusic=null;}soundStatus.setText("Intro-Ton: "+e.getMessage());}
     }
     private void report(String text) { if(status!=null)status.setText(text); }
     private void error(Exception e) { report("Fehler: "+e.getMessage()); new AlertDialog.Builder(this).setTitle("Tormentor").setMessage(e.getMessage()).setPositiveButton("OK",null).show(); }
@@ -290,17 +356,27 @@ public class MainActivity extends Activity {
     }
     private void playAnswer(File file){finishVoice();answerFile=file;if(offline!=null)offline.pause(true);if(music!=null)music.setVolume(volume*0.25f,volume*0.25f);try{MediaPlayer player=new MediaPlayer();voicePlayer=player;player.setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ASSISTANCE_ACCESSIBILITY).setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build());player.setDataSource(file.getAbsolutePath());player.setVolume(voiceVolume,voiceVolume);player.setOnPreparedListener(p->{if(voicePlayer==p&&foreground)p.start();});player.setOnCompletionListener(p->{finishVoice();report("Antwort beendet. Neue Frage: „Cortana, frage Tormentor“.");});player.setOnErrorListener((p,w,e)->{finishVoice();report("Antworttext empfangen, Sprachausgabe nicht abspielbar.");return true;});player.prepareAsync();report("Tormentor antwortet …");}catch(Exception e){finishVoice();report("Sprachausgabe: "+e.getMessage());}}
     private void toggleWake(){if(wakeEnabled){if(awaitingQuestion)endQuestion();wakeEnabled=false;offline.stop();wakeGate.reset();wakeButton.setText("Cortana einschalten");report("Cortana ist ausgeschaltet.");return;}if(checkSelfPermission(Manifest.permission.RECORD_AUDIO)!=PackageManager.PERMISSION_GRANTED){requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO},14);return;}wakeEnabled=true;wakeButton.setText("Cortana ausschalten");offline.pause(false);offline.start();}
+    private void cortanaLanguage(){
+        String language=getPreferences(0).getString("cortanaLanguage","en");
+        new AlertDialog.Builder(this).setTitle("Cortanas Antwortsprache")
+            .setSingleChoiceItems(new String[]{"Englisch","Deutsch"},language.equals("de")?1:0,(dialog,index)->{
+                getPreferences(0).edit().putString("cortanaLanguage",index==1?"de":"en").apply();
+                dialog.dismiss();report("Cortanas Antworten: "+(index==1?"Deutsch":"Englisch")+". Sprachbefehle bleiben Deutsch.");
+            }).setNegativeButton("Schließen",null).show();
+    }
     private void activationVoice(){
         finishVoice();if(offline!=null)offline.pause(true);if(music!=null)music.setVolume(volume*0.25f,volume*0.25f);
-        try(android.content.res.AssetFileDescriptor asset=getAssets().openFd("aktivierung.mp3")){
+        String language=getPreferences(0).getString("cortanaLanguage","en").equals("de")?"de":"en";
+        try(android.content.res.AssetFileDescriptor asset=getAssets().openFd("cortana/"+language+"-activation.wav")){
             MediaPlayer player=new MediaPlayer();voicePlayer=player;
             player.setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ASSISTANCE_ACCESSIBILITY).setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build());
             player.setDataSource(asset.getFileDescriptor(),asset.getStartOffset(),asset.getLength());player.setVolume(voiceVolume,voiceVolume);
-            player.setOnPreparedListener(p->{if(voicePlayer==p&&foreground)p.start();});player.setOnCompletionListener(p->{wakeGate.accept("cortana",SystemClock.elapsedRealtime());finishVoice();});player.setOnErrorListener((p,w,e)->{finishVoice();return true;});player.prepareAsync();
-        }catch(Exception e){finishVoice();}
+            player.setOnPreparedListener(p->{if(voicePlayer==p&&foreground)p.start();});player.setOnCompletionListener(p->{finishVoice();handler.postDelayed(armCommand,400);});player.setOnErrorListener((p,w,e)->{finishVoice();handler.postDelayed(armCommand,400);return true;});player.prepareAsync();
+        }catch(Exception e){finishVoice();handler.postDelayed(armCommand,400);}
     }
     private final Runnable resumeListening=()->{if(offline!=null&&foreground&&wakeEnabled&&voicePlayer==null&&!answerPending){offline.pause(false);if(awaitingQuestion&&!questionListening){questionListening=true;handler.postDelayed(questionTimeout,60000);report("Jetzt deine Frage sprechen · 60 Sekunden · danach kurz schweigen.");}}};
-    private void finishVoice(){handler.removeCallbacks(resumeListening);if(voicePlayer!=null){voicePlayer.release();voicePlayer=null;}if(answerFile!=null){answerFile.delete();answerFile=null;}if(music!=null)music.setVolume(volume,volume);handler.postDelayed(resumeListening,400);}
+    private final Runnable armCommand=()->{if(foreground&&wakeEnabled&&voicePlayer==null&&!awaitingQuestion&&!answerPending){wakeGate.accept("cortana",SystemClock.elapsedRealtime());report("Jetzt deinen Befehl sprechen · z. B. Spiele Bosskampf oder Würfel W20.");}};
+    private void finishVoice(){handler.removeCallbacks(armCommand);handler.removeCallbacks(resumeListening);if(voicePlayer!=null){voicePlayer.release();voicePlayer=null;}if(answerFile!=null){answerFile.delete();answerFile=null;}if(music!=null)music.setVolume(volume,volume);handler.postDelayed(resumeListening,400);}
     private void chooseManager() {
         if(busy){report("Import läuft …");return;}
         ArrayList<String> names=new ArrayList<>(); for(Library.Scene s:library.scenes)names.add(s.name+"  ("+s.items.size()+")");names.add("+ Neue Kategorie");names.add("Laptop-Medienpaket importieren (.zip)");
@@ -365,7 +441,13 @@ public class MainActivity extends Activity {
     }
     private void stopLoreRecording(){
         if(!loreIsRecording()){report("Es läuft gerade keine Lore-Aufnahme.");return;}
-        try{offline.stopRecording();report("Lore-Aufnahme gespeichert: "+loreTitle(loreRecording));}
+        try{
+            offline.stopRecording();
+            report("Aufnahme auf diesem Tablet gespeichert: "+loreTitle(loreRecording)+" · Noch nicht zum Laptop übertragen oder ausgewertet.");
+            if(foreground&&!isFinishing())new AlertDialog.Builder(this).setTitle("Aufnahme auf dem Tablet gespeichert")
+                .setMessage(loreTitle(loreRecording)+"\n\nDie Audiodatei liegt unter Tormentor Lore → Aufnahmen anzeigen / zum Laptop übertragen. Für einen Lore-Entwurf zuerst zum Laptop übertragen und dort auswerten.")
+                .setPositiveButton("Aufnahmen anzeigen",(d,w)->showLoreRecordings()).setNegativeButton("Später",null).show();
+        }
         catch(IOException e){error(e);}
     }
     private void saveLoreTitle(File audioFile,String sessionTitle)throws Exception{
@@ -445,14 +527,32 @@ public class MainActivity extends Activity {
         handler.removeCallbacks(onceTimeout);handler.postDelayed(onceTimeout,20000);
         report("Jetzt einen Befehl sprechen, etwa „Starte Aufnahme“ oder „Beende Aufnahme“.");
     }
-    @Override public void onRequestPermissionsResult(int r,String[] p,int[] g){super.onRequestPermissionsResult(r,p,g);if(r==LORE_PERMISSION){if(g.length>0&&g[0]==PackageManager.PERMISSION_GRANTED)startLoreRecording();else report("Mikrofon nicht freigegeben.");return;}if(r==VOICE||r==14){if(g.length>0&&g[0]==PackageManager.PERMISSION_GRANTED){if(r==14)toggleWake();else listen();}else report("Mikrofon nicht freigegeben. Die Szenentasten funktionieren weiterhin.");}}
+    @Override public void onRequestPermissionsResult(int r,String[] p,int[] g){super.onRequestPermissionsResult(r,p,g);if(r==18){if(g.length>0&&g[0]==PackageManager.PERMISSION_GRANTED)startVoiceTraining();else report("Mikrofon nicht freigegeben.");return;}if(r==LORE_PERMISSION){if(g.length>0&&g[0]==PackageManager.PERMISSION_GRANTED)startLoreRecording();else report("Mikrofon nicht freigegeben.");return;}if(r==VOICE||r==14){if(g.length>0&&g[0]==PackageManager.PERMISSION_GRANTED){if(r==14)toggleWake();else listen();}else report("Mikrofon nicht freigegeben. Die Szenentasten funktionieren weiterhin.");}}
     static String normalize(String text){return Normalizer.normalize(text.toLowerCase(Locale.GERMAN).replace("ß","ss"),Normalizer.Form.NFD).replaceAll("\\p{M}","").replaceAll("[^a-z0-9 ]"," ").trim().replaceAll(" +"," ");}
-    private void command(String text){int recordingAction=LoreCommands.action(text);if(recordingAction==1){startLoreRecording();return;}if(recordingAction==-1){stopLoreRecording();return;}String cmd=" "+normalize(text)+" ";if(cmd.contains(" frage ")){beginQuestion();return;}if(cmd.contains(" stopp ")||cmd.contains(" stop ")){stopPlayback();showHomeBackground();report("Cortana: Wiedergabe gestoppt");return;}Library.Scene best=null;for(Library.Scene scene:library.scenes)if((cmd.contains(" "+normalize(scene.name)+" ")||cmd.contains(" "+normalize(scene.voiceName)+" ")||(scene.name.equalsIgnoreCase("Dungeon")&&cmd.contains(" dann gehen ")))&&(best==null||scene.name.length()>best.name.length()))best=scene;if(best!=null){playScene(best);return;}if(cmd.contains(" wurfel ")||cmd.contains(" wurfle ")){dice();return;}report("Erkannt: "+text+" · Sage „Spiele“ und den Kategorienamen oder „Stopp“.");}
-    private void dice(){String[] names={"W4","W6","W8","W10","W12","W20","W100"};int[] sides={4,6,8,10,12,20,100};new AlertDialog.Builder(this).setTitle("Würfel wählen").setItems(names,(d,n)->report(names[n]+" → "+(random.nextInt(sides[n])+1))).show();}
-    private void help(){new AlertDialog.Builder(this).setTitle("Tormentor auf deinem Tablet").setMessage("Medien verwalten → Kategorie → Sounds oder Bilder / MP4 hinzufügen. Mehrfachauswahl ist möglich. Die App speichert eigene Kopien. Zum Entfernen eine Datei antippen.\n\nEine Szene wählt zufällig einen Sound und einen Hintergrund ihrer Kategorie. Videos laufen stumm in Schleife. Empfohlen: MP3, JPG/PNG und MP4 mit H.264 Baseline bis 1280 × 720 Pixel und 30 Bildern/s.\n\n„Cortana einschalten“ antippen und das Mikrofon freigeben. Danach hört die App offline zu: „Cortana, spiele Taverne“ oder „Cortana, Stopp“. Alternativ erst „Cortana“ sagen, die Antwort abwarten und innerhalb von zehn Sekunden den Befehl sprechen. Die App muss geöffnet bleiben. Die zusätzliche Taste „Sprachbefehl einmal“ verwendet den Android-Sprachdienst und benötigt möglicherweise Internet.\n\nBeim Verlassen der App stoppt die Wiedergabe. Beim Löschen der App werden ihre Medienkopien gelöscht.\n\nDie vorhandene Cortana-Aktivierungsantwort und das Intro sind übernommen. Musik und Cortana-Stimme haben getrennte Lautstärken. Lokale KI-Antworten mit der männlichen Thorsten-Stimme sind integriert. Auf dem Laptop KI-starten.cmd öffnen; beide Geräte müssen im gleichen WLAN sein. Unter „Lokale KI einrichten“ die Tablet-Verbindung.json importieren. Mit „Frage Tormentor“ eine Frage eintippen oder „Cortana, frage Tormentor“ sagen, Cortanas Antwort abwarten. Sobald unten „Jetzt deine Frage sprechen“ steht, hast du 60 Sekunden für die Frage. Danach kurz schweigen, damit das Satzende erkannt wird. Für jede weitere Frage erneut „Cortana, frage Tormentor“ sagen. Die Frage wird offline erkannt, die Antwort auf dem Laptop berechnet und vorgelesen. Musik wird während der Antwort leiser. Es werden keine OpenAI- oder ElevenLabs-Dienste verwendet.").setPositiveButton("OK",null).show();}
+    private void command(String text){int die=DiceCommand.parse(text);if(die!=0){if(die<0)report("Bitte einen Würfel nennen: W4, W6, W8, W10, W12, W20 oder W100.");else dice(die);return;}int recordingAction=LoreCommands.action(text);if(recordingAction==1){startLoreRecording();return;}if(recordingAction==-1){stopLoreRecording();return;}String cmd=" "+normalize(text)+" ";if(cmd.contains(" frage ")){beginQuestion();return;}if(cmd.contains(" stopp ")||cmd.contains(" stop ")||cmd.contains(" stoppe musik ")||cmd.contains(" musik stoppen ")||cmd.contains(" musik aus ")||cmd.contains(" wiedergabe stoppen ")){stopPlayback();showHomeBackground();report("Cortana: Wiedergabe gestoppt");return;}Library.Scene best=null;for(Library.Scene scene:library.scenes)if((cmd.contains(" "+normalize(scene.name)+" ")||cmd.contains(" "+normalize(scene.voiceName)+" ")||(scene.name.equalsIgnoreCase("Dungeon")&&cmd.contains(" dann gehen ")))&&(best==null||scene.name.length()>best.name.length()))best=scene;if(best!=null){playScene(best);return;}report("Erkannt: "+text+" · Sage „Spiele“ und den Kategorienamen oder „Stopp“.");}
+    private void dice(){dice(20);}
+    private void dice(int sides){
+        int result=DiceCommand.roll(sides,random);
+        String entry="W"+sides+" → "+result;
+        cancelQuestion();finishVoice();wakeGate.reset();
+        report(entry);
+        if(offline!=null)offline.pause(true);
+        if(music!=null)music.setVolume(volume*0.25f,volume*0.25f);
+        try(android.content.res.AssetFileDescriptor asset=getAssets().openFd("cortana/dice/"+result+".wav")){
+            MediaPlayer player=new MediaPlayer();voicePlayer=player;
+            player.setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ASSISTANCE_ACCESSIBILITY).setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build());
+            player.setDataSource(asset.getFileDescriptor(),asset.getStartOffset(),asset.getLength());
+            player.setVolume(voiceVolume,voiceVolume);
+            player.setOnPreparedListener(p->{if(voicePlayer==p&&foreground)p.start();});
+            player.setOnCompletionListener(p->{if(voicePlayer==p)finishVoice();});
+            player.setOnErrorListener((p,w,e)->{if(voicePlayer==p){finishVoice();report(entry+" · Sprachausgabe nicht verfügbar.");}return true;});
+            player.prepareAsync();
+        }catch(Exception e){finishVoice();report(entry+" · Sprachausgabe nicht verfügbar.");}
+    }
+    private void help(){new AlertDialog.Builder(this).setTitle("Tormentor auf deinem Tablet").setMessage("Medien verwalten → Kategorie → Sounds oder Bilder / MP4 hinzufügen. Mehrfachauswahl ist möglich. Die App speichert eigene Kopien. Zum Entfernen eine Datei antippen.\n\nEine Szene wählt zufällig einen Sound und einen Hintergrund ihrer Kategorie. Videos laufen stumm in Schleife. Empfohlen: MP3, JPG/PNG und MP4 mit H.264 Baseline bis 1280 × 720 Pixel und 30 Bildern/s.\n\n„Cortana einschalten“ antippen und das Mikrofon freigeben. Danach hört die App offline zu: „Cortana, spiele Taverne“ oder „Cortana, Stopp“. Alternativ erst „Cortana“ sagen, die Antwort abwarten und innerhalb von zehn Sekunden den Befehl sprechen. Die App muss geöffnet bleiben. „Würfel W20“ würfelt direkt und spricht das Ergebnis auf Englisch. W4, W6, W8, W10, W12, W20 und W100 sind möglich. Der Würfelknopf würfelt direkt einen W20. Das Ergebnis steht zusätzlich unten in der Logbox. „Sprachbefehl einmal“ arbeitet ebenfalls offline. Unter „Meine Stimme“ kannst du sechs Sprachproben einlernen und einen lokalen Stimmfilter einschalten. Der Stimmfilter prüft auch kurze Befehle. Cortanas Antwort abwarten; sobald unten die Aufforderung erscheint, den Befehl sprechen.\n\nBeim Verlassen der App stoppt die Wiedergabe. Beim Löschen der App werden ihre Medienkopien gelöscht.\n\nDie vorhandene Cortana-Aktivierungsantwort und das Intro sind übernommen. Musik und Cortana-Stimme haben getrennte Lautstärken. Lokale KI-Antworten mit der männlichen Thorsten-Stimme sind integriert. Auf dem Laptop KI-starten.cmd öffnen; beide Geräte müssen im gleichen WLAN sein. Unter „Lokale KI einrichten“ die Tablet-Verbindung.json importieren. Mit „Frage Tormentor“ eine Frage eintippen oder „Cortana, frage Tormentor“ sagen, Cortanas Antwort abwarten. Sobald unten „Jetzt deine Frage sprechen“ steht, hast du 60 Sekunden für die Frage. Danach kurz schweigen, damit das Satzende erkannt wird. Für jede weitere Frage erneut „Cortana, frage Tormentor“ sagen. Die Frage wird offline erkannt, die Antwort auf dem Laptop berechnet und vorgelesen. Musik wird während der Antwort leiser. Es werden keine OpenAI- oder ElevenLabs-Dienste verwendet.").setPositiveButton("OK",null).show();}
     @Override protected void onSaveInstanceState(Bundle out){super.onSaveInstanceState(out);if(pendingScene!=null)out.putString("pendingScene",pendingScene.id);out.putString("pendingKind",pendingKind);}
     @Override protected void onStart(){super.onStart();foreground=true;showHomeBackground();if(offline!=null&&wakeEnabled)offline.start();}
-    @Override protected void onStop(){foreground=false;finishOnce();if(loreIsRecording())stopLoreRecording();if(introDialog!=null)introDialog.dismiss();if(offline!=null)offline.stop();wakeGate.reset();stopPlayback();super.onStop();}
+    @Override protected void onStop(){foreground=false;if(trainingDialog!=null)trainingDialog.dismiss();finishOnce();if(loreIsRecording())stopLoreRecording();if(introDialog!=null)introDialog.dismiss();if(offline!=null)offline.stop();wakeGate.reset();stopPlayback();super.onStop();}
     @Override protected void onDestroy(){if(loreTransfer!=null)loreTransfer.cancel();stopPlayback();handler.removeCallbacksAndMessages(null);if(offline!=null)offline.close();io.shutdown();network.shutdown();super.onDestroy();}
 }
 

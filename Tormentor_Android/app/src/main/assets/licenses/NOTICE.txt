@@ -1,5 +1,10 @@
 Tormentor Android includes:
 
+vosk-model-spk-0.4 (local speaker vectors)
+https://alphacephei.com/vosk/models
+Apache License 2.0
+Original model attribution is included in model-spk/README.txt.
+
 Vosk Android 0.3.75
 Copyright Alpha Cephei Inc.
 https://github.com/alphacep/vosk-api

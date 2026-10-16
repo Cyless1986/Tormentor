@@ -33,8 +33,13 @@ import portal_reset
 import portal_handouts
 import portal_chat
 import portal_character
+import portal_library
+import portal_portraits
+import portal_experience
+import portal_levels
 import portal_inspiration
 import portal_registration
+import portal_memories
 
 ROOT = Path(__file__).resolve().parent
 INTRO_MUSIC = ROOT / 'assets/music/rising-moon.mp3'
@@ -92,7 +97,9 @@ def database():
         portal_handouts.initialize(db)
         portal_chat.initialize(db)
         portal_character.initialize(db)
+        portal_experience.initialize(db)
         portal_inspiration.initialize(db)
+        portal_memories.initialize(db)
         yield db
         db.commit()
     except Exception:
@@ -137,15 +144,98 @@ def page(title, body, user=None):
     nav = '<a href="/">Start</a><a href="/codex">Codex</a><a href="/news">D&D-News</a><a href="/links">Links</a>'
     if user:
         nav += '<a href="/maps">Karten</a><a href="/messages" id="chat-link">Nachrichten <span id="chat-unread" class="badge" style="background:#a44336;color:white" hidden aria-live="polite"></span></a><a href="/character">Charakterbogen</a>'
-        nav += '<a href="/dashboard">Spielerbereich</a><a href="/profil">Mein Profil</a><a href="/lore">Chronik</a><a href="/handouts">Handouts</a>'
+        nav += '<a href="/dashboard">Spielerbereich</a><a href="/profil">Mein Profil</a><a href="/lore">Chronik</a><a href="/handouts" id="handouts-link">Handouts <span id="handouts-unread" class="badge" style="background:#a44336;color:white" hidden aria-live="polite"></span></a><a href="/memories">Memories</a>'
         if user["role"] == "dm": nav += '<a href="/dm">DM</a>'
         nav += '<form method="post" action="/logout"><button>Abmelden</button></form>'
     else:
         nav += '<a href="/login">Login</a><a href="/register">Mit Code registrieren</a>'
     if user:
-        body += '<script src="/media/chat-unread.js" defer></script>'
+        body += '<script src="/media/chat-unread.js" defer></script><script src="/media/handouts-unread.js" defer></script>'
     header_style = '<style>header{background:linear-gradient(90deg,rgba(12,10,9,.78),rgba(12,10,9,.48)),url(\'/media/header-castle.png\') center 48%/cover no-repeat;min-height:100px;box-sizing:border-box;text-shadow:0 2px 5px #000}header nav a{color:#f1dfb6}header nav a:hover,header nav a:focus-visible{color:#fff4d7;text-decoration:underline;text-underline-offset:5px}header strong{color:#f0cf89}@media(max-width:600px){header{min-height:140px;background-position:center,65% center}}</style>' if title == 'Spieler-Dashboard' else '<style>header{background-image:none!important;background-color:transparent!important;text-shadow:0 2px 5px #000}header nav a{color:#f1dfb6}header nav a:hover,header nav a:focus-visible{color:#fff4d7;text-decoration:underline;text-underline-offset:5px}header strong{color:#f0cf89}</style>'
     header_style = '''<style>header{background:linear-gradient(90deg,#0c0a09cc,#0c0a0977),url('/media/header-castle.png') center 48%/cover no-repeat;min-height:140px;text-shadow:0 2px 5px #000}header nav a{color:#f1dfb6}</style>'''
+    # Transparent navigation on the welcome and login pages.
+    if title in ('Willkommen', 'Login'):
+        header_style += '<style>header{background:none!important;background-color:transparent!important;box-shadow:none;backdrop-filter:none}</style>'
+    # Full-page fantasy atmosphere for Links.
+    if title == 'Entdecken':
+        header_style += '''<style>
+body{background:#120e0a;isolation:isolate;min-height:100vh}
+body:before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:linear-gradient(#130e0866,#0b090bcc),url('/media/memories-journal-hero.png') 65% center/cover no-repeat}
+body:after{content:"";position:fixed;inset:-8%;z-index:-1;pointer-events:none;background:radial-gradient(circle at 12% 76%,#ffdb9fbb 0 1px,transparent 3px),radial-gradient(circle at 28% 35%,#ffd49399 0 1px,transparent 3px),radial-gradient(circle at 43% 84%,#ffd493aa 0 1.5px,transparent 4px),radial-gradient(circle at 68% 48%,#ffe6b899 0 1px,transparent 3px),radial-gradient(circle at 83% 22%,#ffd49388 0 1.5px,transparent 4px),radial-gradient(circle at 91% 68%,#ffdb9faa 0 1px,transparent 3px),radial-gradient(ellipse at 73% 25%,#d18b272b,transparent 48%);animation:links-motes 18s ease-in-out infinite alternate}
+header{background:none!important;background-color:transparent!important;box-shadow:none;backdrop-filter:none}
+main>h1{text-shadow:0 2px 14px #000}
+main .card{background:#19130feb;border:1px solid #99714370;box-shadow:0 8px 26px #0005;backdrop-filter:blur(5px)}
+main>p{color:#f1e3c8;text-shadow:0 2px 6px #000}
+@keyframes links-motes{from{transform:translate3d(0,16px,0);opacity:.45}to{transform:translate3d(12px,-22px,0);opacity:.85}}
+@media(max-width:600px){body:before{background-position:center,65% center}main .card{background:#19130ff2}}
+@media(prefers-reduced-motion:reduce){body:after{animation:none;opacity:.5}}
+</style>'''
+    # Dedicated D&D news navigation artwork.
+    if title == 'D&D-News und Videos':
+        header_style += '''<style>header{background:linear-gradient(90deg,#100b0870,#100b0830),url('/media/news-noticeboard-header.png') center 48%/cover no-repeat;text-shadow:0 2px 6px #000}header nav a{color:#fff0d0}@media(max-width:600px){header{background-position:center,68% center}}</style>'''
+    # Dedicated dungeon artwork for maps navigation.
+    if title == 'Kartenbibliothek':
+        header_style += '''<style>header{background:linear-gradient(90deg,#070e1677,#070e1633),url('/media/maps-dungeon-header.png') center 48%/cover no-repeat;text-shadow:0 2px 6px #000}header nav a{color:#fff0d0}@media(max-width:600px){header{background-position:center,65% center}}</style>'''
+    # Dedicated correspondence artwork for messages navigation.
+    if title == 'Nachrichten':
+        header_style += '''<style>header{background:linear-gradient(90deg,#070e1677,#070e1633),url('/media/messages-letters-header.png') center 48%/cover no-repeat;text-shadow:0 2px 6px #000}header nav a{color:#fff0d0}@media(max-width:600px){header{background-position:center,65% center}}</style>'''
+    # Character artwork embedded to avoid stale stylesheet caches.
+    if title == 'Charakterbogen':
+        header_style += '<style>\n@media screen {\nbody{background:#101115;isolation:isolate;min-height:100vh}\nbody::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(#0a0d1240,#090b10a6),url(\'/media/character-armory.png\') center center/cover no-repeat}\nbody header{background:none!important;background-color:transparent!important;box-shadow:none;backdrop-filter:none}\nbody main>h1{text-shadow:0 2px 12px #000}\nbody .sheet-hero{background:transparent;border-color:#b8955b55;box-shadow:none;text-shadow:0 2px 9px #000}\n.sheet-panel .card{background:linear-gradient(135deg,#24201beb,#141519ed)}\n.sheet-hint{color:#e0d5c4;text-shadow:0 2px 5px #000}\n@media(max-width:600px){body::before{background-position:center,65% center}}\n}\n</style>'
+    # Full-page castle background for the player dashboard.
+    if title == 'Spieler-Dashboard':
+        header_style += '<style>@media screen {\nbody{background:#10120f;isolation:isolate;min-height:100vh}\nbody::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(#0b100b18,#090c0b66),url(\'/media/dashboard-heroes.png\') center center/cover no-repeat}\nbody header{background:none!important;background-color:transparent!important;box-shadow:none;backdrop-filter:none}\nmain>h1,main>h2,main>p{ text-shadow:0 2px 10px #000 }\nmain .card,main .feed-card{background:#171b17e8;border-color:#987c4d80;box-shadow:0 12px 30px #0005}\nmain .feed-filters a{background:#171b17ed}\nmain .feed-filters .selected{background:#752d26}\n@media(max-width:600px){body::before{background-position:center,65% center}}\n}</style>'
+    # Personal chamber background for the profile page.
+    if title == 'Mein Profil':
+        header_style += '<style>@media screen {\nbody{background:#101115;isolation:isolate;min-height:100vh}\nbody::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(#0b0e1218,#090c1066),url(\'/media/profile-chamber.png\') center center/cover no-repeat}\nbody header{background:none!important;background-color:transparent!important;box-shadow:none;backdrop-filter:none}\nmain>h1,main>h2,main>p{text-shadow:0 2px 10px #000}\nmain .card{background:#191a1ee6;border-color:#987c4d80;box-shadow:0 12px 30px #0005}\n@media(max-width:600px){body::before{background-position:center,65% center}}\n}</style>'
+    # Archive background for the chronicle page.
+    if title == 'Chronik':
+        header_style += '<style>@media screen {\nbody{background:#101115;isolation:isolate;min-height:100vh}\nbody::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(#0b0e1218,#090c1066),url(\'/media/chronicle-archive.png\') center center/cover no-repeat}\nbody header{background:none!important;background-color:transparent!important;box-shadow:none;backdrop-filter:none}\nmain>h1,main>h2,main>p{text-shadow:0 2px 10px #000}\nmain .card{background:#191a1ee6;border-color:#987c4d80;box-shadow:0 12px 30px #0005}\n@media(max-width:600px){body::before{background-position:center,65% center}}\n}</style>'
+    # Dedicated full-page artwork for handouts, news, memories and DM.
+    section_artwork = {'Handouts': 'handouts-courier.png', 'D&D-News und Videos': 'news-herald-room.png', 'Memories': 'memories-keepsakes.png', 'DM-Zentrale': 'dm-planning-room.png'}
+    section_artwork.update({'Weitere Klassen': 'classes-guild-v1.png', 'Weitere Spezies': 'species-travelers-v1.png'})
+    if title in section_artwork:
+        header_style += '<style>@media screen {\nbody{background:#101115;isolation:isolate;min-height:100vh}\nbody::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(#0b0e1218,#090c1066),url(\'/media/ARTWORK\') center center/cover no-repeat}\nbody header{background:none!important;background-color:transparent!important;box-shadow:none;backdrop-filter:none}\nmain>h1,main>h2,main>p{text-shadow:0 2px 10px #000}\nmain .card,main .feed-card,main .memory-card,main .memories-upload{background:#191a1ee6;border-color:#987c4d80;box-shadow:0 12px 30px #0005}\nmain .feed-filters a{background:#191a1eed}main .feed-filters .selected{background:#752d26}\nbody .memories-hero{background:transparent;box-shadow:none}\nbody .memories-hero::before{background:none}\nbody .memories-candlelight{display:none}\n@media(max-width:600px){body::before{background-position:center,65% center}}\n}</style>'.replace("ARTWORK", section_artwork[title])
+    if title == 'Herkünfte · Codex':
+        header_style += '<style>@media screen{body{background:#101115;isolation:isolate;min-height:100vh}body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(#10121833,#090c1088),url(\'/media/origins-journey.png\') center/cover no-repeat}body header{background:none!important;background-color:transparent!important;box-shadow:none;backdrop-filter:none}main>h1,main>p{text-shadow:0 2px 10px #000}main .card{background:#191a1ee8} @media(max-width:600px){body::before{background-position:center,65% center}}}</style>'
+    # Quiet cover artwork behind opened Codex books.
+    reading_artwork = {'Codex 2024': '2024', 'Codex 2014': '2014', 'Zauberlexikon · Codex': 'spells', 'Tormentor Homebrew': 'homebrew'}
+    if title in reading_artwork:
+        header_style += '<style>@media screen {\nbody{background:#0d0e10;isolation:isolate;min-height:100vh}\nbody::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(#0b0d10ba,#0b0d10e0),url(\'/media/codex-cover-ARTWORK.png\') center 42%/cover no-repeat}\nbody header{background:none!important;background-color:transparent!important;box-shadow:none;backdrop-filter:none}\nmain>h1,main>p{text-shadow:0 2px 10px #000}\nmain .book{background:#e6d4adf7;box-shadow:10px 16px 32px #0008}\nmain .card{background:#211915f5}\n@media(max-width:600px){body::before{background-position:center,55% center}}\n}</style>'.replace("ARTWORK", reading_artwork[title])
+    # Individual navigation banners for the campaign chronicle sections.
+    lore_headers = {
+        'Bekannte Orte': ('lore-places-header-v1.png', '50%'),
+        'Quests': ('lore-quests-header-v1.png', '48%'),
+        'Sitzungen': ('lore-sessions-header-v1.png', '58%'),
+        'Bekannte NPCs': ('lore-npcs-header-v1.png', '35%'),
+    }
+    if title in lore_headers:
+        artwork, position = lore_headers[title]
+        header_style += '''<style>@media screen {
+body header{background:linear-gradient(90deg,#100c09bb,#100c0970),url('/media/ARTWORK') center POSITION/cover no-repeat!important;min-height:210px;padding-block:2rem;text-shadow:0 2px 6px #000;box-shadow:0 8px 24px #0005}
+body header nav a{color:#fff0d0}
+@media(max-width:600px){body header{min-height:240px;padding-block:1.5rem}}
+}</style>'''.replace('ARTWORK', artwork).replace('POSITION', position)
+    # Spacious catalogue sheets: retain the paper proportions on short panels.
+    if title in ('Weitere Spezies', 'Weitere Klassen', 'Herkünfte · Codex'):
+        header_style += '''<style>@media screen {
+main:has(>.catalogue-sheet-marker){width:100%;max-width:1180px;padding:clamp(24px,4vw,56px) clamp(16px,3vw,40px)}
+main>.book{background-size:cover!important;background-position:center!important;min-height:0!important;margin:0 0 32px;padding:clamp(32px,5vw,64px)!important;border-left-width:4px!important;border-radius:12px!important;box-shadow:0 12px 32px #0006!important;line-height:1.8!important}
+main>.book h2{margin:0 0 22px;padding-bottom:16px!important;line-height:1.3}
+main>.book p{max-width:75ch;margin:0 0 20px}
+main>.book p:last-child{margin-bottom:0}
+main>.book form{display:grid!important;grid-template-columns:minmax(0,1fr) auto;gap:18px!important;align-items:end;margin:28px 0 0!important;padding:22px!important}
+main>.book form label{font-size:16px!important}
+main>.book form input,main>.book form button{min-height:50px!important}
+main>.book form button{padding-inline:28px}
+main>.card{margin:28px 0;padding:clamp(24px,3vw,40px);line-height:1.75}
+main>.card h2{line-height:1.35;margin-top:0}
+@media(max-width:600px){main>.book{padding:30px 24px!important;margin-bottom:24px}main>.book form{grid-template-columns:1fr;padding:16px!important;gap:14px!important}main>.book form button{width:100%}}
+}</style>'''
+        body = '<span class="catalogue-sheet-marker" hidden></span>' + body
+    # Parchment reading surfaces and matching search controls.
+    if title in ('Codex 2024', 'Codex 2014', 'Zauberlexikon · Codex', 'Tormentor Homebrew', 'Weitere Spezies', 'Weitere Klassen', 'Unterklassen · Codex', 'Herkünfte · Codex'):
+        header_style += "<style>\n@media screen {\nmain>.book{background:#f3e8cf url('/media/codex-parchment.png') center top/100% 100% no-repeat;color:#30251a;border:1px solid #b39562;border-left:12px solid #503526;border-radius:5px 12px 12px 5px;padding:clamp(24px,4vw,48px);box-shadow:inset 7px 0 14px #5e3d2520,4px 4px 0 #d7c7a2,7px 7px 0 #6b4c31,12px 18px 30px #0007;line-height:1.65}\nmain>.book h2{color:#583b22;border-bottom:1px solid #a8865055;padding-bottom:12px;letter-spacing:.015em}\nmain>.book>h2:first-child{font-size:clamp(25px,3vw,34px);margin-top:0}\nmain>.book>ol{padding-left:1.7rem;columns:2;column-gap:34px}\nmain>.book>ol>li{break-inside:avoid;margin:0 0 8px;padding:4px 0;border-bottom:1px solid #96764b25}\nmain>.book>ol>li::marker{color:#8a6237;font-size:.85em}\nmain>.book form{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;background:#fff9e577;border:1px solid #ac8b5655;border-radius:10px;padding:18px;margin:22px 0}\nmain>.book form label{flex:1 1 135px;min-width:0;margin:0;font:14px/1.5 system-ui;color:#624628}\nmain>.book form label:has(input[name=q]){flex-basis:100%}\nmain>.book form input,main>.book form select{width:100%;max-width:none;margin:6px 0 0;background:#fffbefd9;color:#30251a;border:1px solid #ab8a58;box-shadow:inset 0 1px 3px #5a402018;min-height:44px}\nmain>.book form input::placeholder{color:#7b6b56}\nmain>.book form button{background:#67412b;color:#fff1d1;border-color:#8c6841;min-height:44px}\nmain>.book form button:hover{background:#805337}\nmain>.book form input:focus-visible,main>.book form select:focus-visible{outline:2px solid #806036;outline-offset:2px}\nmain>.book small{color:#6d5b43}\n@media(max-width:600px){main>.book{padding:25px 20px;border-left-width:7px}main>.book>ol{columns:1}main>.book form{padding:12px;gap:12px}main>.book form button{width:100%}}\n}\n</style>"
     body += '''<style>*{box-sizing:border-box}main,.book,.card,.grid>*{min-width:0;max-width:100%}.grid{grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr))}.book,.card{overflow-wrap:anywhere}.book .card{color:#f1e3c8}.book .card h2,.spell-help h2,.spell-help h3{color:#e5be72}.book .card small,.spell-help small{color:#d3c2a4}.book .card a{color:#edcb85}.level-table{max-width:100%;overflow-x:auto}.book ul,.book ol{padding-left:1.4rem}dd{margin-left:1rem}button{max-width:100%;white-space:normal}@media(max-width:600px){.book{padding:.8rem;border-width:6px}.card{padding:1rem}.cover:hover{transform:none}.book h2{font-size:1.4rem}header{background-position:65% center}}</style>'''
     return f'''<!doctype html><html lang="de"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{escape(title)} · Tormentor</title><style>
     :root{{color-scheme:dark}}body{{margin:0;background:#100c0b;color:#f1e3c8;font:17px Georgia,serif;cursor:url('/media/dagger.svg') 3 3,auto}}header{{background:#201510;border-bottom:1px solid #806847;padding:1.2rem 4vw;display:flex;align-items:center;gap:2rem;flex-wrap:wrap}}h1,h2{{font-weight:normal;color:#e5be72}}header strong{{font-size:1.6rem;color:#d3a256}}nav{{display:flex;gap:1rem;align-items:center;flex-wrap:wrap}}a{{color:#dcb46d}}nav a{{text-decoration:none}}main{{max-width:1050px;margin:auto;padding:3rem 5vw}}.card{{background:#211915;border:1px solid #785c3a;border-radius:14px;padding:1.5rem;margin:1rem 0;box-shadow:0 15px 35px #0005}}input,textarea,button{{font:inherit;border-radius:6px;padding:.65rem;background:#130f0d;color:#f5e6c8;border:1px solid #9b7546}}input,textarea{{display:block;width:min(100%,560px);box-sizing:border-box;margin:.4rem 0 1rem;cursor:text}}button{{background:#752d26}}button:hover{{background:#a44336}}a,button{{cursor:url('/media/dagger.svg') 3 3,pointer}}.grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}}small{{color:#baa88f}}label{{display:block;margin:.5rem 0}}.error{{color:#ffaaa3}}.book{{background:#e6d4ad;color:#281b11;border:14px solid #4a271d;border-radius:8px 18px 18px 8px;min-height:320px;padding:2rem;box-shadow:12px 18px 30px #0009}}.book h2{{color:#633a22}}.book small{{color:#71583e}}.book a{{color:#713d26}}@media print{{header,button{{display:none}}body{{background:white;color:black}}.book{{box-shadow:none;break-after:page}}}}
@@ -303,17 +393,19 @@ def dm_lore_page(session_id=None, show_draft=False):
     if busy:
         return body + f'<div class="card"><p>Die Sitzung wird gerade bearbeitet. Die letzte Spielerfreigabe bleibt bis zu deiner nächsten Prüfung bestehen.</p><a href="{base}">Status aktualisieren</a></div>'
     body += '<div class="card"><h2>Auswertung</h2><div class="actions">'
-    if item.get("audio"):
+    if item.get("audio") and item.get("origin") != "android-local":
         body += f'<form method="post" action="{base}/process"><button>Aufnahme transkribieren und auswerten</button></form>'
-    if item.get("transcript", "").strip():
+    if item.get("transcript", "").strip() and item.get("origin") != "android-local":
         body += f'<form method="post" action="{base}/analyze"><button>Gespeichertes Transkript auswerten</button></form>'
+    if item.get("origin") == "android-local":
+        body += '<p>Diese Aufnahme wird auf deinem Laptop ausgewertet. Für eine erneute Auswertung dort starten; hier kannst du den Entwurf prüfen und freigeben.</p>'
     body += '</div><details><summary>Privates Transkript ansehen oder korrigieren</summary>'
     body += f'<form method="post" action="{base}/transcript">{revision}<label>Transkript · nur für den DM<textarea name="transcript" rows="12">{escape(item.get("transcript", ""))}</textarea></label><button>Transkript speichern</button></form></details></div>'
     edited = item.get("draft", {}) if show_draft or not (item.get("reviewed_at") or item.get("published")) else item.get("approved", {})
     fields = lore.review_fields(edited)
     body += f'<div class="card review"><h2>DM-Prüfung</h2><p>Bearbeite die Texte so, wie deine Spieler sie sehen dürfen. NPCs, Orte und Quests: ein Eintrag pro Zeile.</p><p><a href="{base}?draft=1">KI-Entwurf in die Prüfansicht laden</a> · <a href="{base}">Letzten Prüfstand laden</a></p><form method="post" action="{base}/review">{revision}'
     body += form_field("title", "Sitzungstitel", item["title"])
-    for key, label, rows in (("summary", "Session-Zusammenfassung", 7), ("npcs", "Bekannte NPCs", 4), ("places", "Bekannte Orte", 4), ("quests", "Quests", 4), ("level_ups", "Levelvorschläge · pro Zeile Name | Stufe, etwa Arin | 3", 3)):
+    for key, label, rows in (("summary", "Session-Zusammenfassung", 7), ("npcs", "Bekannte NPCs", 4), ("places", "Bekannte Orte", 4), ("quests", "Quests", 4)):
         body += f'<label>{label}<textarea name="{key}" rows="{rows}">{escape(fields[key])}</textarea></label>'
     body += '<label><input type="checkbox" name="published" value="1"' + (' checked' if item.get("published") else '') + '> Diese geprüften Inhalte für Spieler freigeben</label><button>Prüfung speichern</button></form></div>'
     if item.get("published"):
@@ -384,7 +476,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")
-        self.send_header("Content-Security-Policy", "default-src 'none'; connect-src 'self'; script-src 'self'; style-src 'unsafe-inline'; media-src 'self'; img-src 'self' https://i.ytimg.com; frame-src https://www.youtube-nocookie.com; form-action 'self'; base-uri 'none'; frame-ancestors 'none'")
+        self.send_header("Content-Security-Policy", "default-src 'none'; connect-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; media-src 'self'; img-src 'self' https://i.ytimg.com; frame-src https://www.youtube-nocookie.com; form-action 'self'; base-uri 'none'; frame-ancestors 'none'")
         if cookie: self.send_header("Set-Cookie", portal_security.cookie(cookie))
         self.end_headers()
         self.wfile.write(body)
@@ -403,6 +495,23 @@ class Handler(BaseHTTPRequestHandler):
         return {key: values[0].strip() for key, values in raw.items()}
 
     def do_GET(self):
+        portrait_match = re.fullmatch(r'/character/portrait(?:/(companion-[123]))?', self.path.split('?', 1)[0])
+        if portrait_match:
+            with database() as db:
+                user = self.current_user(db)
+                if not user or user['role'] not in ('player', 'dm'):
+                    return self.send(403, 'Bitte anmelden.')
+                row = db.execute('SELECT image FROM character_portraits WHERE user_id=? AND slot=?', (user['id'], portrait_match.group(1) or 'hero')).fetchone()
+                if not row: return self.send(404, 'Noch kein Porträt.')
+                data = row['image']
+                self.send_response(200)
+                self.send_header('Content-Type', 'image/jpeg')
+                self.send_header('Content-Length', str(len(data)))
+                self.send_header('Cache-Control', 'private, no-store')
+                self.send_header('X-Content-Type-Options', 'nosniff')
+                self.end_headers()
+                self.wfile.write(data)
+                return
         if self.path.split('?', 1)[0] == '/reset-password':
             return self.send(200, page('Passwort zurücksetzen', portal_reset.FORM))
         handout_match = re.fullmatch(r'/handouts/(\d+)/file', self.path.split('?', 1)[0])
@@ -417,7 +526,7 @@ class Handler(BaseHTTPRequestHandler):
                     return self.send(404, page('Nicht gefunden', '<p>Anhang nicht verfügbar.</p>', user))
                 data = (portal_handouts.ROOT / file['filename']).read_bytes()
                 self.send_response(200); self.send_header('Content-Type', file['mime']); self.send_header('Content-Length', str(len(data))); self.send_header('Content-Disposition', 'inline; filename="' + file['original_name'].replace('"', '') + '"'); self.send_header('Cache-Control', 'private, no-store'); self.end_headers(); self.wfile.write(data); return
-        if self.path in ("/media/character.css", "/media/chat-unread.js", "/media/chat.js", "/media/character.js", "/media/feed.js", "/media/login-background.js", "/media/session-countdown.js", "/media/dashboard-music.js", "/media/intro-music.js", "/media/portal-music.js", "/media/reset-password.js"):
+        if self.path in ("/media/character-portrait.js", "/media/handouts-unread.js", "/media/memories.js", "/media/character.css", "/media/chat-unread.js", "/media/chat.js", "/media/character.js", "/media/feed.js", "/media/login-background.js", "/media/session-countdown.js", "/media/dashboard-music.js", "/media/intro-music.js", "/media/portal-music.js", "/media/reset-password.js"):
             content = (ROOT / "assets" / self.path.rsplit("/", 1)[-1]).read_bytes()
             self.send_response(200)
             self.send_header("Content-Type", "text/css; charset=utf-8" if self.path.endswith(".css") else "text/javascript; charset=utf-8")
@@ -430,8 +539,33 @@ class Handler(BaseHTTPRequestHandler):
         media["/media/login-tavern-loop.mp4"] = ROOT / "assets" / "login-tavern-loop.mp4"
         media["/media/login-tavern.png"] = ROOT / "assets" / "login-tavern.png"
         media["/media/intro.mp3"] = INTRO_MUSIC
+        media["/media/cortana-welcome.wav"] = ROOT / "sound" / "cortana" / "de-welcome.wav"
+        media["/media/cortana-welcome-de.wav"] = ROOT / "sound" / "cortana" / "de-welcome.wav"
         media["/media/header-castle.png"] = ROOT / "assets" / "header-castle.png"
+        media["/media/codex-parchment.png"] = ROOT / "assets" / "codex-parchment.png"
+        media["/media/codex-cover-2024.png"] = ROOT / "assets" / "codex-cover-2024.png"
+        media["/media/codex-cover-2014.png"] = ROOT / "assets" / "codex-cover-2014.png"
+        media["/media/codex-cover-spells.png"] = ROOT / "assets" / "codex-cover-spells.png"
+        media["/media/codex-cover-homebrew.png"] = ROOT / "assets" / "codex-cover-homebrew.png"
+        media["/media/origins-journey.png"] = ROOT / "assets" / "origins-journey.png"
+        media["/media/classes-guild-v1.png"] = ROOT / "assets" / "classes-guild-v1.png"
+        media["/media/species-travelers-v1.png"] = ROOT / "assets" / "species-travelers-v1.png"
+        media["/media/character-combat.png"] = ROOT / "assets" / "character-combat.png"
+        media["/media/handouts-courier.png"] = ROOT / "assets" / "handouts-courier.png"
+        media["/media/news-herald-room.png"] = ROOT / "assets" / "news-herald-room.png"
+        media["/media/memories-keepsakes.png"] = ROOT / "assets" / "memories-keepsakes.png"
+        media["/media/dm-planning-room.png"] = ROOT / "assets" / "dm-planning-room.png"
+        media["/media/chronicle-archive.png"] = ROOT / "assets" / "chronicle-archive.png"
+        for filename in ('lore-places-header-v1.png', 'lore-quests-header-v1.png', 'lore-sessions-header-v1.png', 'lore-npcs-header-v1.png'):
+            media['/media/' + filename] = ROOT / 'assets' / filename
+        media["/media/profile-chamber.png"] = ROOT / "assets" / "profile-chamber.png"
+        media["/media/dashboard-heroes.png"] = ROOT / "assets" / "dashboard-heroes.png"
+        media["/media/messages-letters-header.png"] = ROOT / "assets" / "messages-letters-header.png"
+        media["/media/maps-dungeon-header.png"] = ROOT / "assets" / "maps-dungeon-header.png"
+        media["/media/news-noticeboard-header.png"] = ROOT / "assets" / "news-noticeboard-header.png"
+        media["/media/memories-journal-hero.png"] = ROOT / "assets" / "memories-journal-hero.png"
         media["/media/character-dragons.png"] = ROOT / "assets" / "character-dragons.png"
+        media["/media/character-armory.png"] = ROOT / "assets" / "character-armory.png"
         media["/media/wald2.mp3"] = FOREST_MUSIC
         media['/media/SRD-5.1-DE.pdf'] = ROOT / 'assets/srd/SRD_CC_v5.1_DE.pdf'
         for filename in ("Tormentor-Codex-2024.pdf", "Tormentor-Codex-2014-Quellen.pdf", "Tormentor-Codex-Homebrew.pdf"):
@@ -478,6 +612,16 @@ class Handler(BaseHTTPRequestHandler):
         with database() as db:
             user = self.current_user(db)
             path = self.path.split("?", 1)[0]
+            if path == '/handouts/unread':
+                if not user: return self.send(401,'')
+                if user["role"] not in ("dm","player"): return self.send(403,'')
+                return self.send(200,str(portal_handouts.unread(db,user)))
+            if path == '/memories':
+                if not portal_memories.allowed(user): return self.redirect('/login')
+                return self.send(200,page('Memories',portal_memories.render(db,user,self.path.partition('?')[2]),user))
+            memory_match = re.fullmatch(r'/memories/([0-9a-f]{32})/file',path)
+            if memory_match:
+                return portal_memories.serve(self,db,user,memory_match.group(1))
             if path == '/maps':
                 if not user: return self.redirect('/login')
                 return self.send(200,page('Kartenbibliothek',portal_maps.library(db,user),user))
@@ -494,7 +638,7 @@ class Handler(BaseHTTPRequestHandler):
                 if path == '/messages': return self.send(200, page('Nachrichten', portal_chat.render(db, user), user))
                 return self.send(200, page('Charakterbogen', portal_character.render(db, user, saved=self.path.endswith('?saved=1')), user))
             if path == "/":
-                body = '<div class="card"><h2>Willkommen, Abenteurer!</h2><p>Die Chronik deiner Kampagne, dein Heldenprofil und Tormentors Codex erwarten dich.</p></div><div class="grid"><div class="card"><h2>Für Spieler</h2><p>Melde dich mit deinem persönlichen Zugang an.</p><a href="/register">Einladungscode einlösen</a></div><div class="card"><h2>Gästelogin</h2><p>Entdecke den Codex und nützliche Links. Kampagnendaten bleiben verborgen.</p><a href="/login">Gästelogin</a></div></div>'
+                body = '<div class="card"><h2>Willkommen, Abenteurer!</h2><p>Die Chronik deiner Kampagne, dein Heldenprofil und Tormentors Codex erwarten dich.</p></div><div class="grid"><div class="card"><h2>Für Spieler</h2><p>Melde dich mit deinem persönlichen Zugang an.</p><a href="/register">Einladungscode einlösen</a></div><div class="card"><h2>Gästelogin</h2><p>Entdecke den Codex und nützliche Links. Kampagnendaten bleiben verborgen.</p><a href="/login">Gästelogin</a></div></div><section class="card feedback-card"><h2>Feedback und Wünsche</h2><p>Hast du einen Verbesserungsvorschlag oder eine Idee für die Seite? Schreib DM Tormentor direkt:</p><p><a href="mailto:dwhd1986@gmail.com?subject=Feedback%20zu%20Tormentor">dwhd1986@gmail.com</a></p></section>'
                 body = '<p><audio id="intro-music" src="/media/intro.mp3" controls loop preload="none" aria-label="Tormentor Titelmusik"></audio><br><small>Titelmusik mit Play/Pause steuern.</small></p><script src="/media/portal-music.js" defer></script>' + body
                 body += '<p><a href="/dashboard">Zum Spieler-Dashboard →</a></p>' if user else '<p><a href="/login">Zum Login →</a></p>'
             elif path == "/register":
@@ -507,15 +651,12 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send(200, page("Gastzugang", body, user))
             elif path in ("/dashboard", "/profil"):
                 if not user: return self.redirect("/login")
-                fields = [("player_name", "Spielername"), ("race", "Rasse/Spezies"), ("class_name", "Klasse"), ("subclass", "Unterklasse"), ("group_name", "Gruppenname"), ("level", "Level"), ("companion", "Begleiter")]
-                body = '<div class="card"><h2>Mein Held</h2><form method="post">' + ''.join(form_field(k, label, user[k], "number" if k == "level" else "text") for k, label in fields) + '<button>Profil speichern</button></form><p><a href="/codex">Klassen und ihre Unterklassen im Codex ansehen →</a></p></div>'
+                fields = [("player_name", "Spielername"), ("race", "Rasse/Spezies"), ("class_name", "Klasse"), ("subclass", "Unterklasse"), ("group_name", "Gruppenname"), ("companion", "Begleiter")]
+                body = '<div class="card"><h2>Mein Held</h2><form method="post">' + ''.join(form_field(k, label, user[k], "number" if k == "level" else "text") for k, label in fields) + f'<p>Level: {user["level"]} · Wird vom Spielleiter verwaltet.</p><button>Profil speichern</button></form><p><a href="/codex">Klassen und ihre Unterklassen im Codex ansehen →</a></p></div>'
                 if path == "/dashboard":
                     body = f'<div class="card"><span class="badge">Dein Spielerbereich</span><h2>Willkommen, {escape(user["player_name"] or user["username"])}!</h2><p>{escape(user["race"])} · {escape(user["class_name"])} · Stufe {user["level"]}</p><p><b>Unterklasse:</b> {escape(user["subclass"] or "Noch nicht gewählt")}</p><div class="actions"><a href="/profil">Mein Profil bearbeiten</a><a href="/lore">Kampagnenchronik</a><a href="/handouts">Handouts</a></div></div>'
                 body += portal_inspiration.render(db, user)
-                if user["role"] == "dm": body += '<p><a href="/dm">Spielerprofile und Inspirationspunkte verwalten →</a></p>'
-                suggestions = db.execute("SELECT * FROM level_suggestions WHERE player_id=? AND applied=0 ORDER BY created_at DESC", (user["id"],)).fetchall()
-                if suggestions:
-                    body += '<div class="card"><h2>Levelaufstieg aus der Chronik</h2><p>Vom DM geprüft. Du entscheidest, ob du den Vorschlag übernimmst.</p>' + ''.join(f'<form method="post" action="/dashboard/level/{s["id"]}"><p>Stufe {s["proposed_level"]} · {escape(s["evidence"])} <button>Stufe übernehmen</button></p></form>' for s in suggestions) + '</div>'
+                if user["role"] == "dm": body += '<p><a href="/dm">Spielerprofile, Level, EP und Inspiration verwalten →</a></p>'
                 if path == "/dashboard":
                     query = parse_qs(self.path.split("?", 1)[1]) if "?" in self.path else {}
                     body += '<section class="card"><h2>Spielmusik</h2><p><audio id="dashboard-music" src="/media/intro.mp3" controls loop preload="none" aria-label="Spielmusik ein- und ausschalten"></audio></p><p id="music-status" role="status">Ruhige Fantasy-Musik · Rising Moon. Mit Play einschalten; Videos pausieren die Musik.</p><script src="/media/portal-music.js" defer></script></section>'
@@ -534,29 +675,14 @@ class Handler(BaseHTTPRequestHandler):
                 body = '<p><a href="/dm">← Zur Spielerübersicht</a></p><section class="card"><h2>' + escape(player['player_name'] or player['username']) + '</h2>'
                 for key, label in [('username', 'Konto'), ('race', 'Spezies'), ('class_name', 'Klasse'), ('subclass', 'Unterklasse'), ('level', 'Stufe'), ('group_name', 'Gruppe'), ('companion', 'Begleiter')]:
                     body += '<p><b>' + label + ':</b> ' + escape(str(player[key])) + '</p>'
-                return self.send(200, page('Spielerprofil', body + '</section>' + portal_inspiration.render(db, player, True), user))
+                return self.send(200, page('Spielerprofil', body + '</section>' + portal_levels.render(db, player) + portal_experience.render(db, player, True) + portal_inspiration.render(db, player, True), user))
             elif path == "/dm":
                 if not user or user["role"] != "dm": return self.send(403, page("Kein Zugriff", "<p>Nur für den DM.</p>", user))
                 body = '<div class="card"><h2>Spieler einladen</h2><p>Ein Code ist einmalig und 7 Tage gültig.</p><form method="post"><button>Einladungscode erzeugen</button></form></div><div class="card"><h2>Codex verwalten</h2><a href="/dm/codex">Einträge hinzufügen, bearbeiten oder entfernen →</a></div>'
-                body += '<div class="card"><h2>Spieler</h2>' + ''.join(f'<p>{escape(row["username"])} · {escape(row["player_name"])} · Stufe {row["level"]} · <a href="/dm/players/{row["id"]}">Profil und Inspiration →</a></p>' for row in db.execute("SELECT * FROM users WHERE role='player' ORDER BY username")) + '</div>'
+                body += '<div class="card"><h2>Spieler</h2>' + ''.join(f'<p>{escape(row["username"])} · {escape(row["player_name"])} · Stufe {row["level"]} · <a href="/dm/players/{row["id"]}">Profil, Level, EP und Inspiration →</a></p>' for row in db.execute("SELECT * FROM users WHERE role='player' ORDER BY username")) + '</div>'
                 body += session_schedule.editor(db)
                 pending_resets = db.execute('SELECT count(*) FROM password_help_requests').fetchone()[0]
                 body += f'<section class="card"><h2>Passwort-Hilfe</h2><p>{pending_resets} offene Anfragen</p><a href="/dm/password-resets">Anfragen prüfen und Rücksetzlink erstellen →</a></section>'
-                players = db.execute("SELECT id,username,player_name FROM users WHERE role='player' ORDER BY username").fetchall()
-                options = ''.join(f'<option value="{row["id"]}">{escape(row["player_name"] or row["username"])}</option>' for row in players)
-                proposals = []
-                if LORE.exists():
-                    for file in LORE.glob("*/session.json"):
-                        try:
-                            lore_item = json.loads(file.read_text(encoding="utf-8"))
-                            if not lore_item.get("published"): continue
-                            for suggestion in lore_item.get("approved", {}).get("level_ups", []):
-                                if not isinstance(suggestion, dict): continue
-                                level = int(suggestion.get("level", 0))
-                                if 1 <= level <= 20:
-                                    proposals.append(f'<form method="post" action="/dm/level"><input type="hidden" name="session_id" value="{escape(lore_item["id"])}"><input type="hidden" name="level" value="{level}"><input type="hidden" name="evidence" value="{escape(str(suggestion.get("player", ""))[:120])}"><p>{escape(lore_item.get("title", "Sitzung"))}: {escape(suggestion.get("player", ""))} → Stufe {level} <select name="player_id">{options}</select><button>Spieler vorschlagen</button></p></form>')
-                        except (OSError, ValueError, TypeError): pass
-                if proposals: body += '<div class="card"><h2>Erkannte Levelaufstiege prüfen</h2><p>Wähle das richtige Spielerkonto. Der Spieler bestätigt die Übernahme selbst.</p>' + ''.join(proposals) + '</div>'
                 body += '<div class="card"><h2>Spieler-Handouts</h2><a href="/dm/handouts">Handouts anlegen und verwalten →</a></div>'
                 body += '<div class="card"><h2>Tormentor Lore</h2><a href="/dm/lore">Aufnahmen und Transkripte prüfen →</a></div>'
             elif path == "/dm/lore" or path.startswith("/dm/lore/"):
@@ -599,14 +725,9 @@ class Handler(BaseHTTPRequestHandler):
                 body = lore_page(path)
             elif path == "/handouts":
                 if not user: return self.redirect("/login")
-                rows = portal_handouts.visible(db, user)
-                def handout_card(row):
-                    file = portal_handouts.attachment(db, row['id'])
-                    link = f'<p><a href="/handouts/{row["id"]}/file">Anhang öffnen: {escape(file["original_name"])}</a></p>' if file else ''
-                    return f'<article class="card"><h2>{escape(row["title"])}</h2><p style="white-space:pre-wrap">{escape(row["body"])}</p>{link}{"<small>Nur DM</small>" if not row["published"] else ""}</article>'
-                body = ''.join(handout_card(row) for row in rows) or '<p>Noch keine freigegebenen Handouts.</p>'
+                body = portal_handouts.render(db,user)
             elif path == "/codex":
-                body = '<div class="grid"><div class="book cover"><img src="/media/tc.png" alt="Tormentor TC Logo"><h2>Tormentors Rassen und Klassen</h2><p>Ausgabe 2024 · SRD 5.2.1</p><a href="/codex/2024">Buch öffnen →</a></div><div class="book cover"><img src="/media/tc.png" alt="Tormentor TC Logo"><h2>Tormentors Rassen und Klassen</h2><p>Ausgabe 2014 · SRD 5.1</p><a href="/codex/2014">Buch öffnen →</a></div></div><p><a href="/codex/zauber">Zauberlexikon →</a> · <a href="/codex/weitere">Weitere offizielle Spezies →</a> · <a href="/codex/klassen">Weitere offizielle Klassen →</a> · <a href="/codex/herkuenfte">Herkünfte →</a> · <a href="/codex/homebrew">Separates Homebrew-Buch →</a></p>'
+                body = portal_library.render()
                 if user and user["role"] == "dm":
                     body += '<section class="card"><h2>Codex als PDF</h2><p>Druckfassung des aktuellen Stands · A4 · getrennte Bände</p><p><a href="/media/Tormentor-Codex-2024.pdf">2024 herunterladen</a> · <a href="/media/Tormentor-Codex-2014-Quellen.pdf">2014-Quellen herunterladen</a> · <a href="/media/Tormentor-Codex-Homebrew.pdf">Homebrew herunterladen</a></p></section>'
             elif path == "/codex/weitere":
@@ -684,6 +805,44 @@ class Handler(BaseHTTPRequestHandler):
             user = self.current_user(db)
             path = self.path.split("?", 1)[0]
             now = int(time.time())
+            portrait_match = re.fullmatch(r'/character/portrait(?:/(companion-[123]))?', path)
+            if portrait_match:
+                if not user or user['role'] not in ('player', 'dm'):
+                    return portal_memories.json_reply(self, 403, {'error': 'Bitte mit einem Spielerkonto anmelden.'})
+                try:
+                    size = int(self.headers.get('Content-Length', '0'))
+                    if self.headers.get('Transfer-Encoding') or not 0 < size <= portal_portraits.LIMIT:
+                        raise ValueError('Bitte ein Bild bis 8 MB auswählen.')
+                    previous_timeout = self.connection.gettimeout()
+                    try:
+                        self.connection.settimeout(60)
+                        raw = self.rfile.read(size)
+                    finally:
+                        self.connection.settimeout(previous_timeout)
+                    if len(raw) != size: raise ValueError('Übertragung unvollständig. Bitte erneut versuchen.')
+                    portal_portraits.save(db, user['id'], raw, portrait_match.group(1) or 'hero')
+                    db.commit()
+                except ValueError as exc:
+                    return portal_memories.json_reply(self, 400, {'error': str(exc)})
+                except (OSError, TimeoutError):
+                    return portal_memories.json_reply(self, 400, {'error': 'Upload unterbrochen. Bitte erneut versuchen.'})
+                return portal_memories.json_reply(self, 200, {'saved': True})
+            if path == '/dm/memories/upload':
+                if not user or user['role']!='dm': return portal_memories.json_reply(self,403,{'error':'Nur der DM kann Erinnerungen hochladen.'})
+                try:
+                    key=portal_memories.receive(self,db,user,now)
+                except (ValueError,UnicodeError) as exc:
+                    return portal_memories.json_reply(self,400,{'error':str(exc)})
+                except (OSError,TimeoutError):
+                    return portal_memories.json_reply(self,400,{'error':'Upload unterbrochen oder nicht speicherbar. Bitte erneut versuchen.'})
+                return portal_memories.json_reply(self,201,{'id':key,'url':'/memories'})
+            memory_remove=re.fullmatch(r'/dm/memories/([0-9a-f]{32})/remove',path)
+            if memory_remove:
+                if not user or user['role']!='dm': return self.send(403,page('Kein Zugriff','<p>Nur für den DM.</p>',user))
+                try: self.post_data()
+                except (ValueError,UnicodeError): return self.send(400,'Formular ungültig.')
+                portal_memories.remove(db,memory_remove.group(1))
+                return self.redirect('/memories')
             if path == '/dm/maps/upload':
                 if not user or user['role']!='dm': return self.send(403,page('Kein Zugriff','<p>Nur für den DM.</p>',user))
                 try: portal_maps.receive(self,db)
@@ -706,6 +865,13 @@ class Handler(BaseHTTPRequestHandler):
             try: data = self.post_data()
             except (ValueError, UnicodeError): return self.send(400, page("Fehler", "<p>Formular ungültig.</p>", user))
             now = int(time.time())
+            if path == '/handouts/read':
+                if not user or user["role"]!="player": return self.send(403,'')
+                try:
+                    if not portal_handouts.mark_read(db,user,data): return self.send(409,'Handout wurde aktualisiert. Bitte neu laden.')
+                except ValueError as exc: return self.send(400,escape(str(exc)))
+                db.commit()
+                return self.send(200,'')
             if path == '/messages/read':
                 if not user or user['role'] not in ('dm', 'player'): return self.send(403, '')
                 try: portal_chat.mark_read(db, user, data)
@@ -800,6 +966,29 @@ class Handler(BaseHTTPRequestHandler):
                 if jar.get("tormentor_session"): db.execute("DELETE FROM sessions WHERE token_hash=?", (digest(jar["tormentor_session"].value),)); db.commit()
                 return self.redirect("/", "tormentor_session=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0")
             if not user: return self.send(403, page("Kein Zugriff", "<p>Bitte anmelden.</p>"))
+            if re.fullmatch(r'/dm/players/\d+/level', path):
+                if user['role'] != 'dm': return self.send(403, page('Kein Zugriff', '<p>Nur für den DM.</p>', user))
+                player_id = int(path.split('/')[3])
+                player = db.execute("SELECT * FROM users WHERE id=? AND role='player'", (player_id,)).fetchone()
+                if not player: return self.send(404, page('Nicht gefunden', '<p>Spieler nicht gefunden.</p>', user))
+                try:
+                    portal_levels.change(db, player, data)
+                except ValueError as error:
+                    player = db.execute('SELECT * FROM users WHERE id=?', (player_id,)).fetchone()
+                    return self.send(409, page('Level prüfen', '<p role="alert">' + escape(str(error)) + '</p>' + portal_levels.render(db, player), user))
+                db.commit()
+                return self.redirect(f'/dm/players/{player_id}')
+            if re.fullmatch(r'/dm/players/\d+/experience', path):
+                if user['role'] != 'dm': return self.send(403, page('Kein Zugriff', '<p>Nur für den DM.</p>', user))
+                player_id = int(path.split('/')[3])
+                player = db.execute("SELECT * FROM users WHERE id=? AND role='player'", (player_id,)).fetchone()
+                if not player: return self.send(404, page('Nicht gefunden', '<p>Spieler nicht gefunden.</p>', user))
+                try:
+                    portal_experience.change(db, player_id, data)
+                except ValueError as error:
+                    return self.send(409, page('Punktestand prüfen', '<p role="alert">' + escape(str(error)) + '</p>' + portal_experience.render(db, player, True), user))
+                db.commit()
+                return self.redirect(f'/dm/players/{player_id}')
             if re.fullmatch(r'/dm/players/\d+/inspiration', path):
                 if user['role'] != 'dm': return self.send(403, page('Kein Zugriff', '<p>Nur für den DM.</p>', user))
                 player_id = int(path.split('/')[3])
@@ -839,6 +1028,8 @@ class Handler(BaseHTTPRequestHandler):
                     if not match: return self.send(404, page("Nicht gefunden", "<p>Unbekannte Lore-Funktion.</p>", user))
                     session_id, action = match.groups()
                     if action in ("process", "analyze"):
+                        if lore.load(session_id).get("origin") == "android-local":
+                            raise ValueError("Diese Aufnahme bitte auf dem Laptop auswerten. Auf der Website kannst du den Entwurf prüfen und freigeben.")
                         lore_workflow.start_processing(session_id, action == "process")
                     else:
                         with lore_workflow.session_lock(session_id):
@@ -863,22 +1054,11 @@ class Handler(BaseHTTPRequestHandler):
                 except OSError:
                     return self.send(400, page("Lore", '<p>Sitzung nicht lesbar oder nicht speicherbar.</p>', user))
             if path.startswith("/dashboard/level/"):
-                try: suggestion_id = int(path.rsplit("/", 1)[-1])
-                except ValueError: return self.send(404, page("Nicht gefunden", "<p>Vorschlag nicht gefunden.</p>", user))
-                suggestion = db.execute("SELECT * FROM level_suggestions WHERE id=? AND player_id=? AND applied=0", (suggestion_id, user["id"])).fetchone()
-                if not suggestion: return self.send(404, page("Nicht gefunden", "<p>Vorschlag nicht gefunden.</p>", user))
-                if suggestion["proposed_level"] > user["level"]:
-                    db.execute("UPDATE users SET level=? WHERE id=?", (suggestion["proposed_level"], user["id"]))
-                db.execute("UPDATE level_suggestions SET applied=1 WHERE id=?", (suggestion_id,))
-                db.commit()
-                return self.redirect("/dashboard")
+                return self.send(403, page('Levelverwaltung', '<p>Die Stufe wird ausschließlich vom Spielleiter im DM-Spielerprofil verwaltet.</p>', user))
             if path in ("/dashboard", "/profil"):
                 fields = ["player_name", "race", "class_name", "subclass", "group_name", "companion"]
                 values = [data.get(key, "")[:120] for key in fields]
-                try: level = int(data.get("level", "1"))
-                except ValueError: level = 1
-                if not 1 <= level <= 20: return self.send(400, page("Fehler", "<p>Level muss zwischen 1 und 20 liegen.</p>", user))
-                db.execute("UPDATE users SET player_name=?,race=?,class_name=?,subclass=?,group_name=?,companion=?,level=? WHERE id=?", (*values, level, user["id"]))
+                db.execute("UPDATE users SET player_name=?,race=?,class_name=?,subclass=?,group_name=?,companion=? WHERE id=?", (*values, user["id"]))
                 db.commit(); return self.redirect("/dashboard")
             if path == "/dm" and user["role"] == "dm":
                 code = secrets.token_hex(8).upper()

@@ -16,6 +16,8 @@ import queue
 import shutil
 import re
 import asyncio
+import speech_recognition as sr
+from cortana_voice import reply as cortana_reply
 from tkinter import filedialog, messagebox, simpledialog
 from openai import OpenAI
 from elevenlabs.client import ElevenLabs
@@ -210,10 +212,9 @@ def run_cortana(stop_event=None, log_callback=None, lore_callback=None):
             direct_command = command[wake.end():].strip(" ,.!?")
 
             if not direct_command:
-                if log_callback: log_callback("Cortana wurde aktiviert. Ja, Dungeonmaster?")
-                if not os.path.isfile(resource_path("sound/aktivierung.mp3")):
-                    asyncio.run(create_voice("Ja, Dungeonmaster?", "sound/aktivierung.mp3"))
-                play_voice_file("sound/aktivierung.mp3", duck_music=True)
+                text, audio_path = cortana_reply("activation", get_settings_path(), resource_path(""))
+                if log_callback: log_callback(f"Cortana: {text}")
+                play_voice_file(audio_path, duck_music=True)
 
                 with speech_source() as cmd_source:
                     try: command_audio = recognizer.listen(cmd_source, timeout=10, phrase_time_limit=15)
@@ -235,9 +236,9 @@ def run_cortana(stop_event=None, log_callback=None, lore_callback=None):
                 continue
 
             if "bist du da" in command:
-                txt = random.choice(startup_responses)
-                asyncio.run(create_voice(txt))
-                play_voice_file("sound/zufallsantwort.mp3")
+                text, audio_path = cortana_reply("ready", get_settings_path(), resource_path(""))
+                if log_callback: log_callback(f"Cortana: {text}")
+                play_voice_file(audio_path)
             elif "würfel" in command or "würfle" in command:
                 roll_dice(command, log_callback)
             elif "frage tormentor" in command:

@@ -4,12 +4,16 @@ import java.util.regex.*;
 
 /** Accept commands only after an activation word; expires using monotonic time. */
 final class WakeGate {
-    private final Pattern wake=Pattern.compile("\\b(?:cortana|cotana|contana|kortana|katana)\\b",Pattern.CASE_INSENSITIVE);
+    static final Pattern WAKE=Pattern.compile("^\\s*(?:(?:hey|hallo)\\s+)?(?:cortana|kortana|katana)\\b[,:]?",Pattern.CASE_INSENSITIVE);
     private long deadline=0;
     boolean activated=false;
+    static boolean isWakeOnly(String text){
+        Matcher match=WAKE.matcher(text);
+        return match.find()&&text.substring(match.end()).trim().isEmpty();
+    }
     String accept(String text,long now) {
         activated=false;
-        Matcher match=wake.matcher(text);
+        Matcher match=WAKE.matcher(text);
         if(match.find()) {
             activated=true;
             String rest=text.substring(match.end()).trim();

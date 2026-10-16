@@ -64,7 +64,7 @@ class SessionFeaturesTest(unittest.TestCase):
         self.assertEqual(status, 200)
         fields = Fields(); fields.feed(html)
         sheet = portal.portal_character
-        expected = ['revision', 'spell_ability']
+        expected = ['revision', 'spell_ability', 'inventory'] + ['coin_' + key for key, _, _ in portal.portal_character.portal_inventory.COINS]
         expected += [key for key, _ in sheet.ABILITIES]
         expected += ['save_' + key for key, _ in sheet.ABILITIES]
         expected += [key for key, _, _ in sheet.SKILLS]
@@ -76,6 +76,72 @@ class SessionFeaturesTest(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertIn('text/css', headers['Content-Type'])
         self.assertIn('.sheet-hero', css)
+
+    def test_dm_controls_levels_and_player_routes_cannot_override(self):
+        uid = self.ids['alice']
+        path = f'/dm/players/{uid}/level'
+        data = dict(level='5', previous_level='1')
+        for who in (None, 'alice', 'bob'):
+            self.assertEqual(self.request('POST', path, who, data)[0], 403)
+        self.assertEqual(self.request('POST', path, 'dm', data)[0], 303)
+        self.assertIn('Stufe 5', self.request('GET', '/character', 'alice')[1])
+        self.assertNotIn('name="level"', self.request('GET', '/profil', 'alice')[1])
+        self.assertIn('Level verwalten', self.request('GET', f'/dm/players/{uid}', 'dm')[1])
+        self.assertEqual(self.request('POST', path, 'dm', data)[0], 409)
+        for level in ('0', '21', '3.5', 'abc'):
+            self.assertEqual(self.request('POST', path, 'dm', dict(level=level, previous_level='5'))[0], 409)
+        for route in ('/profil', '/dashboard'):
+            self.assertEqual(self.request('POST', route, 'alice', dict(level='20', player_name='Testname'))[0], 303)
+        with portal.database() as db:
+            sid = db.execute("INSERT INTO level_suggestions(player_id,proposed_level,session_id,evidence,created_by,created_at) VALUES(?,?,?,?,?,?)", (uid, 10, 'a'*32, 'Test', self.ids['dm'], 0)).lastrowid
+        self.assertEqual(self.request('POST', f'/dashboard/level/{sid}', 'alice')[0], 403)
+        self.assertNotIn('Stufe übernehmen', self.request('GET', '/profil', 'alice')[1])
+        self.assertEqual(self.request('POST', '/character', 'alice', dict(revision='0', level='20'))[0], 303)
+        with portal.database() as db:
+            self.assertEqual(db.execute('SELECT level FROM users WHERE id=?', (uid,)).fetchone()['level'], 5)
+            self.assertEqual(db.execute('SELECT level FROM users WHERE id=?', (self.ids['bob'],)).fetchone()['level'], 1)
+        self.assertEqual(self.request('POST', path, 'dm', dict(level='3', previous_level='5'))[0], 303)
+        self.assertEqual(self.request('POST', '/dm/players/999999/level', 'dm', data)[0], 404)
+
+    def test_inventory_rejects_malformed_items(self):
+        inventory = portal.portal_character.portal_inventory
+        for raw in ('{}', '[null]', '[{"name": 1}]', '[{"name":"x","kind":"other","quantity":1,"slots":"NaN","equipped":false}]'):
+            with self.assertRaises(ValueError):
+                inventory.parse(raw)
+        item = dict(name='Trank', kind='potion', quantity=1, slots=999, equipped=False)
+        self.assertEqual(inventory.load_slots(inventory.parse([item])), .25)
+        item.update(equipped=True)
+        self.assertEqual(inventory.load_slots(inventory.parse([item])), 0)
+
+    def test_inventory_and_experience(self):
+        import json
+        inventory = [dict(name=kind, kind=kind, quantity=4, slots=99, equipped=False) for kind in ('potion', 'sword', 'armor', 'heavy', 'food', 'drink', 'money')]
+        inventory.append(dict(name='Getragene Rüstung', kind='heavy', quantity=1, slots=3, equipped=True))
+        data = dict(revision='0', inventory=json.dumps(inventory), coin_gold='42', equipment='Alte Notizen')
+        self.assertEqual(self.request('POST', '/character', 'alice', data)[0], 303)
+        with portal.database() as db:
+            stored, rev = portal.portal_character.load(db, self.ids['alice'])
+            self.assertEqual(portal.portal_character.portal_inventory.load_slots(stored['inventory']), 25)
+            self.assertEqual(stored['coin_gold'], 42)
+        self.assertNotIn('Alte Notizen', self.request('GET', '/character', 'bob')[1])
+        data.update(revision=str(rev), coin_gold='-1')
+        self.assertEqual(self.request('POST', '/character', 'alice', data)[0], 400)
+        data.update(coin_gold='42', inventory='{}')
+        self.assertEqual(self.request('POST', '/character', 'alice', data)[0], 400)
+        path = f'/dm/players/{self.ids["alice"]}/experience'
+        ep = dict(revision='0', current='150', target='300')
+        for who in (None, 'alice', 'bob'):
+            self.assertEqual(self.request('POST', path, who, ep)[0], 403)
+        self.assertEqual(self.request('POST', path, 'dm', ep)[0], 303)
+        self.assertEqual(self.request('POST', path, 'dm', ep)[0], 409)
+        self.assertIn('150 / 300 EP', self.request('GET', '/character', 'alice')[1])
+        self.assertNotIn('150 / 300 EP', self.request('GET', '/character', 'bob')[1])
+        self.assertEqual(self.request('POST', '/character', 'alice', dict(revision=str(rev), current='999'))[0], 303)
+        self.assertIn('150 / 300 EP', self.request('GET', '/character', 'alice')[1])
+        with portal.database() as db:
+            stored, _ = portal.portal_character.load(db, self.ids['alice'])
+            self.assertEqual(stored['coin_gold'], 42)
+            self.assertEqual(len(stored['inventory']), 8)
 
     def test_companions_save_and_isolation(self):
         data = {'revision': '0', 'companion_1_name': 'Fenn', 'companion_1_kind': 'Wolf',

@@ -118,8 +118,16 @@ class Handler(BaseHTTPRequestHandler):
                     self.rfile, int(self.headers.get("Content-Length", "0")),
                     self.headers.get("X-Tormentor-SHA256", ""),
                     self.headers.get("X-Tormentor-Audio-Extension", ""), title)
+                message = "Privat auf dem Laptop gespeichert. Unter DM → Tormentor Lore auswerten und prüfen."
+                if (ROOT / "lore-online.json").is_file():
+                    try:
+                        import lore_online_sync
+                        lore_online_sync.enqueue(item["id"])
+                        message = "Auf dem Laptop gespeichert. Lokale Auswertung und private Online-Übernahme gestartet. Auf tormentor-codex.de unter DM → Tormentor Lore prüfen; bei langer Aufnahme kann das dauern."
+                    except OSError:
+                        message = "Auf dem Laptop gespeichert. Online-Auswertung konnte nicht gestartet werden; bitte am Laptop erneut starten."
                 return self.reply(201 if created else 200, {"id": item["id"], "title": item["title"], "created": created,
-                    "message": "Privat auf dem Laptop gespeichert. Unter DM → Tormentor Lore auswerten und prüfen."})
+                    "message": message})
             except lore_workflow.SessionBusy as exc:
                 return self.reply(409, {"error": str(exc)})
             except (ValueError, UnicodeError) as exc:

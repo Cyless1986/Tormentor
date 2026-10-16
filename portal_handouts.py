@@ -10,6 +10,8 @@ MAX_FILE = 25 * 1024 * 1024
 
 
 def initialize(db):
+    db.execute("CREATE TABLE IF NOT EXISTS handout_versions (handout_id INTEGER PRIMARY KEY, version INTEGER NOT NULL)")
+    db.execute("CREATE TABLE IF NOT EXISTS handout_read_state (handout_id INTEGER NOT NULL, user_id INTEGER NOT NULL, version INTEGER NOT NULL, PRIMARY KEY(handout_id,user_id))")
     # Absence of a policy preserves the existing all-player visibility.
     db.execute("CREATE TABLE IF NOT EXISTS handout_audiences (handout_id INTEGER PRIMARY KEY, audience TEXT NOT NULL CHECK(audience IN ('all','selected')))")
     db.execute('CREATE TABLE IF NOT EXISTS handout_recipients (handout_id INTEGER NOT NULL, user_id INTEGER NOT NULL, PRIMARY KEY(handout_id,user_id))')
@@ -96,6 +98,7 @@ def save(db, data, creator_id, now, handout_id=None, attachment=None):
         db.execute('INSERT INTO handout_files(handout_id,filename,original_name,mime,size) VALUES(?,?,?,?,?) ON CONFLICT(handout_id) DO UPDATE SET filename=excluded.filename,original_name=excluded.original_name,mime=excluded.mime,size=excluded.size', (handout_id, filename, original_name[:180], mime, len(data_bytes)))
         if old:
             (ROOT / old['filename']).unlink(missing_ok=True)
+    db.execute("INSERT INTO handout_versions(handout_id,version) VALUES(?,2) ON CONFLICT(handout_id) DO UPDATE SET version=version+1", (handout_id,))
     return handout_id
 
 
@@ -145,3 +148,46 @@ def recipient_label(db, handout_id):
         return 'Alle Spieler'
     names = [row[0] for row in db.execute('SELECT u.username FROM handout_recipients r JOIN users u ON u.id=r.user_id WHERE r.handout_id=? ORDER BY u.username', (handout_id,))]
     return 'Ausgewählt: ' + ', '.join(names) if names else 'Noch keine Spieler ausgewählt'
+
+def version(db, handout_id):
+    row=db.execute("SELECT version FROM handout_versions WHERE handout_id=?",(handout_id,)).fetchone()
+    return row[0] if row else 1
+
+
+def unread(db, user):
+    if not user or user["role"] != "player": return 0
+    return db.execute("""SELECT COUNT(*) FROM handouts h
+        LEFT JOIN handout_audiences a ON a.handout_id=h.id
+        LEFT JOIN handout_versions v ON v.handout_id=h.id
+        LEFT JOIN handout_read_state r ON r.handout_id=h.id AND r.user_id=?
+        WHERE h.deleted=0 AND h.published=1 AND
+        (COALESCE(a.audience,'all')='all' OR EXISTS
+          (SELECT 1 FROM handout_recipients recipient WHERE recipient.handout_id=h.id AND recipient.user_id=?))
+        AND COALESCE(r.version,0)<COALESCE(v.version,1)""",(user["id"],user["id"])).fetchone()[0]
+
+
+def mark_read(db,user,data):
+    try: key,seen=int(data.get("id","")),int(data.get("version",""))
+    except ValueError: raise ValueError("Ungültiger Lesestand.") from None
+    if not (0<key<2**63 and 0<seen<2**63): raise ValueError("Ungültiger Lesestand.")
+    if user["role"]!="player" or key not in {r["id"] for r in visible(db,user)}:
+        raise ValueError("Handout nicht verfügbar.")
+    if version(db,key)!=seen: return False
+    db.execute("""INSERT INTO handout_read_state(handout_id,user_id,version) VALUES(?,?,?)
+        ON CONFLICT(handout_id,user_id) DO UPDATE SET version=MAX(version,excluded.version)""",
+        (key,user["id"],seen))
+    return True
+
+
+def render(db,user):
+    cards=[]
+    for row in visible(db,user):
+        revision=version(db,row["id"])
+        state=db.execute("SELECT version FROM handout_read_state WHERE handout_id=? AND user_id=?",(row["id"],user["id"])).fetchone()
+        is_unread=user["role"]=="player" and (not state or state[0]<revision)
+        badge='<span class="badge handout-new" style="background:#a44336;color:white;margin-left:12px">Neu</span>' if is_unread else ''
+        file=attachment(db,row["id"])
+        link=f'<p><a href="/handouts/{row["id"]}/file">Anhang öffnen: {escape(file["original_name"])}</a></p>' if file else ''
+        marker=f' data-handout-id="{row["id"]}" data-handout-version="{revision}" data-handout-read="{0 if is_unread else 1}"'
+        cards.append(f'<details class="card handout-card"{marker}><summary style="cursor:pointer;color:#e5be72;font-size:1.35rem">{escape(row["title"])}{badge}</summary><p style="white-space:pre-wrap">{escape(row["body"])}</p>{link}'+('<small>Nur DM</small>' if not row["published"] else '')+'</details>')
+    return '<p>Öffne ein Handout, um es zu lesen. Neue oder aktualisierte Freigaben sind markiert.</p>'+(''.join(cards) or '<p>Noch keine freigegebenen Handouts.</p>')

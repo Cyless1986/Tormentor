@@ -1549,7 +1549,7 @@ class TormentorApp(ctk.CTk):
     def open_settings_menu(self):
         win = ctk.CTkToplevel(self)
         win.title("Tormentor – Einstellungen")
-        win.geometry("460x380")
+        win.geometry("460x460")
         win.resizable(False, False)
         win.transient(self)
         win.grab_set()
@@ -1572,6 +1572,18 @@ class TormentorApp(ctk.CTk):
             fg_color=BUTTON_COLOR, hover_color=BUTTON_HOVER,
             command=self.open_lore
         ).pack(fill="x", padx=42, pady=8)
+
+        ctk.CTkLabel(win, text="Cortanas Antwortsprache").pack(pady=(12, 4))
+        language_menu = ctk.CTkOptionMenu(
+            win, values=["Englisch", "Deutsch"],
+            command=self.set_cortana_language)
+        language_menu.set("Deutsch" if self.settings.get("cortana_language", "en") == "de" else "Englisch")
+        language_menu.pack()
+
+    def set_cortana_language(self, value):
+        self.settings["cortana_language"] = "de" if value == "Deutsch" else "en"
+        self.save_settings()
+        self.add_log(f"Cortanas Antwortsprache: {value}")
 
     def open_lore(self):
         from lore_desktop import LoreWindow

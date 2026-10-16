@@ -18,7 +18,7 @@ with tempfile.TemporaryDirectory(dir=destination) as tmp:
         with sqlite3.connect(stage / 'portal.sqlite3') as target:
             source.backup(target)
             assert target.execute('pragma integrity_check').fetchone()[0] == 'ok'
-    for name in ('portal_maps', 'portal_lore', 'private_lore'):
+    for name in ('portal_maps', 'portal_lore', 'private_lore', 'portal_memories'):
         if (root / name).exists():
             shutil.copytree(root / name, stage / name)
     with tarfile.open(archive, 'w:gz') as output:

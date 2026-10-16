@@ -12,9 +12,6 @@ URL_FILE = ROOT / 'local_ai/tablet-download-url.txt'
 KEY = URL_FILE.read_text(encoding='utf-8').strip().rstrip('/').rsplit('/', 1)[-1] if URL_FILE.exists() else secrets.token_urlsafe(12)
 FILES = {
     'Tormentor-Android.apk': ROOT / 'Tormentor-Android.apk',
-    'Medienpaket.zip': ROOT / 'Medienpaket.zip',
-    'Tablet-Verbindung.json': ROOT / 'local_ai/Tablet-Verbindung.json',
-    'Tablet-Videos.zip': ROOT / 'Tablet-Videos.zip',
 }
 
 class Handler(BaseHTTPRequestHandler):
@@ -30,15 +27,9 @@ class Handler(BaseHTTPRequestHandler):
         if not name:
             body = ('<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width">'
                     '<title>Tormentor installieren</title><body style="font:22px sans-serif;padding:24px">'
-                    '<h1>Tormentor 1.6 – Update</h1><p>Neues Layout: Steinplatten im Rahmen, Funktionen links. Nur die App aktualisieren.</p>'
-                    '<p><a href="Tormentor-Android.apk?v=1.6">1. App aktualisieren (Version 1.6)</a></p>'
-                    '<p><a href="Tablet-Videos.zip">Optional: Reparaturpaket für alte Szenenvideos</a></p>'
-                    '<p>APK als Update installieren, ohne die App zu deinstallieren. Wenn die Szenenvideos bereits laufen, ist kein erneuter ZIP-Import nötig. Nur bei noch defekten Szenenvideos Tablet-Videos.zip '
-                    'unter Medien verwalten → Laptop-Medienpaket importieren auswählen. '
-                    'Gleichnamige Videos werden ersetzt; Sounds und Bilder bleiben erhalten.</p>'
-                    '<h2>Nur bei neuer Einrichtung</h2>'
-                    + ''.join(f'<p><a href="{n}">{n}</a></p>' for n in ('Medienpaket.zip', 'Tablet-Verbindung.json'))
-                    + '<p>Danach die APK in Eigene Dateien öffnen. ZIP und Verbindungsdatei in der App importieren.</p>'
+                    '<h1>Tormentor 2.5.6 – Update</h1><p>Direkt würfeln, Ergebnis in der Logbox und englische Cortana-Ansage. Stimmfilter für kurze Befehle angepasst.</p>'
+                    '<p><a href="Tormentor-Android.apk?v=2.5.6">App herunterladen (Version 2.5.6)</a></p>'
+                    '<p>Die APK in Eigene Dateien öffnen und als Update installieren. Die vorhandene App nicht deinstallieren.</p>'
                     '<p>Laptop während des Downloads eingeschaltet lassen.</p>').encode('utf-8')
             self.send_response(200)
             self.send_header('Content-Type', 'text/html; charset=utf-8')
@@ -66,7 +57,10 @@ class Handler(BaseHTTPRequestHandler):
             self.send_error(404)
 
 if __name__ == '__main__':
-    host = json.loads(FILES['Tablet-Verbindung.json'].read_text(encoding='utf-8'))['host'].split('://')[1].split(':')[0]
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--host', required=True)
+    host = parser.parse_args().host
     server = ThreadingHTTPServer((host, 8766), Handler)
     (ROOT / 'local_ai/tablet-download-url.txt').write_text(f'http://{host}:8766/{KEY}/', encoding='utf-8')
     timer = threading.Timer(7200, server.shutdown)
