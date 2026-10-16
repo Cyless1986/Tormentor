@@ -247,7 +247,7 @@ main>.card h2{line-height:1.35;margin-top:0}
     .level-table{{overflow-x:auto;margin:1rem 0}}.level-table caption{{text-align:left;font-weight:bold;padding:.6rem 0}}.level-table td:first-child{{font-weight:bold}}@media print{{.level-table{{overflow:visible}}.level-table table{{font-size:9pt}}.level-table th,.level-table td{{padding:3pt}}.level-table tr{{break-inside:avoid}}}}
     .book table{{width:100%;border-collapse:collapse;font-size:.95rem}}.book th,.book td{{padding:.6rem;text-align:left;vertical-align:top;border-bottom:1px solid #927854}}.book th{{color:#59341f}}.book tr:nth-child(even){{background:#b29a7020}}
     .codex-art-page{{margin-bottom:1.5rem}}@media print{{.codex-art-page{{break-inside:avoid}}.codex-art-page .codex-illustration{{width:100%;height:220mm;object-fit:contain}}}}
-    </style>{login_style}{header_style}{login_video}<header><strong>☉ TORMENTOR</strong><nav>{nav}</nav></header><main><h1>{escape(title)}</h1>{body}<p><small>Version 2.0 created with ChatGPT/Kodex</small></p></main></html>'''
+    </style>{login_style}{header_style}{login_video}{news.render_atmosphere(title)}<header><strong>☉ TORMENTOR</strong><nav>{nav}</nav></header><main><h1>{escape(title)}</h1>{body}<p><small>Version 2.0 created with ChatGPT/Kodex</small></p></main></html>'''
 
 
 def form_field(name, label, value="", kind="text", autocomplete=None):
@@ -730,6 +730,9 @@ class Handler(BaseHTTPRequestHandler):
                 body = portal_library.render()
                 if user and user["role"] == "dm":
                     body += '<section class="card"><h2>Codex als PDF</h2><p>Druckfassung des aktuellen Stands · A4 · getrennte Bände</p><p><a href="/media/Tormentor-Codex-2024.pdf">2024 herunterladen</a> · <a href="/media/Tormentor-Codex-2014-Quellen.pdf">2014-Quellen herunterladen</a> · <a href="/media/Tormentor-Codex-Homebrew.pdf">Homebrew herunterladen</a></p></section>'
+            elif path == "/codex/quellen/tasha":
+                body = codex_expansions.tasha_source(codex_expansions.catalogue(EXTRA_SPECIES))
+                return self.send(200, page(codex_expansions.TASHA, body, user))
             elif path == "/codex/weitere":
                 query = parse_qs(self.path.partition('?')[2]).get('q', [''])[0][:80]
                 body = codex_expansions.index(codex_expansions.catalogue(EXTRA_SPECIES), query)

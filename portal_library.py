@@ -27,4 +27,5 @@ def render():
     books=''
     for key,title,subtitle,edition,url in BOOKS:
         books += f'<a class="codex-volume" href="{url}" aria-label="{title} · {subtitle} öffnen"><img src="/media/codex-cover-{key}.png" alt="" loading="lazy"><span class="codex-cover-shade"></span><div class="codex-volume-copy"><span class="codex-imprint">TORMENTOR · CODEX</span><h2>{title}</h2><span class="codex-volume-subtitle">{subtitle}</span><span class="codex-volume-bottom"><span class="codex-volume-edition">{edition}</span><span class="codex-volume-open">Buch öffnen →</span></span></div></a>'
-    return STYLE+'<div class="codex-shelf">'+books+'</div><nav class="codex-library-links" aria-label="Weitere Codex-Themen"><a href="/codex/weitere">Weitere Spezies</a><a href="/codex/klassen">Weitere Klassen</a><a href="/codex/herkuenfte">Herkünfte</a></nav>'
+    sources = '<section class="card"><h2>Weitere Quellen</h2><h3><a href="/codex/quellen/tasha">Tashas Kessel mit Allem</a></h3><p>Regelfassung 2014 · Magieschmied und Unterklassen</p><p><a href="/codex/quellen/tasha">Quelle öffnen →</a></p></section>'
+    return STYLE+'<div class="codex-shelf">'+books+'</div>'+sources+'<nav class="codex-library-links" aria-label="Weitere Codex-Themen"><a href="/codex/weitere">Weitere Spezies</a><a href="/codex/klassen">Weitere Klassen</a><a href="/codex/herkuenfte">Herkünfte</a></nav>'

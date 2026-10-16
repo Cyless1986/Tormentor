@@ -163,3 +163,45 @@ def render_links():
     for channel in CHANNELS:
         result += f'<article class="card"><span class="badge">{html.escape(channel["language"])}</span><h2>{html.escape(channel["name"])}</h2><p>{html.escape(channel["about"])}</p><a href="{channel["url"]}" target="_blank" rel="noopener noreferrer">Zum YouTube-Kanal ↗</a></article>'
     return result + '</div><h2>Miniaturen und Hobby</h2><div class="grid"><article class="card"><h2>Hero Forge</h2><p>Eigene Charakterminiaturen gestalten.</p><a href="https://www.heroforge.com/" target="_blank" rel="noopener noreferrer">Hero Forge öffnen ↗</a></article><article class="card"><h2>The Army Painter</h2><p>Farben, Pinsel und Anleitungen für deine Miniaturen.</p><a href="https://thearmypainter.com/" target="_blank" rel="noopener noreferrer">The Army Painter öffnen ↗</a></article></div>'
+
+
+def render_atmosphere(title):
+    """Decorative lights aligned with each background's cover crop."""
+    if title not in ('D&D-News und Videos', 'Entdecken'):
+        return ''
+    links = title == 'Entdecken'
+    width, height = (2172, 724) if links else (1672, 941)
+    lights = ([(1242, 30, 9, 26), (1384, 130, 7, 22), (940, 80, 22, 40)] if links
+              else [(448, 281, 7, 18), (1192, 526, 4, 14), (1300, 391, 4, 14),
+                    (1131, 220, 4, 12), (510, 451, 4, 12)])
+    flames = ''
+    for index, (x, y, rx, ry) in enumerate(lights):
+        flames += (f'<g class="ambient-light" style="--delay:-{index * .73}s;--speed:{2.7 + index * .31}s;transform-origin:{x}px {y}px">'
+                   f'<ellipse cx="{x}" cy="{y}" rx="{rx * 9}" ry="{ry * 4}" fill="url(#ambient-glow)"/>'
+                   f'<ellipse class="ambient-flame" cx="{x}" cy="{y}" rx="{rx}" ry="{ry}" fill="url(#ambient-fire)"/>'
+                   '</g>')
+    # Match CSS background-size:cover and the existing horizontal crop exactly.
+    ratio = width / height
+    wide = f'{ratio * 100:.6f}vh'
+    tall = f'{100 / ratio:.6f}vw'
+    position = '.65' if links else '.5'
+    return (f'<style>.ambient-scene{{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:-1}}'
+            f'.ambient-scene svg{{position:absolute;width:max(100vw,{wide});height:max(100vh,{tall});'
+            f'left:calc((100vw - max(100vw,{wide}))*{position});top:calc((100vh - max(100vh,{tall}))*.5)}}'
+            '.ambient-light{opacity:.5;animation:ambient-flicker var(--speed) ease-in-out var(--delay) infinite alternate}'
+            '.ambient-flame{mix-blend-mode:screen;filter:blur(1px)}'
+            '.ambient-dust{animation:ambient-drift 22s ease-in-out infinite alternate;opacity:.2}'
+            '@keyframes ambient-flicker{0%,100%{opacity:.32;transform:scale(.94,1)}23%{opacity:.55;transform:scale(1.04,.96)}'
+            '47%{opacity:.42;transform:scale(.97,1.03)}71%{opacity:.65;transform:scale(1.03,1.01)}}'
+            '@keyframes ambient-drift{from{transform:translate(0,12px);opacity:.12}to{transform:translate(14px,-20px);opacity:.35}}'
+            f'@media(max-width:600px){{.ambient-scene svg{{left:calc((100vw - max(100vw,{wide}))*.65)}}}}'
+            '@media(prefers-reduced-motion:reduce){.ambient-scene{display:none}}'
+            '@media print{.ambient-scene{display:none}}</style>'
+            f'<div class="ambient-scene" aria-hidden="true"><svg viewBox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg" focusable="false">'
+            '<defs><radialGradient id="ambient-glow"><stop stop-color="#ffb342" stop-opacity=".5"/>'
+            '<stop offset=".4" stop-color="#ed7f24" stop-opacity=".16"/><stop offset="1" stop-color="#ed7f24" stop-opacity="0"/></radialGradient>'
+            '<radialGradient id="ambient-fire"><stop stop-color="#fff5ce" stop-opacity=".85"/>'
+            '<stop offset=".4" stop-color="#ffcb68" stop-opacity=".55"/><stop offset="1" stop-color="#ffa129" stop-opacity="0"/></radialGradient></defs>'
+            + flames + '<g class="ambient-dust" fill="#ffdc9b">'
+            + ''.join(f'<circle cx="{width * x}" cy="{height * y}" r="1.1"/>' for x, y in ((.12,.43),(.2,.68),(.32,.23),(.47,.6),(.62,.34),(.82,.72),(.91,.3)))
+            + '</g></svg></div>')

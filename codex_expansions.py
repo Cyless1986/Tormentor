@@ -156,3 +156,17 @@ def detail(entry, entries):
             + parent_link(e)
             + (class_subclasses(entries, german(e['name']), e['edition']) if e['kind'] == 'Klasse' else '') +
             f'<p>{nav}<a href="/codex/{e["edition"]}">Inhaltsverzeichnis</a> · <a href="/codex">Buch schließen ↩</a></p></article>')
+
+
+def tasha_source(entries):
+    selected = [entry for entry in entries if entry['source'] == TASHA]
+    body = ('<article class="book"><p>Weitere Quelle · Regelfassung 2014</p>'
+            '<h2>Tashas Kessel mit Allem</h2>'
+            '<p>Hier findest du die bereits erfasste Klasse und die Unterklassen dieser Quelle, nach Klassen geordnet.</p>'
+            '<p>Die Quellen-Steckbriefe enthalten keine vollständigen Buchregeln. Optionale Klassenmerkmale, Talente, Zauber und weitere Buchinhalte sind hier noch nicht vollständig erfasst.</p>'
+            '<p><a href="https://www.dndbeyond.com/sources/dnd/tcoe">Originalquelle bei D&amp;D Beyond</a></p>')
+    classes = [entry for entry in selected if entry['kind'] == 'Klasse']
+    body += '<h3>Klasse</h3>' + links(classes)
+    for kind in sorted({entry['kind'] for entry in selected if entry['kind'].startswith('Unterklasse')}):
+        body += '<h3>' + escape(kind) + '</h3>' + links([entry for entry in selected if entry['kind'] == kind])
+    return body + '<p><a href="/codex">← Zur Codex-Bibliothek</a></p></article>'
