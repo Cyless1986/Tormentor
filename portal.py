@@ -27,6 +27,7 @@ import portal_maps
 import codex_homebrew
 import portal_security
 import codex_core
+import codex_backgrounds
 import codex_2014
 import codex_expansions
 import codex_spells
@@ -285,40 +286,29 @@ def entry_form(entry=None):
 
 
 def backgrounds_page(db, user):
-    body = ('<section class="book"><h2>Herkünfte &amp; Hintergründe</h2>'
-            '<p>Welches Leben hat dein Charakter vor seinen Abenteuern geführt? Hier findest du die Hintergründe '
-            'für deine Figur, getrennt nach Regelfassung und Homebrew.</p></section>')
+    body = (codex_backgrounds.STYLE + '<section class="book"><h2>Herkünfte &amp; Hintergründe</h2>'
+            '<p>Die Hintergründe aus den Spielerhandbüchern 2014 und 2024: Beschreibungen, Fertigkeiten, '
+            'Werkzeuge, Sprachen, Startausrüstung und die jeweiligen Regelvorteile.</p>'
+            '<p><a href="#backgrounds-2014">Regelfassung 2014</a> · <a href="#backgrounds-2024">Regelfassung 2024</a> · '
+            '<a href="#backgrounds-homebrew">Homebrew</a></p></section>')
     rows = db.execute("SELECT id,title,edition,source,published FROM codex_entries WHERE kind='Hintergrund' AND deleted=0 ORDER BY title").fetchall()
     visible = [row for row in rows if row['published'] or user and user['role'] == 'dm']
-    if not visible:
-        standard = [
-            ('Akolyth', 'Regelfassung 2014', 'Du hast als Diener einer Gottheit oder eines Heiligtums gelebt.'),
-            ('Scharlatan', 'Regelfassung 2014', 'Du hast dich mit Täuschungen, Fälschungen und Tricks über Wasser gehalten.'),
-            ('Krimineller', 'Regelfassung 2014', 'Du kennst die Unterwelt und hast Erfahrung mit Diebstahl und Gaunerei.'),
-            ('Unterhalter', 'Regelfassung 2014', 'Du hast dein Publikum mit Musik, Schauspiel oder Geschichten begeistert.'),
-            ('Volksheld', 'Regelfassung 2014', 'Du hast deine Gemeinschaft beschützt und bist durch Taten bekannt geworden.'),
-            ('Gildenhandwerker', 'Regelfassung 2014', 'Du bist in einem Handwerk ausgebildet und Mitglied einer Handwerksgilde.'),
-            ('Einsiedler', 'Regelfassung 2014', 'Du hast abgeschieden gelebt und dabei eine wichtige Erkenntnis gewonnen.'),
-            ('Adliger', 'Regelfassung 2014', 'Du entstammst einer wohlhabenden oder einflussreichen Familie.'),
-            ('Weiser', 'Regelfassung 2014', 'Du hast dein Leben dem Lernen, Forschen und Sammeln von Wissen gewidmet.'),
-            ('Seemann', 'Regelfassung 2014', 'Du hast auf Schiffen gearbeitet und kennst das Leben auf See.'),
-            ('Soldat', 'Regelfassung 2014', 'Du hast in einer Armee gedient und militärische Erfahrung gesammelt.'),
-            ('Straßenkind', 'Regelfassung 2014', 'Du bist in den Straßen aufgewachsen und hast gelernt, allein zurechtzukommen.'),
-            ('Fremder', 'Regelfassung 2014', 'Du stammst aus der Wildnis und bist mit Überleben und Natur vertraut.'),
-        ]
-        body += '<section class="card"><h2>Regelfassung 2014</h2><ul>' + ''.join('<li><b>'+escape(n)+'</b> · '+escape(d)+'</li>' for n,_,d in standard) + '</ul></section>'
-    for edition in ENTRY_EDITIONS:
+    for edition in ('2014', '2024', 'Homebrew'):
         label = 'Homebrew' if edition == 'Homebrew' else 'Regelfassung ' + edition
-        body += '<section class="card"><h2>' + label + '</h2>'
+        body += '<section class="card" id="backgrounds-' + edition.lower() + '"><h2>' + label + '</h2>'
+        body += codex_backgrounds.render_edition(edition)
         entries = [row for row in visible if row['edition'] == edition]
         if entries:
+            if edition != 'Homebrew':
+                body += '<h3>Weitere Einträge</h3>'
             body += '<ul>' + ''.join(
                 f'<li><a href="/codex/eintrag/{row["id"]}">{escape(row["title"])}</a>'
                 + (f' · {escape(row["source"])}' if row['source'] else '')
                 + (' · Privat (nur DM)' if not row['published'] else '') + '</li>' for row in entries) + '</ul>'
-        else:
+        elif edition == 'Homebrew':
             body += '<p>Noch keine Herkünfte eingetragen oder freigegeben.</p>'
         body += '</section>'
+    body += codex_backgrounds.attribution()
     if user and user['role'] == 'dm':
         body += '<p><a href="/dm/codex">Herkunft anlegen</a> · Wähle beim neuen Eintrag die Art „Hintergrund“.</p>'
     return body + '<p><a href="/codex">Zurück zum Codex</a></p>'

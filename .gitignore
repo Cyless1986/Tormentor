@@ -247,3 +247,6 @@
 !/assets/lore-npcs-header-v1.webp
 
 !/test_portal_assets.py
+
+!/codex_backgrounds.py
+!/test_codex_backgrounds.py

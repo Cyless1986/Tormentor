@@ -7,7 +7,7 @@
   mascot.innerHTML = `
     <style>
       .start-devil{position:fixed;left:max(8px,env(safe-area-inset-left));bottom:calc(8px + env(safe-area-inset-bottom));width:120px;z-index:25;text-align:center;font:13px system-ui;color:#ffe9b8}
-      .start-devil button{display:block;width:120px;height:132px;padding:0;border:0;background:none;box-shadow:none;border-radius:24px;touch-action:manipulation}
+      .start-devil .devil-roll-button{display:block;width:120px;height:132px;padding:0;border:0;background:none;box-shadow:none;border-radius:24px;touch-action:manipulation}
       .start-devil button:hover,.start-devil button:active{background:none;box-shadow:none;transform:none}
       .start-devil button:focus-visible{outline:2px solid #ffe3a3;outline-offset:2px}
       .start-devil svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 4px 5px #0008)}
@@ -20,11 +20,10 @@
       @keyframes devil-tail{from{transform:rotate(-5deg)}to{transform:rotate(6deg)}}
       @keyframes devil-blink{0%,43%,47%,100%{transform:scaleY(1)}45%{transform:scaleY(.12)}}
       @keyframes devil-roll{0%{transform:translateY(0) rotate(0)}45%{transform:translateY(-35px) rotate(190deg)}75%{transform:translateY(-5px) rotate(340deg)}100%{transform:translateY(0) rotate(360deg)}}
-      @media(max-width:600px){.start-devil{width:88px;font-size:11px}.start-devil button{width:88px;height:98px}}
-      @media(prefers-reduced-motion:reduce){.start-devil *{animation:none!important}}
+      @media(max-width:600px){.start-devil{width:88px;font-size:11px}.start-devil .devil-roll-button{width:88px;height:98px}}
       @media print{.start-devil{display:none}}
     </style>
-    <button type="button" title="Klick mich: W20 würfeln" aria-label="Mit dem kleinen Teufel einen W20 würfeln">
+    <button class="devil-roll-button" type="button" title="Klick mich: W20 würfeln" aria-label="Mit dem kleinen Teufel einen W20 würfeln">
       <svg viewBox="0 0 160 170" aria-hidden="true" focusable="false">
         <defs><linearGradient id="devil-red" x2="0" y2="1"><stop stop-color="#ed705d"/><stop offset="1" stop-color="#ac3438"/></linearGradient>
         <linearGradient id="devil-gold" x2="1" y2="1"><stop stop-color="#fff0af"/><stop offset="1" stop-color="#cf8a35"/></linearGradient></defs>
@@ -54,7 +53,6 @@
   const button = mascot.querySelector("button");
   const number = mascot.querySelector(".devil-number");
   const output = mascot.querySelector("output");
-  const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const roll = () => {
     const random = new Uint32Array(1);
     const limit = Math.floor(0x100000000 / 20) * 20;
@@ -73,6 +71,6 @@
       number.textContent = String(result);
       output.textContent = result === 20 ? "W20: 20 ✦" : result === 1 ? "W20: 1 …" : "W20: " + result;
       button.disabled = false;
-    }, motion.matches ? 0 : 900);
+    }, 900);
   });
 })();
